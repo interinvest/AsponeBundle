@@ -1,0 +1,13 @@
+services:
+    aspone.services.deposit:
+        class: InterInvest\AsponeBundle\Services\AsponeDeposit
+        arguments: ["@doctrine.orm.entity_manager", "@service_container", "@besimple.soap.client.builder.teledeclarations"]
+    aspone.services.monitoring:
+        class: InterInvest\AsponeBundle\Services\AsponeMonitoring
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+    aspone.services.xml:
+        class: InterInvest\AsponeBundle\Services\AsponeXml
+        arguments: ["@service_container"]
+    aspone.services.pdf:
+        class: InterInvest\AsponeBundle\Services\AsponePdf
+        arguments: ["@doctrine.orm.entity_manager", "@service_container", "@kernel"]
