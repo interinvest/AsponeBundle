@@ -61,4 +61,10 @@ interface DeclarableInterface
     public function getIdentifEmail();
 
     public function getXml();
+
+    /**
+     * Récupère tous les xml (tous types confondus) de l'objet déclarable
+     * @return mixed
+     */
+    public function getXmls();
 }
