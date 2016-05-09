@@ -12,8 +12,6 @@ interface DeclarationInterface
     public function setType($type);
     public function getType();
 
-    public function getDocument();
-
     public function setDeposit($deposit);
     public function getDeposit();
 
@@ -24,10 +22,4 @@ interface DeclarationInterface
     public function getDeclarable();
 
     public function getXml();
-
-    /**
-     * Récupère tous les xml (tous types confondus) de l'objet déclarable
-     * @return mixed
-     */
-    public function getXmls();
 }
