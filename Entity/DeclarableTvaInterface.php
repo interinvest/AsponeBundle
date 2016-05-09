@@ -18,17 +18,6 @@ interface DeclarableTvaInterface extends DeclarableInterface
     public function get3310CA3KA();
     public function get3310CA3KF();
 
-
-    /**
-     * @return mixed
-     */
-    public function get3519DH();
-    public function get3519DN();
-    public function get3519FK();
-    public function get3519DD();
-    public function get3519DI();
-
-
     public function get3310CA3KE();
 
     /**
@@ -49,15 +38,4 @@ interface DeclarableTvaInterface extends DeclarableInterface
      */
     public function get3310CA3KG();
 
-
-    public function get3519AA();
-
-    /**
-     * @return array TexteLibre[$i]
-     */
-    public function get3519FJ();
-
-    public function get3519DC();
-
-    public function get3519DG();
 }

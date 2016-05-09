@@ -7,7 +7,6 @@ namespace InterInvest\AsponeBundle\Services;
 use InterInvest\AsponeBundle\Entity;
 use InterInvest\AsponeBundle\Entity\DeclarableInterface;
 use InterInvest\AsponeBundle\Entity\DeclarationAbstract;
-use InterInvest\AsponeBundle\Entity\DeclarationRbt;
 
 class AsponeDeclaration
 {
@@ -22,18 +21,7 @@ class AsponeDeclaration
 
         $declaration->setEtat(0);
         $declaration->setDeclarable($declarable);
-        $declaration->save();
 
-        $declarations = array($declaration);
-
-        if ($declarable->getType() == 'TVA' && $declarable->get3310CA3JB()) {
-            $declarationRbt = new DeclarationRbt();
-            $declarationRbt->setDeclarable($declarable);
-            $declarationRbt->save();
-
-            array_push($declarations, $declarationRbt);
-        }
-
-        return $declarations;
+        return $declaration;
     }
 }
