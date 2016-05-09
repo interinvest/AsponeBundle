@@ -11,3 +11,5 @@ services:
     aspone.services.pdf:
         class: InterInvest\AsponeBundle\Services\AsponePdf
         arguments: ["@doctrine.orm.entity_manager", "@service_container", "@kernel"]
+    aspone.services.declaration:
+        class: InterInvest\AsponeBundle\Services\AsponeDeclaration

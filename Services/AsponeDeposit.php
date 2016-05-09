@@ -32,29 +32,31 @@ class AsponeDeposit
     /**
      * Crée un tableau de déclarations à enregistrer pour utiliser ensuite dans le déposit
      *
-     * @param DeclarationInterface $declaration
+     * @param Declarable $declarable
      *
      * @return array
      */
-    public function createDeclarationFromDeclarable(DeclarationInterface $declaration)
+    public function createDeclarationFromDeclarable(Declarable $declarable)
     {
         $declarations = array();
 
+
+
         $aDeclaration = array(
             'etat' => 0,
-            'type' => $declaration->getType(),
-            'declarableId' => $declaration->getId(),
-            'xml' => $declaration->getXml($declaration->getType())
+            'type' => $declarable->getType(),
+            'declarableId' => $declarable->getId(),
+            'xml' => $declarable->getXml($declarable->getType())
         );
 
         $declarations[] = $aDeclaration;
 
-        if ($declaration->getType() != 'RBT' && $declaration->getDeclarable()->get3310CA3JB() > 0) {
+        if ($declarable->getType() != 'RBT' && $declarable->getDeclarable()->get3310CA3JB() > 0) {
             $aDeclaration = array(
                 'etat' => 0,
                 'type' => 'RBT',
-                'declarableId' => $declaration->getDeclarable()->getId(),
-                'xml' => $declaration->getXml('RBT')
+                'declarableId' => $declarable->getDeclarable()->getId(),
+                'xml' => $declarable->getXml('RBT')
             );
 
             $declarations[] = $aDeclaration;
