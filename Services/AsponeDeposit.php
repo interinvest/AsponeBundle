@@ -7,6 +7,7 @@ namespace InterInvest\AsponeBundle\Services;
 use Doctrine\ORM\EntityManager;
 use InterInvest\AsponeBundle\Entity\Declarable;
 use InterInvest\AsponeBundle\Entity\Declaration;
+use InterInvest\AsponeBundle\Entity\DeclarationInterface;
 use InterInvest\AsponeBundle\SoapClient\SoapClient;
 use InterInvest\AsponeBundle\SoapClient\SoapClientBuilder;
 use Symfony\Component\DependencyInjection\Container;
@@ -31,32 +32,32 @@ class AsponeDeposit
     /**
      * Crée un tableau de déclarations à enregistrer pour utiliser ensuite dans le déposit
      *
-     * @param Declarable $declarable
+     * @param DeclarationInterface $declaration
      *
      * @return array
      */
-    public function createDeclarationFromDeclarable(Declarable $declarable)
+    public function createDeclarationFromDeclarable(DeclarationInterface $declaration)
     {
         $declarations = array();
 
-        $declaration = array(
+        $aDeclaration = array(
             'etat' => 0,
-            'type' => $declarable->getType(),
-            'declarableId' => $declarable->getId(),
-            'xml' => $declarable->getXml($declarable->getType())
+            'type' => $declaration->getType(),
+            'declarableId' => $declaration->getId(),
+            'xml' => $declaration->getXml($declaration->getType())
         );
 
-        $declarations[] = $declaration;
+        $declarations[] = $aDeclaration;
 
-        if ($declarable->getType() != 'RBT' && $declarable->getN331026Jb() > 0) {
-            $declaration = array(
+        if ($declaration->getType() != 'RBT' && $declaration->getDeclarable()->get3310CA3JB() > 0) {
+            $aDeclaration = array(
                 'etat' => 0,
                 'type' => 'RBT',
-                'declarableId' => $declarable->getId(),
-                'xml' => $declarable->getXml('RBT')
+                'declarableId' => $declaration->getDeclarable()->getId(),
+                'xml' => $declaration->getXml('RBT')
             );
 
-            $declarations[] = $declaration;
+            $declarations[] = $aDeclaration;
         }
 
         return $declarations;
@@ -87,7 +88,7 @@ class AsponeDeposit
             );
             $deposit['xml'] = $asponeXml->concatXml($declarations, $test);
 
-            /** @var Declaration $declaration */
+            /** @var DeclarationInterface $declaration */
             foreach ($declarations as $declaration) {
                 $deposit['declarations'][] = array($declaration->getId(), $declaration->getType());
             }
