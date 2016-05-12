@@ -2,6 +2,7 @@
 
 namespace InterInvest\AsponeBundle\Command;
 
+use InterInvest\AsponeBundle\Entity\Declaration;
 use InterInvest\AsponeBundle\Test\TestDeclarableTva;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,26 +17,29 @@ class TestCreateXmlCommand extends ContainerAwareCommand
         $this
             ->setName('aspone:test:createxml')
             ->setDescription('Test création xml')
-            ->addOption('path', null, InputOption::VALUE_REQUIRED, 'Chemin du répertoire de sauvegarde du fichier de test')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $service = $this->getContainer()->get('aspone.services.xml');
-        $declaration = new TestDeclarableTva();
+        $path = $this->getContainer()->get('kernel')->getRootDir() . $this->getContainer()->getParameter('aspone.xmlPath');
+
+        $declarable = new TestDeclarableTva();
+
 
         try {
-            $xml = new \SimpleXMLElement($service->setXmlFromDeclarable($declaration));
+            $xml = $service->setXmlFromDeclarable($declarable);
 
-            $path = $input->getOption('path');
-            if (!file_exists($path) || !is_dir($path)) {
-                mkdir($path);
-            }
+            $declaration = new Declaration();
+            $declaration->setType($declarable->getType());
+            $declaration->setEtat(Declaration::ETAT_NON_FINIE);
 
-            $xml->saveXML($path . '/testDeclaration' . $declaration->getType() . '.xml');
+            //save
+//            $declaration->setId('1');
+//            $declaration->setXml($xml, $path);
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new \Exception($e->getMessage() . ' ' . $e->getFile() . ' l.' . $e->getLine());
         }
     }
 }

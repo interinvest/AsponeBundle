@@ -11,6 +11,11 @@ class TestDeclarableTva implements DeclarableTvaInterface
         return '';
     }
 
+    public function getXmls()
+    {
+        // TODO: Implement getXmls() method.
+    }
+
     public function getId()
     {
         return 192046;

@@ -4,24 +4,39 @@
 
 namespace InterInvest\AsponeBundle\Services;
 
-use InterInvest\AsponeBundle\Entity;
+use InterInvest\AsponeBundle\Entity\Declaration;
 use InterInvest\AsponeBundle\Entity\DeclarableInterface;
-use InterInvest\AsponeBundle\Entity\DeclarationAbstract;
 
+/**
+ * Class AsponeDeclaration
+ *
+ * Service à implémenter en interne pour créer vos propres entités issues de Declaration et enregistrer vos objets
+ *
+ * @package InterInvest\AsponeBundle\Services
+ */
 class AsponeDeclaration
 {
     public function __construct(){}
 
-    public function createDeclarationsFromDeclarable(DeclarableInterface $declarable)
+    /**
+     * @param DeclarableInterface $declarable
+     *
+     * @return Declaration
+     * @throws \Exception
+     */
+    public function createDeclarationsFromDeclarable($declarable)
     {
-        $objetDeclaration = 'Declaration' . $declarable->getType();
+        if ($declarable instanceof DeclarableInterface) {
+            $declaration = new Declaration();
+            $declaration->setType($declarable->getType());
+            $declaration->setEtat(Declaration::ETAT_NON_FINIE);
+            $declaration->setDeclarantSiren($declarable->getRedevableIdentifiant());
+            $declaration->setPeriodeStart(date_create_from_format('YmdHis', $declarable->getTIdentifCA() . '000000'));
+            $declaration->setPeriodeEnd(date_create_from_format('YmdHis', $declarable->getTIdentifCB() . '000000'));
 
-        /** @var DeclarationAbstract $declaration */
-        $declaration = new $objetDeclaration();
-
-        $declaration->setEtat(0);
-        $declaration->setDeclarable($declarable);
-
-        return $declaration;
+            return $declaration;
+        } else {
+            throw new \Exception('L\'objet déclarable doit implémenter l\'interface DeclarableInterface');
+        }
     }
 }

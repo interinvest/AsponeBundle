@@ -27,7 +27,7 @@ class TestDepositDetailCommand extends ContainerAwareCommand
         try {
             $response = $service->setDepositDetails($deposit);
 
-            echo print_r($response, true) . "\n";
+//            echo print_r($response, true) . "\n";
 
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage() . ' ' . $e->getFile() . ' l.' . $e->getLine());

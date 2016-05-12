@@ -7,7 +7,7 @@ interface DeclarableInterface
     public function getId();
 
     /**
-     * @return string 'TVA', 'RBT', 'TDFC'
+     * @return string 'IDT', 'RBT', 'IDF', ...
      */
     public function getType();
 

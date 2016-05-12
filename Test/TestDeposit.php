@@ -4,7 +4,7 @@ namespace InterInvest\AsponeBundle\Test;
 
 use InterInvest\AsponeBundle\Entity\DepositInterface;
 
-class TestDeposit implements DepositInterface
+class TestDeposit
 {
 
     private $id = 2548;

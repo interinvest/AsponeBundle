@@ -7,7 +7,7 @@ namespace InterInvest\AsponeBundle\Services;
 use Doctrine\ORM\EntityManager;
 use InterInvest\AsponeBundle\Entity\Declarable;
 use InterInvest\AsponeBundle\Entity\Declaration;
-use InterInvest\AsponeBundle\Entity\DeclarationInterface;
+use InterInvest\AsponeBundle\Entity\Deposit;
 use InterInvest\AsponeBundle\SoapClient\SoapClient;
 use InterInvest\AsponeBundle\SoapClient\SoapClientBuilder;
 use Symfony\Component\DependencyInjection\Container;
@@ -33,11 +33,12 @@ class AsponeDeposit
      * Crée un tableau de dépôts à partir d'une liste de declarations
      *
      * @param array  $declarations
+     * @param string $type
      * @param int    $test
      *
      * @return array
      */
-    public function createDeposit(array $declarations, $test = 1)
+    public function createDeposit(array $declarations, $type, $test = 1)
     {
         $asponeXml = $this->container->get('aspone.services.xml');
         $deposits = array();
@@ -48,16 +49,21 @@ class AsponeDeposit
         $declarationsCh = array_chunk($declarations, 100);
 
         foreach ($declarationsCh as $k => $declarations) {
-            $deposit = array(
-                'declaratons' => array(),
-            );
-            $deposit['xml'] = $asponeXml->concatXml($declarations, $test);
+            $oDeposit = new Deposit();
+            $oDeposit->setType($type);
+            $oDeposit->setEtat(0);
+            $oDeposit->setRetourImmediat(Deposit::ETAT_NON_FINI);
+            $this->em->persist($oDeposit);
+            $this->em->flush(); //flush pour donner l'id aux declarations ensuite
 
-            /** @var DeclarationInterface $declaration */
+            $deposits[] = array('xml' => $asponeXml->concatXml($declarations, $test), 'deposit' => $oDeposit);
+
+            /** @var Declaration $declaration */
             foreach ($declarations as $declaration) {
-                $deposit['declarations'][] = array($declaration->getId(), $declaration->getType());
+                $declaration->setDepositId($oDeposit->getId());
+                $this->em->persist($declaration);
             }
-            $deposits[] = $deposit;
+            $this->em->flush();
         }
 
         return $deposits;
@@ -87,21 +93,30 @@ class AsponeDeposit
     }
 
     /**
-     * @param $request
-     * @param $type
+     * @param         $request
+     * @param Deposit $deposit
      *
      * @return string
      * @throws \Exception
      */
-    public function sendDeposit($request, $type)
+    public function sendDeposit($request, Deposit $deposit)
     {
         $req = $request->asXML();
         $this->initSoap();
-        $this->soap->addDocument('Depot ' . $type, $type, $req);
+        $this->soap->addDocument('Depot ' . $deposit->getType(), $deposit->getType(), $req);
 
         $response = $this->soap->getResponse();
 
         if ($response) {
+            $deposit->setDateEnvoi(new \DateTime());
+            $deposit->setRetourImmediat(strpos($response, 'SUCCESS') === 0 ? Deposit::ETAT_OK : Deposit::ETAT_ERREUR);
+            $identif = str_replace(array('SUCCESS', 'ERROR'), '', $response);
+            $deposit->setIdentifiant($identif);
+            $deposit->setEtat(Deposit::ETAT_NON_FINI);
+
+            $this->em->persist($deposit);
+            $this->em->flush();
+
             return $response;
         } else {
             throw  new \Exception("Réponse ASPONE vide");

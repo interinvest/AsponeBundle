@@ -4,22 +4,27 @@
  */
 namespace InterInvest\AsponeBundle\Services;
 
+use Doctrine\ORM\EntityManager;
 use InterInvest\AsponeBundle\Entity\Declarable;
 use InterInvest\AsponeBundle\Entity\DeclarableInterface;
 use InterInvest\AsponeBundle\Entity\DeclarableTdfcInterface;
 use InterInvest\AsponeBundle\Entity\DeclarableTvaInterface;
+use InterInvest\AsponeBundle\Entity\Declaration;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Yaml\Yaml;
 
 class AsponeXml
 {
+    private $em;
     private $container;
 
     private $xml;
     private $declarable;
     private $millesime;
 
-    public function __construct(Container $container)
+    public function __construct(EntityManager $em, Container $container)
     {
+        $this->em = $em;
         $this->container = $container;
     }
 
@@ -50,25 +55,10 @@ class AsponeXml
         $groupNode = $rootNode->addChild('GroupeFonctionnel');
         $groupNode->addAttribute('Type', 'INFENT');
 
-        $codeDocument = '';
-        switch ($type) {
-            case 'TDFC' :
-                $codeDocument = $declarable->getTypeDeclaration();
-                break;
-            case 'TVA' :
-                $codeDocument = 'IDT';
-                break;
-            case 'RBT' :
-                $codeDocument= 'RBT';
-                break;
-            default :
-                throw new \Exception ('Type de déclaration non reconnu', 0);
-                break;
-        }
 
-        $listeFormNode = $this->setDeclarableGroup($groupNode, $codeDocument);
+        $listeFormNode = $this->setDeclarableGroup($groupNode, $type);
 
-        $this->setDeposit($listeFormNode);
+        $this->setFormulaires($listeFormNode);
 
         try {
             $this->xml = $rootNode->asXml();
@@ -84,13 +74,22 @@ class AsponeXml
      * Crée le xml pour une déclaration
      * en utilisant un objet declarable qui implémente l'interface voulue
      *
-     * @param \SimpleXMLElement $node
+     * @param $node
+     *
+     * @throws \Exception
      */
-    private function setDeposit(&$node)
+    private function setFormulaires(&$node)
     {
         $declarable = $this->declarable;
 
-        foreach ($declarable->getListeFormulaires() as $numForm => $zonesForm) {
+        try {
+            $yml = Yaml::parse(__DIR__ . '/../Resources/millesimes/20' . $this->millesime . '.yml');
+            $forms = $yml[$declarable->getType()];
+        } catch (\Exception $e) {
+            throw new \Exception('Problème lors de la lecture du fichier de millesime.');
+        }
+
+        foreach ($forms as $numForm => $zonesForm) {
             $formNode = $node->addChild('Formulaire');
             $formNode->addAttribute('Nom', $numForm);
             $formNode->addAttribute('Millesime', $this->millesime);
@@ -98,18 +97,22 @@ class AsponeXml
             foreach ($zonesForm as $zone) {
 
                 if (method_exists($declarable, 'getMultiple' . $numForm . $zone)) {
-                    $zoneX = $formNode->addChild('Zone');
-                    $zoneX->addAttribute('id', $zone);
                     $getter = 'getMultiple' . $numForm . $zone;
-                    $tmp = $declarable->$getter();
-                    foreach ($tmp as $i => $vals) {
-                        $zoneY = $zoneX->addChild('Occurrence');
-                        $zoneY->addAttribute('Numero', ($i+1));
-                        $this->setZones($zoneY, $vals, false);
+                    if (!is_null($declarable->$getter())) {
+                        $zoneX = $formNode->addChild('Zone');
+                        $zoneX->addAttribute('id', $zone);
+                        $tmp = $declarable->$getter();
+                        foreach ($tmp as $i => $vals) {
+                            $zoneY = $zoneX->addChild('Occurrence');
+                            $zoneY->addAttribute('Numero', ($i + 1));
+                            $this->setZones($zoneY, $vals, false);
+                        }
                     }
                 } elseif (method_exists($declarable, 'get' . $numForm . $zone)) {
                     $getter = 'get' . $numForm . $zone;
-                    $this->setZones($formNode, array($zone => $declarable->$getter()));
+                    if (!is_null($declarable->$getter())) {
+                        $this->setZones($formNode, array($zone => $declarable->$getter()));
+                    }
                 }
             }
         }
@@ -356,19 +359,19 @@ class AsponeXml
      */
     public function concatXml(array $declarations, $test = 1)
     {
+        $path = $this->container->get('kernel')->getRootDir() . $this->container->getParameter('aspone.xmlPath');
         $xmlContent = "";
-        /* @var Declarable $declaration */
+        /* @var Declaration $declaration */
         foreach ($declarations as $declaration) {
-            $documents = $declaration->getXmls();
-            if ($documents) {
-                foreach ($documents as $document) {
-                    $content = new \SimpleXMLElement($document);
-                    $xmlDeclarations = $content->children();
-                    foreach ($xmlDeclarations as $xmlDeclaration) {
-                        $xmlContent .= $xmlDeclaration->asXml();
-                    }
+            $document = $path . '/' . $declaration->getXmlPath();
+            if (file_exists($document)) {
+                /** @var \SimpleXMLElement $content */
+                $content = simplexml_load_file($document);
+                $xmlDeclarations = $content->children();
+                /** @var \SimpleXMLElement $xmlDeclaration */
+                foreach ($xmlDeclarations->children() as $xmlDeclaration) {
+                    $xmlContent .= $xmlDeclaration->asXml();
                 }
-
             }
         }
         $rootNode = new \SimpleXMLElement("<?xml version='1.0' encoding='ISO-8859-1'?>" .

@@ -1,0 +1,14 @@
+IDT:
+  3310CA3: ['CA', 'CG', 'GM', 'GH', 'HA', 'HB', 'HC', 'HD', 'JA', 'JB', 'JC', 'KA', 'KF', 'KE', 'FM', 'HG', 'KG']
+RBT:
+  3519: ['DH', 'DN', 'FK', 'DD', 'DI', 'AA', 'FJ', 'DC', 'DG']
+IDF:
+  2033A: ['AC', 'BC', 'CC', 'AE', 'BE', 'CE', 'AJ', 'CJ', 'AK', 'CK', 'AQ', 'BQ', 'CQ', 'AR', 'BR', 'CR', 'FA', 'FF', 'FG', 'FH', 'FJ', 'FL', 'FM', 'FN', 'FP', 'FQ', 'FR', 'FS', 'JD']
+  2033B: ['BC', 'BG', 'BH', 'BN', 'BP', 'BS', 'BT', 'BU', 'BV', 'BW', 'BX', 'BY', 'BZ', 'CA', 'CC', 'CD', 'ED', 'CF', 'EL', 'CM', 'EM', 'EP', 'CR', 'ER', 'JA', 'HU', 'HV', 'JB']
+  2033C: ['AC', 'DC', 'AF', 'BF', 'CF', 'DF', 'AK', 'BK', 'CK', 'DK', 'FE', 'GE', 'HE', 'JE', 'FH', 'GH', 'HH', 'JH', 'RQ']
+  2033D: ['PG', 'PH', 'PJ', 'MG', 'MH', 'PF']
+  2033E: ['DB']
+  2033F: ['GS']
+  2033G: ['GS']
+  2031: ['HA', 'HB', 'CW', 'CX', 'BG']
+  2083: ['TE', 'TF', 'AA', 'AB', 'BA', 'BB', 'BC', 'BW', 'BX', 'BD', 'BE', 'BF', 'BG', 'BH', 'BJ', 'BL', 'BM', 'BK', 'BN', 'BP', 'BQ', 'BS', 'BR', 'BT', 'TA', 'TB', 'TC', 'TD', 'EK', 'EA', 'EB', 'ED', 'EE', 'EF', 'EG', 'EH', 'EJ', 'ET', 'EU', 'EL', 'EM', 'EW', 'EP', 'PA', 'PF', 'PG']

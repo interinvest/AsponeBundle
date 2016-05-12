@@ -128,26 +128,15 @@ interface DeclarableTdfcInterface extends DeclarableInterface
     //formulaire 2031
     public function do2031();
     public function get2031HA();
-    public function get2031HBDesignation();
-    public function get2031HBDesignationSuite();
-    public function get2031HBAdresseVille();
-    public function get2031HBAdresseCodePays();
+    public function get2031HB();
     public function get2031CW();
     public function get2031CX();
-    public function get2031BGAdresseNumero();
-    public function get2031BGAdresseVoie();
-    public function get2031BGAdresseComplement();
-    public function get2031BGAdresseCodePostal();
-    public function get2031BGAdresseVille();
-    public function get2031BGAdresseCodePays();
+    public function get2031BG();
 
     //formulaire 2083
     public function do2083();
     public function get2083TE();
-    public function get2083TFDesignation();
-    public function get2083TFDesignationSuite();
-    public function get2083TFAdresseVille();
-    public function get2083TFAdresseCodePays();
+    public function get2083TF();
     public function getMultiple2083AA();
     public function getMultiple2083AB();
     public function getMultiple2083BA();
