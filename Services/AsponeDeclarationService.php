@@ -14,20 +14,20 @@ use InterInvest\AsponeBundle\Entity\DeclarableInterface;
  *
  * @package InterInvest\AsponeBundle\Services
  */
-class AsponeDeclaration
+class AsponeDeclarationService
 {
     public function __construct(){}
 
     /**
      * @param DeclarableInterface $declarable
+     * @param Declaration         $declaration
      *
      * @return Declaration
      * @throws \Exception
      */
-    public function createDeclarationsFromDeclarable($declarable)
+    public function createDeclarationsFromDeclarable($declarable, &$declaration)
     {
         if ($declarable instanceof DeclarableInterface) {
-            $declaration = new Declaration();
             $declaration->setType($declarable->getType());
             $declaration->setEtat(Declaration::ETAT_NON_FINIE);
             $declaration->setDeclarantSiren($declarable->getRedevableIdentifiant());

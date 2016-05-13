@@ -31,14 +31,21 @@ class AsponeXml
     /**
      * Créer le xml lié à un objet déclarable (déclaration TVA, demande de remboursement, TDFC, etc)
      *
-     * @param Declarable $declarable
-     * @param Int        $test
+     * @param Declarable|Array $declarable si array alors {service declarable, entité}
+     * @param Int              $test
      *
      * @return string
      * @throws \Exception
      */
     public function setXmlFromDeclarable($declarable, $test = 1)
     {
+        if (is_array($declarable)) {
+            if (!isset($declarable[1])) {
+                throw new \Exception('Entité manquante pour l\'appel au service ' . $declarable[0]);
+            }
+            $serviceDeclarable = $this->container->get($declarable[0]);
+            $declarable = $serviceDeclarable->init($declarable[1]);
+        }
         $this->declarable = $declarable;
         $type = $declarable->getType();
         $millesime = $declarable->getAnnee() % 100;
@@ -363,14 +370,17 @@ class AsponeXml
         $xmlContent = "";
         /* @var Declaration $declaration */
         foreach ($declarations as $declaration) {
-            $document = $path . '/' . $declaration->getXmlPath();
-            if (file_exists($document)) {
+            $document = $this->setXmlFromDeclarable($declaration->getServiceDeclarable());
+            if ($document) {
                 /** @var \SimpleXMLElement $content */
-                $content = simplexml_load_file($document);
+                $content = simplexml_load_string($document);
                 $xmlDeclarations = $content->children();
                 /** @var \SimpleXMLElement $xmlDeclaration */
                 foreach ($xmlDeclarations->children() as $xmlDeclaration) {
                     $xmlContent .= $xmlDeclaration->asXml();
+                }
+                if ($this->container->getParameter('aspone.archive') == 'yes') {
+                    $declaration->archiveXml($document, $path);
                 }
             }
         }

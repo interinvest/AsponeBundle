@@ -87,7 +87,6 @@ class AsponeMonitoring
                 $this->em->remove($historique);
             }
             $this->em->flush();
-
             foreach ($response['historiques'] as $historique) {
                 $oHistorique = new DepositHistorique();
                 $oHistorique->setDeposit($deposit);
@@ -125,9 +124,7 @@ class AsponeMonitoring
             foreach ($response['declarations'] as $declaration) {
                 //get declaration
                 $this->setDeclarationDetails($declaration->nodeValue);
-
             }
-
             $this->em->flush();
 
             return $response;
@@ -204,18 +201,22 @@ class AsponeMonitoring
                 if (is_string($declaration)) {
                     //recherche de la déclaration
                     $identifiant = $informations['identifiant'];
+                    $type = $informations['type'];
                     unset($informations['identifiant']);
+                    unset($informations['type']);
 
                     $informations['periodeStart'] = new \DateTime($informations['periodeStart']);
                     $informations['periodeEnd'] = new \DateTime($informations['periodeEnd']);
 
-                    $declarationRepo = $this->em->getRepository('AsponeBundle:Declaration');
-                    $oDeclaration = $declarationRepo->findOneBy($informations);
+                    $declarationRepo = $this->em->getRepository($this->container->getParameter('aspone.declarationRepository'));
+                    $declarations = $declarationRepo->findBy($informations);
 
-                    if ($oDeclaration) {
-                        $oDeclaration->setIdentifiant($identifiant);
-                        $this->em->persist($oDeclaration);
-                        $this->em->flush();
+                    foreach ($declarations as $oDeclaration) {
+                        if ($oDeclaration->getType() == $type) {
+                            $oDeclaration->setIdentifiant($identifiant);
+                            $this->em->persist($oDeclaration);
+                            $this->em->flush();
+                        }
                     }
                 } else {
                     $oDeclaration = $declaration;
@@ -223,16 +224,16 @@ class AsponeMonitoring
 
                 $historiqueRepo = $this->em->getRepository('AsponeBundle:DeclarationHistorique');
                 $historiqueDetailRepo = $this->em->getRepository('AsponeBundle:DeclarationHistoriqueDetail');
-                foreach ($historiqueRepo->findBy(array('declaration' => $oDeclaration)) as $historique) {
+
+                foreach ($historiqueRepo->findBy(array('declarationId' => $oDeclaration->getId())) as $historique) {
                     foreach ($historiqueDetailRepo->findBy(array('declarationHistorique' => $historique)) as $detail) {
                         $this->em->remove($detail);
                     }
                     $this->em->remove($historique);
                 }
-
                 foreach ($response['historiques'] as $historique) {
                     $oHistorique = new DeclarationHistorique();
-                    $oHistorique->setDeclaration($oDeclaration);
+                    $oHistorique->setDeclarationId($oDeclaration->getId());
                     $oHistorique->setDate(new \DateTime($historique['date']));
                     $oHistorique->setIserror($historique['isError']);
                     $oHistorique->setIsfinal($historique['isFinal']);

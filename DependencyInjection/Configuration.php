@@ -27,6 +27,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('password')->isRequired()->end()
                 ->scalarNode('contextLogin')->isRequired()->end()
                 ->scalarNode('contextPassword')->isRequired()->end()
+                ->scalarNode('declarationRepository')->isRequired()->end()
                 ->enumNode('archive')
                     ->isRequired()
                     ->values(array('yes', 'no'))

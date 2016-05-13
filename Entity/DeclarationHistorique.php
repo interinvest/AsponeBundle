@@ -57,15 +57,13 @@ class DeclarationHistorique
      */
     private $date;
 
+
     /**
-     * @var Declaration
+     * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="InterInvest\AsponeBundle\Entity\Declaration")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="declaration_id", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="declaration_id", type="integer", nullable=true)
      */
-    private $declaration;
+    private $declarationId;
 
 
     /**
@@ -165,18 +163,18 @@ class DeclarationHistorique
     }
 
     /**
-     * @return Declaration
+     * @return int
      */
-    public function getDeclaration()
+    public function getDeclarationId()
     {
-        return $this->declaration;
+        return $this->declarationId;
     }
 
     /**
-     * @param Declaration $declaration
+     * @param int $declarationId
      */
-    public function setDeclaration($declaration)
+    public function setDeclarationId($declarationId)
     {
-        $this->declaration = $declaration;
+        $this->declarationId = $declarationId;
     }
 }
