@@ -255,10 +255,12 @@ class AsponeMonitoring
                         $oDetail->setIserror($detail['isError']);
                         $oDetail->setIsfinal($detail['isFinal']);
                         $oDetail->setLabel($detail['label']);
-                        $oDetail->setDetail($detail['detailledlabel']);
+                        if (isset($detail['detailledlabel'])) {
+                            $oDetail->setDetail($detail['detailledlabel']);
+                        }
                         $oDetail->setName($detail['name']);
                         $oDetail->setDate(new \DateTime($detail['date']));
-                        if (isset($detail['codeErreur'])) { die(var_dump($detail['codeErreur']));
+                        if (isset($detail['codeErreur'])) {
                             $oDetail->setCodeErreur($detail['codeErreur']);
                         }
                         $this->em->persist($oDetail);
@@ -351,7 +353,7 @@ class AsponeMonitoring
             $histo['label'] = $xmlLabels->item($i)->nodeValue;
             if ($xmlDetailLabels->item($i)) {
                 $histo['detailledlabel'] = $xmlDetailLabels->item($i)->nodeValue;
-                if (preg_match('/[c|C]ode [e|E]rreur\s{1,3}\(?([0-9]{3,7})\)?/', $xmlDetailLabels->item($i)->nodeValue, $matches)) {
+                if (preg_match('/[c|C]ode [e|E]rreur.{1,3}\(?([0-9]{3,7})\)?/', $xmlDetailLabels->item($i)->nodeValue, $matches)) {
                     $histo['codeErreur'] = $matches[1];
                 }
             }
