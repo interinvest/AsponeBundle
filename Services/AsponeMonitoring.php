@@ -225,46 +225,48 @@ class AsponeMonitoring
                 $historiqueRepo = $this->em->getRepository('AsponeBundle:DeclarationHistorique');
                 $historiqueDetailRepo = $this->em->getRepository('AsponeBundle:DeclarationHistoriqueDetail');
 
-                foreach ($historiqueRepo->findBy(array('declarationId' => $oDeclaration->getId())) as $historique) {
-                    foreach ($historiqueDetailRepo->findBy(array('declarationHistorique' => $historique)) as $detail) {
-                        $this->em->remove($detail);
-                    }
-                    $this->em->remove($historique);
-                }
-                foreach ($response['historiques'] as $historique) {
-                    $oHistorique = new DeclarationHistorique();
-                    $oHistorique->setDeclarationId($oDeclaration->getId());
-                    $oHistorique->setDate(new \DateTime($historique['date']));
-                    $oHistorique->setIserror($historique['isError']);
-                    $oHistorique->setIsfinal($historique['isFinal']);
-                    $oHistorique->setLabel($historique['label']);
-                    $oHistorique->setName($historique['name']);
-
-                    $this->em->persist($oHistorique);
-                    $this->em->flush();
-
-                    if ($historique['isError']) {
-                        $oDeclaration->setEtat(Declaration::ETAT_ERREUR);
-                    } elseif ($historique['isFinal'] && !$historique['isError']) {
-                        $oDeclaration->setEtat(Declaration::ETAT_OK);
-                    }
-                    $this->em->persist($oDeclaration);
-
-                    foreach ($historique['detail'] as $detail) {
-                        $oDetail = new DeclarationHistoriqueDetail();
-                        $oDetail->setDeclarationHistorique($oHistorique);
-                        $oDetail->setIserror($detail['isError']);
-                        $oDetail->setIsfinal($detail['isFinal']);
-                        $oDetail->setLabel($detail['label']);
-                        if (isset($detail['detailledlabel'])) {
-                            $oDetail->setDetail($detail['detailledlabel']);
+                if (isset($oDeclaration)) {
+                    foreach ($historiqueRepo->findBy(array('declarationId' => $oDeclaration->getId())) as $historique) {
+                        foreach ($historiqueDetailRepo->findBy(array('declarationHistorique' => $historique)) as $detail) {
+                            $this->em->remove($detail);
                         }
-                        $oDetail->setName($detail['name']);
-                        $oDetail->setDate(new \DateTime($detail['date']));
-                        if (isset($detail['codeErreur'])) {
-                            $oDetail->setCodeErreur($detail['codeErreur']);
+                        $this->em->remove($historique);
+                    }
+                    foreach ($response['historiques'] as $historique) {
+                        $oHistorique = new DeclarationHistorique();
+                        $oHistorique->setDeclarationId($oDeclaration->getId());
+                        $oHistorique->setDate(new \DateTime($historique['date']));
+                        $oHistorique->setIserror($historique['isError']);
+                        $oHistorique->setIsfinal($historique['isFinal']);
+                        $oHistorique->setLabel($historique['label']);
+                        $oHistorique->setName($historique['name']);
+
+                        $this->em->persist($oHistorique);
+                        $this->em->flush();
+
+                        if ($historique['isError']) {
+                            $oDeclaration->setEtat(Declaration::ETAT_ERREUR);
+                        } elseif ($historique['isFinal'] && !$historique['isError']) {
+                            $oDeclaration->setEtat(Declaration::ETAT_OK);
                         }
-                        $this->em->persist($oDetail);
+                        $this->em->persist($oDeclaration);
+
+                        foreach ($historique['detail'] as $detail) {
+                            $oDetail = new DeclarationHistoriqueDetail();
+                            $oDetail->setDeclarationHistorique($oHistorique);
+                            $oDetail->setIserror($detail['isError']);
+                            $oDetail->setIsfinal($detail['isFinal']);
+                            $oDetail->setLabel($detail['label']);
+                            if (isset($detail['detailledlabel'])) {
+                                $oDetail->setDetail($detail['detailledlabel']);
+                            }
+                            $oDetail->setName($detail['name']);
+                            $oDetail->setDate(new \DateTime($detail['date']));
+                            if (isset($detail['codeErreur'])) {
+                                $oDetail->setCodeErreur($detail['codeErreur']);
+                            }
+                            $this->em->persist($oDetail);
+                        }
                     }
                 }
                 $this->em->flush();

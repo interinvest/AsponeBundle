@@ -10,5 +10,5 @@ IDF:
   2033E: ['DB']
   2033F: ['GS']
   2033G: ['GS']
-  2031: ['HA', 'HB', 'CW', 'CX', 'BG']
+  2031: ['CW', 'CX', 'BG']
   2083: ['TE', 'TF', 'AA', 'AB', 'BA', 'BB', 'BC', 'BW', 'BX', 'BD', 'BE', 'BF', 'BG', 'BH', 'BJ', 'BL', 'BM', 'BK', 'BN', 'BP', 'BQ', 'BS', 'BR', 'BT', 'TA', 'TB', 'TC', 'TD', 'EK', 'EA', 'EB', 'ED', 'EE', 'EF', 'EG', 'EH', 'EJ', 'ET', 'EU', 'EL', 'EM', 'EW', 'EP', 'PA', 'PF', 'PG']

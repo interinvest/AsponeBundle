@@ -17,16 +17,6 @@ interface DeclarableInterface
     public function getListeFormulaires();
 
     public function getAnnee();
-    public function getTrimestre();
-
-    public function getTIdentifCA();
-    public function getTIdentifCB();
-    public function getTIdentifEA();
-    public function getTIdentifGA();
-    public function getTIdentifHA();
-    public function getTIdentifKA();
-    public function getTIdentifKD();
-    public function getTIdentifGABic();
 
     public function getDestinataires();
 

@@ -97,28 +97,30 @@ class AsponeXml
         }
 
         foreach ($forms as $numForm => $zonesForm) {
-            $formNode = $node->addChild('Formulaire');
-            $formNode->addAttribute('Nom', $numForm);
-            $formNode->addAttribute('Millesime', $this->millesime);
+            $do = 'do'.$numForm;
+            if (!method_exists($declarable, $do) || $declarable->$do()) {
+                $formNode = $node->addChild('Formulaire');
+                $formNode->addAttribute('Nom', $numForm);
+                $formNode->addAttribute('Millesime', $this->millesime);
 
-            foreach ($zonesForm as $zone) {
-
-                if (method_exists($declarable, 'getMultiple' . $numForm . $zone)) {
-                    $getter = 'getMultiple' . $numForm . $zone;
-                    if (!is_null($declarable->$getter())) {
-                        $zoneX = $formNode->addChild('Zone');
-                        $zoneX->addAttribute('id', $zone);
-                        $tmp = $declarable->$getter();
-                        foreach ($tmp as $i => $vals) {
-                            $zoneY = $zoneX->addChild('Occurrence');
-                            $zoneY->addAttribute('Numero', ($i + 1));
-                            $this->setZones($zoneY, $vals, false);
+                foreach ($zonesForm as $zone) {
+                    if (method_exists($declarable, 'getMultiple' . $numForm . $zone)) {
+                        $getter = 'getMultiple' . $numForm . $zone;
+                        if (!is_null($declarable->$getter()) && $declarable->$getter()) {
+                            $zoneX = $formNode->addChild('Zone');
+                            $zoneX->addAttribute('id', $zone);
+                            $tmp = $declarable->$getter();
+                            foreach ($tmp as $i => $vals) {
+                                $zoneY = $zoneX->addChild('Occurrence');
+                                $zoneY->addAttribute('Numero', ($i + 1));
+                                $this->setZones($zoneY, (array)$vals, false);
+                            }
                         }
-                    }
-                } elseif (method_exists($declarable, 'get' . $numForm . $zone)) {
-                    $getter = 'get' . $numForm . $zone;
-                    if (!is_null($declarable->$getter())) {
-                        $this->setZones($formNode, array($zone => $declarable->$getter()));
+                    } elseif (method_exists($declarable, 'get' . $numForm . $zone)) {
+                        $getter = 'get' . $numForm . $zone;
+                        if (!is_null($declarable->$getter()) && $declarable->$getter()) {
+                            $this->setZones($formNode, array($zone => $declarable->$getter()));
+                        }
                     }
                 }
             }
@@ -158,7 +160,7 @@ class AsponeXml
 
         //node AA
         $this->setAA($identifNode);
-        if ($declaration->getType() == 'TDFC') {
+        if ($declaration->getType() == 'IDF') {
             /** @var DeclarableTdfcInterface $declaration */
             $zones = array(
                 'BA' => $declaration->getIdentifBA(),
@@ -168,11 +170,10 @@ class AsponeXml
                 'CB' => $declaration->getIdentifCB(),
                 'DA' => $declaration->getIdentifDA(),
                 'DB' => $declaration->getIdentifDB(),
+                'KD' => $declaration->getTIdentifKD(),
             );
             $this->setZones($identifNode, $zones);
-        }
-
-        if (!is_null($declaration)) {
+        } elseif (!is_null($declaration)) {
             //zones identif
             $zones = array(
                 'CA' => $declaration->getTIdentifCa(),
@@ -342,7 +343,7 @@ class AsponeXml
     private function validateXml($type)
     {
         $xsd = 'Tva';
-        if ($type == 'TDFC') {
+        if ($type == 'IDF') {
             $xsd = 'Tdfc';
         }
 
@@ -370,7 +371,7 @@ class AsponeXml
         $xmlContent = "";
         /* @var Declaration $declaration */
         foreach ($declarations as $declaration) {
-            $document = $this->setXmlFromDeclarable($declaration->getServiceDeclarable());
+            $document = $this->setXmlFromDeclarable($declaration->getServiceDeclarable(), $test);
             if ($document) {
                 /** @var \SimpleXMLElement $content */
                 $content = simplexml_load_string($document);
