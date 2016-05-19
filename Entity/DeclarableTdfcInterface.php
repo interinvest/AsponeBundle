@@ -14,6 +14,7 @@ interface DeclarableTdfcInterface extends DeclarableInterface
     public function getIdentifBA();
     public function getIdentifBB();
     public function getIdentifBC();
+    public function getIdentifBF();
     public function getIdentifCA();
     public function getIdentifCB();
     public function getIdentifDA();

@@ -166,6 +166,7 @@ class AsponeXml
                 'BA' => $declaration->getIdentifBA(),
                 'BB' => $declaration->getIdentifBB(),
                 'BC' => $declaration->getIdentifBC(),
+                'BF' => $declaration->getIdentifBF(),
                 'CA' => $declaration->getExercice(),
                 'CB' => $declaration->getIdentifCB(),
                 'DA' => $declaration->getIdentifDA(),
