@@ -10,6 +10,6 @@ services:
         arguments: ["@doctrine.orm.entity_manager", "@service_container"]
     aspone.services.pdf:
         class: InterInvest\AsponeBundle\Services\AsponePdf
-        arguments: ["@doctrine.orm.entity_manager", "@service_container", "@kernel"]
+        arguments: ["@service_container", "@aspone.services.xml"]
     aspone.services.declaration:
         class: InterInvest\AsponeBundle\Services\AsponeDeclarationService

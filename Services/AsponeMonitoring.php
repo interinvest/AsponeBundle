@@ -203,18 +203,19 @@ class AsponeMonitoring
                     $type = $informations['type'];
                     unset($informations['identifiant']);
                     unset($informations['type']);
-
                     //recherche de la déclaration
                     $declarationRepo = $this->em->getRepository($this->container->getParameter('aspone.declarationRepository'));
                     if (isset($informations['referenceClient']) && $informations['referenceClient']) {
                         $declarations = $declarationRepo->findBy(array('referenceClient' => $informations['referenceClient']));
                     } else {
+                        if (isset($informations['referenceClient'])) {
+                            unset($informations['referenceClient']);
+                        }
                         $informations['periodeStart'] = new \DateTime($informations['periodeStart']);
                         $informations['periodeEnd'] = new \DateTime($informations['periodeEnd']);
 
                         $declarations = $declarationRepo->findBy($informations);
                     }
-
                     foreach ($declarations as $oDeclaration) {
                         if ($oDeclaration->getType() == $type) {
                             $oDeclaration->setIdentifiant($identifiant);
@@ -222,7 +223,6 @@ class AsponeMonitoring
                             $this->em->flush();
                         }
                     }
-
                 } else {
                     $oDeclaration = $declaration;
                 }
@@ -308,11 +308,11 @@ class AsponeMonitoring
 
         if ($resp->getElementsByTagName('rofDeclared')->length) {
             $final['infos'] = array(
-                'declarantSiren'  => $resp->getElementsByTagName('declarantSiren')->item(0)->nodeValue,
-                'periodeStart'    => $resp->getElementsByTagName('periodStart')->item(0)->nodeValue,
-                'periodeEnd'      => $resp->getElementsByTagName('periodEnd')->item(0)->nodeValue,
-                'identifiant'     => $resp->getElementsByTagName('declarationId')->item(0)->nodeValue,
-                'type'            => $resp->getElementsByTagName('code')->item(0)->nodeValue,
+                'declarantSiren' => $resp->getElementsByTagName('declarantSiren')->item(0)->nodeValue,
+                'periodeStart'   => $resp->getElementsByTagName('periodStart')->item(0)->nodeValue,
+                'periodeEnd'     => $resp->getElementsByTagName('periodEnd')->item(0)->nodeValue,
+                'identifiant'    => $resp->getElementsByTagName('declarationId')->item(0)->nodeValue,
+                'type'           => $resp->getElementsByTagName('code')->item(0)->nodeValue,
                 'referenceClient' => $resp->getElementsByTagName('referenceClient')->item(0) ? $resp->getElementsByTagName('referenceClient')->item(0)->nodeValue : ''
             );
         }

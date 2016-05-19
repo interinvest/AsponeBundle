@@ -2,6 +2,8 @@
 
 namespace InterInvest\AsponeBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * AsponeDeclaration
  */
@@ -18,6 +20,12 @@ abstract class Declaration
     public static $correspondancesTypes = array(
         'TVA'  => array('IDT', 'RBT'),
         'TDFC' => array('CVA', 'CRM', 'IAT', 'IDF', 'ILF', 'LIS', 'LOY'),
+    );
+
+    public static $formPdf = array(
+        'IDT' => array(3310),
+        'RBT' => array(3519),
+        'IDF' => array(2033, 2031, 2083)
     );
 
     abstract function getId();
@@ -53,5 +61,7 @@ abstract class Declaration
      * @return mixed
      */
     abstract function getServiceDeclarable();
+
+    abstract function getXmlPath();
 
 }
