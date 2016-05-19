@@ -199,17 +199,21 @@ class AsponeMonitoring
             if (isset($response['infos'])) {
                 $informations = $response['infos'];
                 if (is_string($declaration)) {
-                    //recherche de la déclaration
                     $identifiant = $informations['identifiant'];
                     $type = $informations['type'];
                     unset($informations['identifiant']);
                     unset($informations['type']);
 
-                    $informations['periodeStart'] = new \DateTime($informations['periodeStart']);
-                    $informations['periodeEnd'] = new \DateTime($informations['periodeEnd']);
-
+                    //recherche de la déclaration
                     $declarationRepo = $this->em->getRepository($this->container->getParameter('aspone.declarationRepository'));
-                    $declarations = $declarationRepo->findBy($informations);
+                    if (isset($informations['referenceClient']) && $informations['referenceClient']) {
+                        $declarations = $declarationRepo->findBy(array('referenceClient' => $informations['referenceClient']));
+                    } else {
+                        $informations['periodeStart'] = new \DateTime($informations['periodeStart']);
+                        $informations['periodeEnd'] = new \DateTime($informations['periodeEnd']);
+
+                        $declarations = $declarationRepo->findBy($informations);
+                    }
 
                     foreach ($declarations as $oDeclaration) {
                         if ($oDeclaration->getType() == $type) {
@@ -218,6 +222,7 @@ class AsponeMonitoring
                             $this->em->flush();
                         }
                     }
+
                 } else {
                     $oDeclaration = $declaration;
                 }
@@ -303,11 +308,12 @@ class AsponeMonitoring
 
         if ($resp->getElementsByTagName('rofDeclared')->length) {
             $final['infos'] = array(
-                'declarantSiren' => $resp->getElementsByTagName('declarantSiren')->item(0)->nodeValue,
-                'periodeStart'   => $resp->getElementsByTagName('periodStart')->item(0)->nodeValue,
-                'periodeEnd'     => $resp->getElementsByTagName('periodEnd')->item(0)->nodeValue,
-                'identifiant'    => $resp->getElementsByTagName('declarationId')->item(0)->nodeValue,
-                'type'           => $resp->getElementsByTagName('code')->item(0)->nodeValue
+                'declarantSiren'  => $resp->getElementsByTagName('declarantSiren')->item(0)->nodeValue,
+                'periodeStart'    => $resp->getElementsByTagName('periodStart')->item(0)->nodeValue,
+                'periodeEnd'      => $resp->getElementsByTagName('periodEnd')->item(0)->nodeValue,
+                'identifiant'     => $resp->getElementsByTagName('declarationId')->item(0)->nodeValue,
+                'type'            => $resp->getElementsByTagName('code')->item(0)->nodeValue,
+                'referenceClient' => $resp->getElementsByTagName('referenceClient')->item(0) ? $resp->getElementsByTagName('referenceClient')->item(0)->nodeValue : ''
             );
         }
 
