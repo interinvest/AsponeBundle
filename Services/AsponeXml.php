@@ -65,7 +65,6 @@ class AsponeXml
         $this->setFormulaires($listeFormNode, $formulaires);
         try {
             $this->xml = $rootNode->asXml();
-            var_dump($this->xml);
             $this->validateXml($type);
             return $this->xml;
         } catch (\Exception $E) {
