@@ -21,19 +21,27 @@ class AsponeDeclarationService
     /**
      * @param DeclarableInterface $declarable
      * @param Declaration         $declaration
+     * @param mixed               $formulaires
      *
      * @return Declaration
      * @throws \Exception
      */
-    public function createDeclarationsFromDeclarable($declarable, &$declaration)
+    public function createDeclarationsFromDeclarable($declarable, &$declaration, $formulaires)
     {
+        if (is_array($formulaires)) {
+            $strFormulaires = implode(',', $formulaires);
+        } else {
+            $strFormulaires = str_replace(' ', '', $formulaires);
+        }
+
         if ($declarable instanceof DeclarableInterface) {
             $declaration->setType($declarable->getType());
             $declaration->setEtat(Declaration::ETAT_NON_FINIE);
             $declaration->setDeclarantSiren($declarable->getRedevableIdentifiant());
             $declaration->setPeriodeStart(date_create_from_format('YmdHis', (method_exists($declarable, 'getTIdentifCA') ? $declarable->getTIdentifCA() : $declarable->getAnnee() . '0101') . '000000'));
             $declaration->setPeriodeEnd(date_create_from_format('YmdHis', (method_exists($declarable, 'getTIdentifCB') ? $declarable->getTIdentifCB() : $declarable->getAnnee() . '1231') . '000000'));
-            $declaration->setReferenceClient($declarable->getInfent());
+            $declaration->setReferenceClient($declarable->getInfent() . '-' . time());
+            $declaration->setFormulaires($strFormulaires);
             return $declaration;
         } else {
             throw new \Exception('L\'objet déclarable doit implémenter l\'interface DeclarableInterface');

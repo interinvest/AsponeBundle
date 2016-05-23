@@ -2,8 +2,6 @@
 
 namespace InterInvest\AsponeBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * AsponeDeclaration
  */
@@ -55,6 +53,9 @@ abstract class Declaration
 
     abstract function setReferenceClient($referenceClient);
     abstract function getReferenceClient();
+
+    abstract function setFormulaires($formulaires);
+    abstract function getFormulaires();
 
     /**
      * Doit renvoyer un tableau avec le nom du service pour la création de l'objet déclarable et l'entité utilisée
