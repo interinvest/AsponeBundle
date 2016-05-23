@@ -7,11 +7,8 @@ namespace InterInvest\AsponeBundle\Services;
 use Doctrine\ORM\EntityManager;
 use InterInvest\AsponeBundle\Entity\Declarable;
 use InterInvest\AsponeBundle\Entity\DeclarableInterface;
-use InterInvest\AsponeBundle\Entity\DeclarableTdfcInterface;
-use InterInvest\AsponeBundle\Entity\DeclarableTvaInterface;
 use InterInvest\AsponeBundle\Entity\Declaration;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\Yaml\Yaml;
 
 class AsponeXml
 {
@@ -32,19 +29,20 @@ class AsponeXml
      * Créer le xml lié à un objet déclarable (déclaration TVA, demande de remboursement, TDFC, etc)
      *
      * @param Declarable|Array $declarable si array alors {service declarable, entité}
-     * @param Int              $test
+     * @param array $formulaires
+     * @param int   $test
      *
-     * @return string
+     * @return mixed
      * @throws \Exception
      */
-    public function setXmlFromDeclarable($declarable, $test = 1)
+    public function setXmlFromDeclarable($declarable, $formulaires = array(), $test = 1)
     {
         if (is_array($declarable)) {
             if (!isset($declarable[1])) {
                 throw new \Exception('Entité manquante pour l\'appel au service ' . $declarable[0]);
             }
             $serviceDeclarable = $this->container->get($declarable[0]);
-            $declarable = $serviceDeclarable->init($declarable[1]);
+            $declarable = $serviceDeclarable->init($declarable[1], $formulaires);
         }
         $this->declarable = $declarable;
         $type = $declarable->getType();
@@ -62,15 +60,13 @@ class AsponeXml
         $groupNode = $rootNode->addChild('GroupeFonctionnel');
         $groupNode->addAttribute('Type', 'INFENT');
 
-
         $listeFormNode = $this->setDeclarableGroup($groupNode, $type);
 
-        $this->setFormulaires($listeFormNode);
-
+        $this->setFormulaires($listeFormNode, $formulaires);
         try {
             $this->xml = $rootNode->asXml();
+            var_dump($this->xml);
             $this->validateXml($type);
-
             return $this->xml;
         } catch (\Exception $E) {
             throw new \Exception ('Erreur lors de la validation du XML : ' . $E->getMessage(), 0);
@@ -81,45 +77,65 @@ class AsponeXml
      * Crée le xml pour une déclaration
      * en utilisant un objet declarable qui implémente l'interface voulue
      *
-     * @param $node
+     * @param       $node
+     * @param array $formulaires
      *
      * @throws \Exception
      */
-    private function setFormulaires(&$node)
+    private function setFormulaires(&$node, $formulaires = array())
     {
+        /** @var DeclarableInterface $declarable */
         $declarable = $this->declarable;
 
         try {
-            $yml = Yaml::parse(__DIR__ . '/../Resources/millesimes/20' . $this->millesime . '.yml');
-            $forms = $yml[$declarable->getType()];
+            $forms = $this->getFormZones($declarable->getType());
         } catch (\Exception $e) {
             throw new \Exception('Problème lors de la lecture du fichier de millesime.');
         }
 
-        foreach ($forms as $numForm => $zonesForm) {
-            $do = 'do'.$numForm;
-            if (!method_exists($declarable, $do) || $declarable->$do()) {
-                $formNode = $node->addChild('Formulaire');
-                $formNode->addAttribute('Nom', $numForm);
-                $formNode->addAttribute('Millesime', $this->millesime);
+        /**
+         * Test des formulaires dans la déclaration
+         * Si présents dans le dictionnaire alors on les rempli
+         */
+        $formulaires = explode(',', $formulaires);
+        array_unshift($formulaires, 'Identif');
 
-                foreach ($zonesForm as $zone) {
-                    if (method_exists($declarable, 'getMultiple' . $numForm . $zone)) {
-                        $getter = 'getMultiple' . $numForm . $zone;
-                        if (!is_null($declarable->$getter()) && $declarable->$getter()) {
-                            $zoneX = $formNode->addChild('Zone');
-                            $zoneX->addAttribute('id', $zone);
-                            $tmp = $declarable->$getter();
-                            foreach ($tmp as $i => $vals) {
-                                $zoneY = $zoneX->addChild('Occurrence');
-                                $zoneY->addAttribute('Numero', ($i + 1));
-                                $this->setZones($zoneY, (array)$vals, false);
+        $formulairesDeclarables = $declarable->getConfiguration();
+
+        foreach ($formulairesDeclarables as $formulaire => $zones) {
+            if (!in_array($formulaire, $formulaires)) {
+                continue;
+            }
+            if (isset($forms[$formulaire])) {
+                if ($formulaire != 'Identif') {
+                    $formNode = $node->addChild('Formulaire');
+                    $formNode->addAttribute('Nom', $formulaire);
+                } else {
+                    $formNode = $node->addChild('Identif');
+                }
+                $formNode->addAttribute('Millesime', $this->millesime);
+                if ($formulaire == 'Identif') {
+                    $this->setAA($formNode);
+                }
+                foreach ($zones as $zone => $val) {
+                    if (isset($forms[$formulaire][$zone])) {
+                        $value = $this->getValue($declarable->getConfiguration(), $formulaire, $zone);
+                        if (!is_null($value)) {
+                            if ($forms[$formulaire][$zone]['multi'] == 'NON') {
+                                //$setZones = ($forms[$formulaire][$zone]['retour'] == 'value' ? true : false);
+                                $this->setZones($formNode, array($zone => $value));
+                            } else {
+                                $zoneX = $formNode->addChild('Zone');
+                                $zoneX->addAttribute('id', $zone);
+                                $tmp = $value;
+                                $i = 1;
+                                foreach ($tmp as $vals) {
+                                    $zoneY = $zoneX->addChild('Occurrence');
+                                    $zoneY->addAttribute('Numero', $i);
+                                    $this->setZones($zoneY, (array)$vals, false);
+                                    $i++;
+                                }
                             }
-                        }
-                    } elseif (method_exists($declarable, 'get' . $numForm . $zone)) {
-                        $getter = 'get' . $numForm . $zone;
-                        if (!is_null($declarable->$getter()) && $declarable->$getter()) {
-                            $this->setZones($formNode, array($zone => $declarable->$getter()));
                         }
                     }
                 }
@@ -155,44 +171,6 @@ class AsponeXml
         }
 
         $listeFormNode = $declarationNode->addChild('ListeFormulaires');
-        $identifNode = $listeFormNode->addChild('Identif');
-        $identifNode->addAttribute('Millesime', $this->millesime);
-
-        //node AA
-        $this->setAA($identifNode);
-        if ($declaration->getType() == 'IDF') {
-            /** @var DeclarableTdfcInterface $declaration */
-            $zones = array(
-                'BA' => $declaration->getIdentifBA(),
-                'BB' => $declaration->getIdentifBB(),
-                'BC' => $declaration->getIdentifBC(),
-                'BF' => $declaration->getIdentifBF(),
-                'CA' => $declaration->getExercice(),
-                'CB' => $declaration->getIdentifCB(),
-                'DA' => $declaration->getIdentifDA(),
-                'DB' => $declaration->getIdentifDB(),
-                'KD' => $declaration->getTIdentifKD(),
-            );
-            $this->setZones($identifNode, $zones);
-        } elseif (!is_null($declaration)) {
-            //zones identif
-            $zones = array(
-                'CA' => $declaration->getTIdentifCa(),
-                'CB' => $declaration->getTIdentifCb(),
-            );
-            if ($declaration->getTIdentifEa() && $declaration->getTIdentifHa()) {
-                $zones['HA'] = $declaration->getTIdentifHa();
-                $zones['GA'] = array(
-                    'Iban' => $declaration->getTIdentifGa(),
-                    //il faut le bic !
-                    'Bic'  => $declaration->getTIdentifGABic(),
-                );
-                $zones['KA'] = $declaration->getTIdentifKa();
-            }
-            $zones['KD'] = $declaration->getTIdentifKD();
-
-            $this->setZones($identifNode, $zones);
-        }
 
         return $listeFormNode;
     }
@@ -209,44 +187,10 @@ class AsponeXml
 
         //Redacteur
         $redacteurNode = $node->addChild('Redacteur');
-        $redacteurNode->addChild('Siret', $declaration->getRedacteurSiret());
-        $redacteurNode->addChild('Designation', $declaration->getRedacteurDesignation());
-        if ($declaration->getRedacteurDesignationSuite()) {
-            $redacteurNode->addChild('DesignationSuite1', $declaration->getRedacteurDesignationSuite());
-        }
-        $adresseNode = $redacteurNode->addChild('Adresse');
-        if ($declaration->getRedacteurAdresseAdresseNumero()) {
-            $adresseNode->addChild('AdresseNumero', $declaration->getRedacteurAdresseAdresseNumero());
-        }
-        $adresseNode->addChild('AdresseVoie', $declaration->getRedacteurAdresseAdresseVoie());
-        if ($declaration->getRedacteurAdresseAdresseComplement()) {
-            $adresseNode->addChild('AdresseComplement', $declaration->getRedacteurAdresseAdresseComplement());
-        }
-        $adresseNode->addChild('AdresseCodePostal', $declaration->getRedacteurAdresseAdresseCodePostal());
-        $adresseNode->addChild('AdresseVille', $declaration->getRedacteurAdresseAdresseVille());
-        $adresseNode->addChild('AdresseCodePays', $declaration->getRedacteurAdresseAdresseCodePays());
-
+        $this->setZones($redacteurNode, $declaration->getRedacteur(), true, true);
         //Redevable
         $redevableNode = $node->addChild('Redevable');
-        $redevableNode->addChild('Identifiant', $declaration->getRedevableIdentifiant());
-        $redevableNode->addChild('Designation', $declaration->getRedevableDesignation());
-        if ($declaration->getRedevableDesignationSuite()) {
-            $redevableNode->addChild('DesignationSuite1', $declaration->getRedevableDesignationSuite());
-        }
-
-        $adresseNode = $redevableNode->addChild('Adresse');
-        if ($declaration->getRedevableAdresseAdresseNumero()) {
-            $adresseNode->addChild('AdresseNumero', $declaration->getRedevableAdresseAdresseNumero());
-        }
-        $adresseNode->addChild('AdresseVoie', $declaration->getRedevableAdresseAdresseVoie());
-        if ($declaration->getRedevableAdresseAdresseComplement()) {
-            $adresseNode->addChild('AdresseComplement', $declaration->getRedevableAdresseAdresseComplement());
-        }
-        $adresseNode->addChild('AdresseCodePostal', $declaration->getRedevableAdresseAdresseCodePostal());
-        $adresseNode->addChild('AdresseVille', $declaration->getRedevableAdresseAdresseVille());
-        $adresseNode->addChild('AdresseCodePays', $declaration->getRedevableAdresseAdresseCodePays());
-
-        $redevableNode->addChild('Rof', $declaration->getTIdentifKD());
+        $this->setZones($redevableNode, $declaration->getRedevable(), true, true);
     }
 
     /**
@@ -259,19 +203,7 @@ class AsponeXml
 
         $zoneAaNode = $node->addChild('Zone');
         $zoneAaNode->addAttribute('id', 'AA');
-        $zoneAaNode->addChild('Identifiant', $declaration->getIdentifIdentifiant());
-        $zoneAaNode->addChild('Designation', $declaration->getIdentifDesignation());
-        if ($declaration->getIdentifAdresseAdresseNumero()) {
-            $zoneAaNode->addChild('AdresseNumero', $declaration->getIdentifAdresseAdresseNumero());
-        }
-        $zoneAaNode->addChild('AdresseVoie', $declaration->getIdentifAdresseAdresseVoie());
-        if ($declaration->getIdentifAdresseAdresseComplement()) {
-            $zoneAaNode->addChild('AdresseComplement', $declaration->getIdentifAdresseAdresseComplement());
-        }
-        $zoneAaNode->addChild('AdresseCodePostal', $declaration->getIdentifAdresseAdresseCodePays());
-        $zoneAaNode->addChild('AdresseVille', $declaration->getIdentifAdresseAdresseVille());
-        $zoneAaNode->addChild('AdresseCodePays', $declaration->getIdentifAdresseAdresseCodePays());
-        $zoneAaNode->addChild('Email', $declaration->getIdentifEmail());
+        $this->setZones($zoneAaNode, $declaration->getIdentif(), true, true);
     }
 
     /**
@@ -279,10 +211,11 @@ class AsponeXml
      * Prend en compte les valeurs simples et les tableaux
      *
      * @param \SimpleXMLElement $node
-     * @param array             $zones
+     * @param                   $zones
      * @param bool              $setZones
+     * @param bool              $isSimple La zone envoyée est-elle simple ? (cad balise correspond à id et non <balise id=id>)
      */
-    private function setZones(&$node, array $zones, $setZones = true)
+    private function setZones(&$node, $zones, $setZones = true, $isSimple = false)
     {
         foreach ($zones as $id => $zone) {
             if (is_null($zone) || !$zone) {
@@ -299,37 +232,33 @@ class AsponeXml
                     continue;
                 }
             }
-            if ($setZones) {
+            if ($setZones && !$isSimple) {
                 $zoneX = $node->addChild('Zone');
                 $zoneX->addAttribute('id', $id);
+            } elseif ($setZones && $isSimple && is_array($zone)) {
+                $zoneX = $node->addChild($id);
             } else {
                 $zoneX = $node;
             }
             if (is_array($zone)) {
                 foreach ($zone as $k => $z) {
-                    $zoneX->addChild($k, $z);
+                    if (!is_null($z) && $z != '') {
+                        if (is_array($z) && isset($z['Valeur']) && $z['Valeur']) {
+                            $zoneX->addChild('Valeur', $z['Valeur']);
+                        } elseif (!is_array($z) && $z) {
+                            $zoneX->addChild($k, $z);
+                        }
+                    }
+                }
+            } elseif ($setZones && $isSimple) {
+                if (!is_null($zone) && $zone != '') {
+                    $zoneX->addChild($id, $zone);
                 }
             } else {
-                $zoneX->addChild('Valeur', $zone);
+                if (!is_null($zone) && $zone != '') {
+                    $zoneX->addChild('Valeur', $zone);
+                }
             }
-        }
-    }
-
-    /**
-     * @param \SimpleXMLElement $node
-     */
-    private function setComments(&$node)
-    {
-        /** @var DeclarableTvaInterface $declaration */
-        $declaration = $this->declarable;
-
-        $zone = $node->addChild('Zone');
-        $zone->addAttribute('id', 'FJ');
-
-        $i = 1;
-        foreach ($declaration->getFJ() as $value) {
-            $zone->{'TexteLibre' . $i} = $value;
-            $i++;
         }
     }
 
@@ -370,9 +299,10 @@ class AsponeXml
     {
         $path = $this->container->get('kernel')->getRootDir() . $this->container->getParameter('aspone.xmlPath');
         $xmlContent = "";
+
         /* @var Declaration $declaration */
         foreach ($declarations as $declaration) {
-            $document = $this->setXmlFromDeclarable($declaration->getServiceDeclarable(), $test);
+            $document = $declaration->getXml($this->container);
             if ($document) {
                 /** @var \SimpleXMLElement $content */
                 $content = simplexml_load_string($document);
@@ -395,5 +325,72 @@ class AsponeXml
         );
 
         return utf8_decode($rootNode->saveXML());
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function getFormZones($type)
+    {
+        $formsZones = array();
+
+        if (in_array($type, array('RBT', 'IDT'))) {
+            $typeDepot = 'TVA';
+        } elseif (in_array($type, array('IDF'))) {
+            $typeDepot = 'TDFC';
+        }
+
+        $path = __DIR__ . '/../Resources/dictionnaires/';
+
+        try {
+            $dir = opendir($path);
+            while (false !== ($fichier = readdir($dir))) {
+                if (strpos($fichier, 'DICTIONNAIRE_' . $typeDepot . '_') !== false) {
+                    if (strpos($fichier, (string)$this->millesime) !== false) {
+                        $handle = fopen($path . $fichier, 'r');
+                        $row = 0;
+                        while (($data = fgetcsv($handle, 100000, ";")) !== false) {
+                            if ($row > 0) {
+                                $formulaire = $data[0];
+                                if (strpos($data[0], 'IDENTIF') !== false) {
+                                    $formulaire = 'Identif';
+                                }
+                                if ($data[1] == $this->millesime) {
+                                    $formsZones[$formulaire][$data[2]] = array(
+                                        'multi'  => $data[5],
+                                        'retour' => $data[7] == 'Valeur' ? 'value' : 'array',
+                                    );
+                                }
+                            }
+                            $row++;
+                        }
+                        fclose($handle);
+                    }
+                }
+            }
+            closedir($dir);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage() . ' ' . $e->getFile() . ' l.' . $e->getLine());
+        }
+        return $formsZones;
+    }
+
+    /**
+     * @param array $declarableConfig
+     * @param       $form
+     * @param       $zone
+     *
+     * @return mixed
+     */
+    private function getValue(Array $declarableConfig, $form, $zone)
+    {
+        if (isset($declarableConfig[$form][$zone]))
+        {
+            return $declarableConfig[$form][$zone];
+        }
+        return null;
     }
 }

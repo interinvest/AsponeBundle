@@ -63,6 +63,29 @@ abstract class Declaration
      */
     abstract function getServiceDeclarable();
 
-    abstract function getXmlPath();
+    /**
+     * @return string
+     */
+    public function getXmlPath()
+    {
+        return $this->getType() . '/' . $this->getId() . '.xml';
+    }
 
+    /**
+     * @param Container $container
+     *
+     * @return string
+     */
+    public function getXml(Container $container)
+    {
+        if ($container->getParameter('aspone.archive') == 'yes') {
+            $path = $container->get('kernel')->getRootDir() . $container->getParameter('aspone.xmlPath') . $this->getXmlPath();
+            if (file_exists($path)) {
+                return file_get_contents($path);
+            }
+        }
+
+        $serviceXml = $container->get('aspone.services.xml');
+        return $serviceXml->setXmlFromDeclarable($this->getServiceDeclarable(), 1, $this->getFormulaires());
+    }
 }

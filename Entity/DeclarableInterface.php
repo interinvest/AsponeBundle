@@ -4,7 +4,25 @@ namespace InterInvest\AsponeBundle\Entity;
 
 interface DeclarableInterface
 {
+    /**
+     * @param $declaration
+     * @param $formulaires List of forms to use
+     *
+     * @return mixed
+     */
+    public function init($declaration, $formulaires);
+
     public function getId();
+
+    /**
+     * Return the configuration array of the object.
+     * Must be like this : array(form=>array(zone=>array(nodename=>value))
+     * Ex : array(2031 => array('CW' => array('Valeur' => 123)))
+     * Ex : array('3310CA3' => array('BA' => array('TextLibre1' => 'Lorem Ipsum', 'TextLibre2' => 'Dolor')))
+     *
+     * @return array
+     */
+    public function getConfiguration();
 
     /**
      * @return string 'IDT', 'RBT', 'IDF', ...
@@ -12,49 +30,17 @@ interface DeclarableInterface
     public function getType();
 
     public function getInfent();
-    public function getNumeroFormulaire();
-
-    public function getListeFormulaires();
 
     public function getAnnee();
 
     public function getDestinataires();
 
-    public function getRedacteurSiret();
-    public function getRedacteurDesignation();
-    public function getRedacteurDesignationSuite();
-    public function getRedacteurAdresseAdresseNumero();
-    public function getRedacteurAdresseAdresseVoie();
-    public function getRedacteurAdresseAdresseComplement();
-    public function getRedacteurAdresseAdresseCodePostal();
-    public function getRedacteurAdresseAdresseVille();
-    public function getRedacteurAdresseAdresseCodePays();
-
-    public function getRedevableIdentifiant();
-    public function getRedevableDesignation();
-    public function getRedevableDesignationSuite();
-    public function getRedevableAdresseAdresseNumero();
-    public function getRedevableAdresseAdresseVoie();
-    public function getRedevableAdresseAdresseComplement();
-    public function getRedevableAdresseAdresseCodePostal();
-    public function getRedevableAdresseAdresseVille();
-    public function getRedevableAdresseAdresseCodePays();
-
-    public function getIdentifIdentifiant();
-    public function getIdentifDesignation();
-    public function getIdentifAdresseAdresseNumero();
-    public function getIdentifAdresseAdresseVoie();
-    public function getIdentifAdresseAdresseComplement();
-    public function getIdentifAdresseAdresseCodePostal();
-    public function getIdentifAdresseAdresseVille();
-    public function getIdentifAdresseAdresseCodePays();
-    public function getIdentifEmail();
-
-    public function getXml();
-
     /**
-     * Récupère tous les xml (tous types confondus) de l'objet déclarable
-     * @return mixed
+     * Return array of designation :
+     * redevable = array('Siret' => '412346', 'Designation' => 'Redevable', 'AdresseNumero' => 5, ....)
+     * @return array
      */
-    public function getXmls();
+    public function getRedacteur();
+    public function getRedevable();
+    public function getIdentif();
 }
