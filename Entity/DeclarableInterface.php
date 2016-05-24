@@ -4,14 +4,8 @@ namespace InterInvest\AsponeBundle\Entity;
 
 interface DeclarableInterface
 {
-    /**
-     * @param $declaration
-     * @param $formulaires List of forms to use
-     *
-     * @return mixed
-     */
-    public function init($declaration, $formulaires);
 
+    public function init($declaration, $formulaires);
     public function getId();
 
     /**

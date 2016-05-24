@@ -28,21 +28,21 @@ class AsponeXml
     /**
      * Créer le xml lié à un objet déclarable (déclaration TVA, demande de remboursement, TDFC, etc)
      *
-     * @param Declarable|Array $declarable si array alors {service declarable, entité}
-     * @param array $formulaires
-     * @param int   $test
+     * @param Declaration $declaration
+     * @param int    $test
      *
      * @return mixed
      * @throws \Exception
      */
-    public function setXmlFromDeclarable($declarable, $formulaires = array(), $test = 1)
+    public function setXmlFromDeclarable($declaration, $test = 1)
     {
+        $declarable = $declaration->getServiceDeclarable();
         if (is_array($declarable)) {
             if (!isset($declarable[1])) {
                 throw new \Exception('Entité manquante pour l\'appel au service ' . $declarable[0]);
             }
             $serviceDeclarable = $this->container->get($declarable[0]);
-            $declarable = $serviceDeclarable->init($declarable[1], $formulaires);
+            $declarable = $serviceDeclarable->init($declarable[1], $declaration->getFormulaires());
         }
         $this->declarable = $declarable;
         $type = $declarable->getType();
@@ -60,11 +60,12 @@ class AsponeXml
         $groupNode = $rootNode->addChild('GroupeFonctionnel');
         $groupNode->addAttribute('Type', 'INFENT');
 
-        $listeFormNode = $this->setDeclarableGroup($groupNode, $type);
+        $listeFormNode = $this->setDeclarableGroup($groupNode, $type, $declaration->getReferenceClient());
 
-        $this->setFormulaires($listeFormNode, $formulaires);
+        $this->setFormulaires($listeFormNode, $declaration->getFormulaires());
         try {
             $this->xml = $rootNode->asXml();
+
             $this->validateXml($type);
             return $this->xml;
         } catch (\Exception $E) {
@@ -121,7 +122,6 @@ class AsponeXml
                         $value = $this->getValue($declarable->getConfiguration(), $formulaire, $zone);
                         if (!is_null($value)) {
                             if ($forms[$formulaire][$zone]['multi'] == 'NON') {
-                                //$setZones = ($forms[$formulaire][$zone]['retour'] == 'value' ? true : false);
                                 $this->setZones($formNode, array($zone => $value));
                             } else {
                                 $zoneX = $formNode->addChild('Zone');
@@ -146,15 +146,16 @@ class AsponeXml
      *
      * @param \SimpleXMLElement $groupNode
      * @param string            $codeDoc
+     * @param string            $referenceClient
      *
      * @return \SimpleXMLElement
      */
-    private function setDeclarableGroup(&$groupNode, $codeDoc)
+    private function setDeclarableGroup(&$groupNode, $codeDoc, $referenceClient = '')
     {
         /** @var DeclarableInterface $declaration */
         $declaration = $this->declarable;
         $declarationNode = $groupNode->addChild('Declaration');
-        $declarationNode->addAttribute('Reference', 'INFENT' . $declaration->getInfent());
+        $declarationNode->addAttribute('Reference', 'INFENT' . $referenceClient);
         $declarationNode->addAttribute('Type', $codeDoc);
 
         //création des nodes d'adresses
@@ -216,7 +217,7 @@ class AsponeXml
     private function setZones(&$node, $zones, $setZones = true, $isSimple = false)
     {
         foreach ($zones as $id => $zone) {
-            if (is_null($zone) || $zone === false || empty($zone)) {
+            if (is_null($zone) || $zone === false || $zone === '') {
                 continue;
             }
             if (is_array($zone)) {
@@ -230,6 +231,7 @@ class AsponeXml
                     continue;
                 }
             }
+
             if ($setZones && !$isSimple) {
                 $zoneX = $node->addChild('Zone');
                 $zoneX->addAttribute('id', $id);
@@ -238,10 +240,11 @@ class AsponeXml
             } else {
                 $zoneX = $node;
             }
+
             if (is_array($zone)) {
                 foreach ($zone as $k => $z) {
                     if (!is_null($z)) {
-                        if (is_array($z) && isset($z['Valeur']) && $z['Valeur'] !== false && !empty($z)) {
+                        if (is_array($z) && isset($z['Valeur']) && $z['Valeur'] !== false && $zone !== '') {
                             $zoneX->addChild('Valeur', $z['Valeur']);
                         } elseif (!is_array($z) && $z !== false && !empty($z)) {
                             $zoneX->addChild($k, $z);
@@ -251,7 +254,7 @@ class AsponeXml
             } elseif ($setZones && $isSimple) {
                 $zoneX->addChild($id, $zone);
             } else {
-                if (!is_null($zone) && $zone !== false && !empty($zone)) {
+                if (!is_null($zone) && $zone !== false && $zone !== '') {
                     $zoneX->addChild('Valeur', $zone);
                 }
             }
