@@ -126,12 +126,11 @@ class AsponeXml
                             } else {
                                 $zoneX = $formNode->addChild('Zone');
                                 $zoneX->addAttribute('id', $zone);
-                                $tmp = $value;
                                 $i = 1;
-                                foreach ($tmp as $vals) {
+                                foreach ($value as $vals) {
                                     $zoneY = $zoneX->addChild('Occurrence');
                                     $zoneY->addAttribute('Numero', $i);
-                                    $this->setZones($zoneY, (array)$vals, false);
+                                    $this->setZones($zoneY, $vals, false);
                                     $i++;
                                 }
                             }
@@ -217,7 +216,7 @@ class AsponeXml
     private function setZones(&$node, $zones, $setZones = true, $isSimple = false)
     {
         foreach ($zones as $id => $zone) {
-            if (is_null($zone) || !$zone) {
+            if (is_null($zone) || $zone === false || empty($zone)) {
                 continue;
             }
             if (is_array($zone)) {
@@ -241,20 +240,18 @@ class AsponeXml
             }
             if (is_array($zone)) {
                 foreach ($zone as $k => $z) {
-                    if (!is_null($z) && $z != '') {
-                        if (is_array($z) && isset($z['Valeur']) && $z['Valeur']) {
+                    if (!is_null($z)) {
+                        if (is_array($z) && isset($z['Valeur']) && $z['Valeur'] !== false && !empty($z)) {
                             $zoneX->addChild('Valeur', $z['Valeur']);
-                        } elseif (!is_array($z) && $z) {
+                        } elseif (!is_array($z) && $z !== false && !empty($z)) {
                             $zoneX->addChild($k, $z);
                         }
                     }
                 }
             } elseif ($setZones && $isSimple) {
-                if (!is_null($zone) && $zone != '') {
-                    $zoneX->addChild($id, $zone);
-                }
+                $zoneX->addChild($id, $zone);
             } else {
-                if (!is_null($zone) && $zone != '') {
+                if (!is_null($zone) && $zone !== false && !empty($zone)) {
                     $zoneX->addChild('Valeur', $zone);
                 }
             }
@@ -275,9 +272,7 @@ class AsponeXml
         if ($type == 'IDF') {
             $xsd = 'Tdfc';
         }
-
         $xsdFile = 'XmlEdi' . $xsd . '.xsd';
-
         $verif = new \DOMDocument();
         $verif->loadXML($this->xml);
         if (!$verif->schemaValidate(__DIR__ . '/../Resources/xsd/' . $xsdFile)) {
