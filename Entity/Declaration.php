@@ -2,6 +2,8 @@
 
 namespace InterInvest\AsponeBundle\Entity;
 
+use Symfony\Component\DependencyInjection\Container;
+
 /**
  * AsponeDeclaration
  */
