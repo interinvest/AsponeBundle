@@ -330,7 +330,7 @@ class AsponeXml
      * @return array
      * @throws \Exception
      */
-    private function getFormZones($type)
+    public function getFormZones($type)
     {
         $formsZones = array();
 
