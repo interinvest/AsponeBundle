@@ -88,7 +88,6 @@ abstract class Declaration
         }
 
         $serviceXml = $container->get('aspone.services.xml');
-        return $serviceXml->setXmlFromDeclarable($this);
+        return $serviceXml->setXmlFromDeclarable($this->getServiceDeclarable(), 1, $this->getFormulaires());
     }
-
 }

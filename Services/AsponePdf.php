@@ -27,7 +27,7 @@ class AsponePdf
     private $rootDir;
     /** @var  int */
     private $millesime;
-    
+
     /** @var array  */
     private $forms = array();
     /** @var  Crawler */
@@ -87,13 +87,13 @@ class AsponePdf
                         if (!method_exists($this, $methode)) {
                             throw new \Exception("Méthode $methode() inconnue");
                         }
-                        
+
                     } catch (\Exception $e) {
                         throw new \Exception($e->getMessage() . ' ' . $e->getFile() . ' l.' . $e->getLine());
                     }
                 }
             }
-            
+
             $this->forms = $formUsed;
 
         } catch (\Exception $e) {
@@ -593,9 +593,139 @@ class AsponePdf
         $pdf = new TCPDFLib();
         $pdf->printFooter = false;
 
+        $pageOrientation = array(
+            1 => 'P',
+            2 => 'L',
+            3 => 'L',
+            4 => 'P',
+            5 => 'L',
+        );
+
         $import = new ImportPdfAction();
         $import->setOption('file', $this->getTplPath(2083));
+        $import->setOption('orientation', $pageOrientation);
+        $import->setOption('pages', array(1));
         $import->execute($pdf);
+
+        $crawlerForm = "Declaration > ListeFormulaires > Identif > ";
+        $pdf->setPage(1);
+        $valueCa = $this->crawler->filter("{$crawlerForm}Zone#CA")->first()->text();
+        $CA = date_create_from_format('Ymd', $valueCa)->format('d m Y');
+        $valueCB = $this->crawler->filter("{$crawlerForm}Zone#CB")->first()->text();
+        $CB = date_create_from_format('Ymd', $valueCB)->format('d m Y');
+
+        $pdf->transaction()
+            ->add('textOptions', array('size' => 12))
+            ->add('html', array('html' => $CA, 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '118', 'align' => 'L'))
+            ->add('html', array('html' => $CB, 'w' => '90', 'h' => '4', 'x' => '168', 'y' => '118', 'align' => 'L'))
+            ->add('textOptions', array('size' => 10))
+            ->execute();
+
+        $crawlerForm = "Declaration > ListeFormulaires > Formulaire[Nom=\"2083\"] > ";
+        $currentPage = 2;
+
+        //associés
+        $nbOccurrences = $this->getNombreOccurrences($crawlerForm, 'AA');
+        for ($i = 1; $i <= $nbOccurrences; $i++) {
+            $max = $i*20+1;
+            if($i%20 == 0 || $i == 1){
+                $import = new ImportPdfAction();
+                $import->setOption('file', $this->getTplPath('aide2083'));
+                $import->setOption('orientation', 'P');
+                $import->setOption('pages', array(2));
+                $import->execute($pdf);
+
+                $pdf->setPage($currentPage++);
+            }
+            $zones = array(
+                'AA>Designation' => 27,
+                'AA' => array(
+                    70,
+                    'AdresseNumero',
+                    'AdresseType',
+                    'AdresseVoie',
+                    'AdresseComplement',
+                    'AdresseCodePostal',
+                    'AdresseVille',
+                    'AdresseCodePays'
+                ),
+                'AA>Identifiant' => 115,
+                'AB' => 165,
+            );
+            $this->setMultiValues($pdf, $crawlerForm, $zones, 34, 12, 8, $max);
+        }
+
+
+        $import = new ImportPdfAction();
+        $import->setOption('file', $this->getTplPath(2083));
+        $import->setOption('orientation', $pageOrientation);
+        $import->setOption('pages', array(2, 3, 4, 5));
+        $import->execute($pdf);
+
+        $pdf->setPage($currentPage++);
+        $pdf->transaction()
+            ->add('textOptions', array('size' => 9))
+            ->execute();
+
+        $pdf->setPage($currentPage++);
+        $zones = array('BQ' => 48, 'BR' => 74, 'BS' => 123, 'BT' => 155, 'BU' => 210);
+        $this->setMultiValues($pdf, $crawlerForm, $zones, 40, 7, 10);
+
+        $pdf->setPage($currentPage++);
+        $zones = array(
+            'EA' => 20,
+            'EB' => array(25, 'AdresseCodePostal'),
+            'ED' => 35,
+            'EE' => 42,
+            'EF' => 46,
+            'EG' => 50,
+            'EH' => 55,
+            'EJ' => 60,
+            'ET' => array(65,'date' => 'Valeur'),
+            'EU' => 80,
+            'EK' => 100,
+            'EL' => array(115, 'date' => 'Valeur'),
+            'EM' => array(128, 'date' => 'Valeur'),
+            'EN' => array(140, 'date' => 'Valeur'),
+            'EV' => 150,
+            'EW' => 160,
+            'EP' => 185,
+        );
+        $this->setMultiValues($pdf, $crawlerForm, $zones, 237, 4.5, 5);
+
+        $pdf->setPage($currentPage++);
+        $zones = array(
+            'PA' => array(20, 'int' => 'Valeur'),
+            'PB' => array(45, 'int' => 'Valeur'),
+            'PC' => array(70, 'int' => 'Valeur'),
+            'PD' => array(91, 'int' => 'Valeur'),
+            'PE' => array(115, 'int' => 'Valeur'),
+            'PF' => array(140, 'int' => 'Valeur'),
+            'PG' => array(171, 'int' => 'Valeur'),
+            'PH' => array(205, 'int' => 'Valeur'),
+            'PJ' => array(241, 'int' => 'Valeur'),
+        );
+        $this->setMultiValues($pdf, $crawlerForm, $zones, 43, 7, 10);
+
+        $zones = array(
+            'TA>Designation' => 20,
+            'TA>Identifiant' => 68,
+            'TB' => 95,
+            'TA' => array(
+                115,
+                'AdresseNumero',
+                'AdresseType',
+                'AdresseVoie',
+                'AdresseComplement',
+                'AdresseCodePostal',
+                'AdresseVille',
+                'AdresseCodePays'
+            ),
+            'TH' => array(180, 'int' => 'Valeur'),
+            'TC' => array(210, 'int' => 'Valeur'),
+            'TD' => array(250, 'int' => 'Valeur'),
+        );
+        $this->setMultiValues($pdf, $crawlerForm, $zones, 100, 4.5, 6);
 
         return $pdf;
     }
@@ -626,5 +756,104 @@ class AsponePdf
     public function getForms()
     {
         return $this->forms;
+    }
+
+    /**
+     * TODO prévoir l'intégration entre deux pages d'une page supplémentaire et/ou répétée dans l'import pdf
+     * @param TCPDFLib $pdf
+     * @param          $crawlerForm
+     * @param          $aZones
+     * @param          $yOrigin
+     * @param          $yIndent
+     * @param          $size
+     * @param          $maxOccurrence
+     *
+     * @throws \Exception
+     */
+    private function setMultiValues(TCPDFLib $pdf, $crawlerForm, $aZones, $yOrigin, $yIndent, $size, $maxOccurrence = false)
+    {
+        foreach ($aZones as $id => $item) {
+            $y = $yOrigin;
+            $i = 1;
+            $node = '';
+            $zone = $id;
+            if (strpos($id, '>') !== false) {
+                $infosName = explode('>', $id);
+                $zone = trim($infosName[0]);
+                $node = ' > ' . trim($infosName[1]);
+            }
+
+            /** @var \DOMElement $occurrence */
+            foreach ($this->crawler->filter("{$crawlerForm}Zone#$zone > Occurrence$node") as $occurrence) {
+                if ($maxOccurrence && $i == $maxOccurrence) {
+                    continue 2;
+                }
+                $text = $occurrence->textContent;
+                $x = $item;
+                if (is_array($item)) {
+                    $text = '';
+                    $x = $item[0];
+                    foreach ($item as $key => $value) {
+                        $br = ($id != 'TA');
+                        $this->setText($text, $id, $i, $key, $value, $crawlerForm, $br);
+                    }
+                }
+                $pdf->transaction()
+                    ->add('textOptions', array('size' => $size))
+                    ->add('html', array('html' => $text, 'w' => '90', 'h' => '4', 'x' => $x, 'y' => $y, 'align' => 'L'))
+                    ->execute()
+                ;
+                $y += $yIndent;
+                $i++;
+            }
+        }
+    }
+
+    /**
+     * @param $text
+     * @param $id
+     * @param $i
+     * @param $key
+     * @param $value
+     * @param $crawlerForm
+     * @param $br
+     */
+    private function setText(&$text, $id, $i, $key, $value, $crawlerForm, $br = true)
+    {
+        if ($key > 0 && is_int($key)) {
+            if ($this->crawler->filter("{$crawlerForm}Zone#$id > Occurrence[Numero=$i] > $value")->count()) {
+                $text .= $this->crawler->filter("{$crawlerForm}Zone#$id > Occurrence[Numero=$i] > $value")->first()->text();
+                if ($br) {
+                    if (in_array($value, array('AdresseNumero', 'AdresseType', 'AdresseCodePostal', 'AdresseVille'))) {
+                        $text .= " ";
+                    } else {
+                        $text .= "<br />";
+                    }
+                } else {
+                    $text .= " ";
+                }
+            }
+        } elseif (is_string($key)) {
+            switch ($key) {
+                case 'date':
+                    $date = date_create_from_format('Ymd', $this->crawler->filter("{$crawlerForm}Zone#$id > Occurrence[Numero=$i] > $value")->first()->text());
+                    $text = $date->format('d-m-Y');
+                    break;
+                case 'int':
+                    $text = intval($this->crawler->filter("{$crawlerForm}Zone#$id > Occurrence[Numero=$i] > $value")->first()->text());
+                    break;
+            }
+        }
+    }
+
+    /**
+     * @param $crawlerForm
+     * @param $zone
+     *
+     * @return int
+     */
+    private function getNombreOccurrences($crawlerForm, $zone)
+    {
+        return $this->crawler->filter("{$crawlerForm}Zone#$zone > Occurrence")->count();
     }
 }

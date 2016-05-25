@@ -40,7 +40,7 @@ class AsponeDeclarationService
             $declaration->setDeclarantSiren($declarable->getRedevableIdentifiant());
             $declaration->setPeriodeStart(date_create_from_format('YmdHis', (method_exists($declarable, 'getTIdentifCA') ? $declarable->getTIdentifCA() : $declarable->getAnnee() . '0101') . '000000'));
             $declaration->setPeriodeEnd(date_create_from_format('YmdHis', (method_exists($declarable, 'getTIdentifCB') ? $declarable->getTIdentifCB() : $declarable->getAnnee() . '1231') . '000000'));
-            $declaration->setReferenceClient($declarable->getInfent());
+            $declaration->setReferenceClient($declarable->getInfent() . '-' . time());
             $declaration->setFormulaires($strFormulaires);
             return $declaration;
         } else {

@@ -65,6 +65,7 @@ class AsponeDeposit
             }
             $this->em->flush();
         }
+
         return $deposits;
     }
 
