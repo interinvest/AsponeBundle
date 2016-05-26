@@ -288,13 +288,17 @@ class AsponeMonitoring
      *
      * @return array
      */
-    public function getDeclarationDetailsResponse()
+    public function getDeclarationDetailsResponse($response = null)
     {
-        /** @var SoapClient $soap */
-        $soap = $this->soap;
 
         $resp = new \DOMDocument('1.0', 'utf-8');
-        $resp->loadXML($soap->parseResponse());
+        if (is_null($response)) {
+            /** @var SoapClient $soap */
+            $soap = $this->soap;
+            $resp->loadXML($soap->parseResponse());
+        } else {
+            $resp->loadXML($response);
+        }
 
         $XMLresults = $resp->getElementsByTagName("wsResponse");
 
