@@ -38,8 +38,8 @@ class AsponeDeclarationService
             $declaration->setType($declarable->getType());
             $declaration->setEtat(Declaration::ETAT_NON_FINIE);
             $declaration->setDeclarantSiren($declarable->getRedevableIdentifiant());
-            $declaration->setPeriodeStart(date_create_from_format('YmdHis', (method_exists($declarable, 'getTIdentifCA') ? $declarable->getTIdentifCA() : $declarable->getAnnee() . '0101') . '000000'));
-            $declaration->setPeriodeEnd(date_create_from_format('YmdHis', (method_exists($declarable, 'getTIdentifCB') ? $declarable->getTIdentifCB() : $declarable->getAnnee() . '1231') . '000000'));
+            $declaration->setPeriodeStart(date_create_from_format('YmdHis', (method_exists($declarable, 'getPeriode') ? $declarable->getPeriode()[0] : $declarable->getAnnee() . '0101') . '000000'));
+            $declaration->setPeriodeEnd(date_create_from_format('YmdHis', (method_exists($declarable, 'getPeriode') ? $declarable->getPeriode()[1] : $declarable->getAnnee() . '1231') . '000000'));
             $declaration->setReferenceClient($declarable->getInfent() . '-' . time());
             $declaration->setFormulaires($strFormulaires);
             return $declaration;
