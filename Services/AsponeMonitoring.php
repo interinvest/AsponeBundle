@@ -321,6 +321,18 @@ class AsponeMonitoring
             );
         }
 
+        $formulaires = array();
+        if ($resp->getElementsByTagName('fiscalForm')->length) {
+            for ($i = 0; $i < $resp->getElementsByTagName('fiscalForm')->length; $i++) {
+                $name = $resp->getElementsByTagName('fiscalForm')->item($i)->firstChild->textContent;
+                if (!strpos($name, 'IDENTIF')) {
+                    $formulaires[] = $name;
+                }
+            }
+        }
+        sort($formulaires);
+        $final['infos']['formulaires'] = implode(',', $formulaires);
+
         for ($i = 0; $i < $xmlHistos->length; $i++ ) {
             $children = $xmlHistos->item($i)->childNodes;
             foreach ($children as $child) {
