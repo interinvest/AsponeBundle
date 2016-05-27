@@ -54,6 +54,9 @@ class AsponeXml
         if (date('m') == 1) {
             $millesime--;
         }
+        if ($millesime < 10) {
+            $millesime = '0' . $millesime;
+        }
         $this->millesime = $millesime;
 
         $rootNode = new \SimpleXMLElement("<?xml version='1.0' encoding='ISO-8859-1'?><XmlEdi Test='$test'></XmlEdi>");
@@ -90,7 +93,7 @@ class AsponeXml
         try {
             $forms = $this->getFormZones($declarable->getType());
         } catch (\Exception $e) {
-            throw new \Exception('Problème lors de la lecture du fichier de millesime.');
+            throw new \Exception('Problème lors de la lecture du fichier de millesime. ' . $e->getMessage());
         }
 
         /**
@@ -101,7 +104,6 @@ class AsponeXml
         array_unshift($formulaires, 'Identif');
 
         $formulairesDeclarables = $declarable->getConfiguration();
-
         foreach ($formulairesDeclarables as $formulaire => $zones) {
             if (!in_array($formulaire, $formulaires)) {
                 continue;
@@ -277,6 +279,7 @@ class AsponeXml
         }
         $xsdFile = 'XmlEdi' . $xsd . '.xsd';
         $verif = new \DOMDocument();
+
         $verif->loadXML($this->xml);
         if (!$verif->schemaValidate(__DIR__ . '/../Resources/xsd/' . $xsdFile)) {
             throw new \Exception('XML non valide', 0);
@@ -346,7 +349,15 @@ class AsponeXml
             $dir = opendir($path);
             while (false !== ($fichier = readdir($dir))) {
                 if (strpos($fichier, 'DICTIONNAIRE_' . $typeDepot . '_') !== false) {
-                    if (strpos($fichier, (string)$this->millesime) !== false) {
+                    //on prend le millesime le plus proche dans le dictionnaire
+                    preg_match_all('/(\d){2}/', $fichier, $output);
+                    $millesimes = $output[0];
+                    if (in_array($this->millesime, $millesimes)) {
+                        $millesimeToUse = $this->millesime;
+                    } else {
+                        $millesimeToUse = $millesimes[0];
+                    }
+                    if (strpos($fichier, (string)$millesimeToUse) !== false) {
                         $handle = fopen($path . $fichier, 'r');
                         $row = 0;
                         while (($data = fgetcsv($handle, 100000, ";")) !== false) {
@@ -355,7 +366,7 @@ class AsponeXml
                                 if (strpos($data[0], 'IDENTIF') !== false) {
                                     $formulaire = 'Identif';
                                 }
-                                if ($data[1] == $this->millesime) {
+                                if ($data[1] == $millesimeToUse) {
                                     $formsZones[$formulaire][$data[2]] = array(
                                         'multi'  => $data[5],
                                         'retour' => $data[7] == 'Valeur' ? 'value' : 'array',
@@ -365,6 +376,8 @@ class AsponeXml
                             $row++;
                         }
                         fclose($handle);
+                    } else {
+                        throw new \Exception('Aucun dictionnaire présent pour le millésime ' . $this->millesime);
                     }
                 }
             }
