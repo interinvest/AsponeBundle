@@ -158,7 +158,7 @@ class AsponePdf
         $codePostalSnc = $this->crawler->filter("Declaration > Redevable > Adresse > AdresseCodePostal")->first()->text();
         $villeSnc = $this->crawler->filter("Declaration > Redevable > Adresse > AdresseVille")->first()->text();
 
-        $adresseSnc = $nomSnc.'<br />'.$adresseVoieSnc.'<br />'.$adresseComplementSnc.'<br />'.$codePostalSnc.' '.$villeSnc;
+        $adresseSnc = $nomSnc.'<br />'.$adresseVoieSnc.' '.$adresseComplementSnc.'<br />'.$codePostalSnc.' '.$villeSnc;
 
         $referenceDossier = '';
         if($this->crawler->filter("Declaration > ListeDestinataires > Destinataire > ReferenceDossier")->count() == 1) {
@@ -177,7 +177,9 @@ class AsponePdf
 
         $this->pdf->setPage(1);
         $this->pdf->transaction()
+            ->add('textOptions', array('size' => 10))
             ->add('html', array('html' => $adresseSnc, 'w' => '121', 'h' => '16', 'x' => '80', 'y' => '75', 'align' => 'L '))
+            ->add('textOptions', array('size' => 12))
             ->add('html', array('html' => substr($referenceDossier,0,7), 'w' => '32', 'h' => '4', 'x' => '5', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => substr($referenceDossier,7,6), 'w' => '26', 'h' => '4', 'x' => '38', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => substr($referenceDossier,12,2), 'w' => '8', 'h' => '4', 'x' => '65', 'y' => '105', 'align' => 'C'))
@@ -405,6 +407,37 @@ class AsponePdf
         $import->setOption('file', $this->getTplPath(2033));
         $import->execute($this->pdf);
 
+        $this->pdf->setPage($page);
+
+        //Identif
+        $crawlerForm = "Declaration > ListeFormulaires > Identif > Zone#AA > ";
+        $identif = $this->crawler->filter("{$crawlerForm}Designation")->first()->text();
+        $siren = $this->crawler->filter("{$crawlerForm}Identifiant")->first()->text();
+
+        $numero = $this->crawler->filter("{$crawlerForm}AdresseNumero")->count() ? $this->crawler->filter("{$crawlerForm}AdresseNumero")->first()->text() : '';
+        $type = $this->crawler->filter("{$crawlerForm}AdresseType")->count() ? $this->crawler->filter("{$crawlerForm}AdresseType")->first()->text() : '';
+        $voie = $this->crawler->filter("{$crawlerForm}AdresseVoie")->count() ? $this->crawler->filter("{$crawlerForm}AdresseVoie")->first()->text() : '';
+        $complement = $this->crawler->filter("{$crawlerForm}AdresseComplement")->count() ? $this->crawler->filter("{$crawlerForm}AdresseComplement")->first()->text() : '';
+        $codePostal = $this->crawler->filter("{$crawlerForm}AdresseCodePostal")->count() ? $this->crawler->filter("{$crawlerForm}AdresseCodePostal")->first()->text() : '';
+        $ville = $this->crawler->filter("{$crawlerForm}AdresseVille")->count() ? $this->crawler->filter("{$crawlerForm}AdresseVille")->first()->text() : '';
+
+        $adresse = $numero . $type . ' ' . $voie . ' ' . $complement . ' ' . $codePostal . ' ' . $ville;
+
+        $dateFin = date_create_from_format('Ymd', $this->crawler->filter("Declaration > ListeFormulaires > Identif > Zone#CB")->first()->text());
+        $dateDebut = date_create_from_format('Ymd', $this->crawler->filter("Declaration > ListeFormulaires > Identif > Zone#CA")->first()->text());
+
+        $diffMonth = floor(date_diff($dateDebut, $dateFin)->days / 30);
+
+        $this->pdf->transaction()
+            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '50', 'y' => '22', 'align' => 'L'))
+            ->add('textOptions', array('size' => 8))
+            ->add('html', array('html' => $adresse, 'w' => '150', 'h' => '4', 'x' => '40', 'y' => '30', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => '3.4', 'size' => 12))
+            ->add('html', array('html' => $siren, 'w' => '150', 'h' => '4', 'x' => '32', 'y' => '35', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => '3.4', 'size' => 10))
+            ->add('html', array('html' => $diffMonth, 'w' => '150', 'h' => '4', 'x' => '67', 'y' => '41', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => '0'))
+            ->execute();
 
         //2033A
         $nom = '2033A';
@@ -414,7 +447,7 @@ class AsponePdf
         foreach ($this->getZones('IDF', $nom) as $zone) {
             $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ? $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() : '';
         }
-        $this->pdf->setPage($page);
+
         $this->pdf->transaction()
             ->add('textOptions', array('size' => 8))
             ->add('html', array('html' => isset($JD) ? $JD : '', 'w' => '90', 'h' => '4', 'x' => '195.5', 'y' => '22', 'align' => 'L'))
@@ -619,9 +652,9 @@ class AsponePdf
         $crawlerForm = "Declaration > ListeFormulaires > Identif > ";
         $this->pdf->setPage(1);
         $valueCa = $this->crawler->filter("{$crawlerForm}Zone#CA")->first()->text();
-        $CA = date_create_from_format('Ymd', $valueCa)->format('d m Y');
+        $CA = date_create_from_format('Ymd', $valueCa)->format('dmY');
         $valueCB = $this->crawler->filter("{$crawlerForm}Zone#CB")->first()->text();
-        $CB = date_create_from_format('Ymd', $valueCB)->format('d m Y');
+        $CB = date_create_from_format('Ymd', $valueCB)->format('dmY');
 
         $societe = $this->crawler->filter("Declaration > Redevable > Designation")->first()->text();
         if ($this->crawler->filter("Declaration > Redevable > DesignationSuite1")->count()) {
@@ -644,9 +677,10 @@ class AsponePdf
         $siren = $this->crawler->filter("Declaration > Redevable > Identifiant")->first()->text();
 
         $this->pdf->transaction()
-            ->add('textOptions', array('size' => 12))
-            ->add('html', array('html' => $CA, 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '118', 'align' => 'L'))
-            ->add('html', array('html' => $CB, 'w' => '90', 'h' => '4', 'x' => '168', 'y' => '118', 'align' => 'L'))
+            ->add('textOptions', array('size' => 12, 'spacing' => 3.4))
+            ->add('html', array('html' => $CA, 'w' => '90', 'h' => '4', 'x' => '109', 'y' => '118', 'align' => 'L'))
+            ->add('html', array('html' => $CB, 'w' => '90', 'h' => '4', 'x' => '158', 'y' => '118', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => 0))
             ->add('html', array('html' => $societe, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '150', 'align' => 'L'))
             ->add('textOptions', array('size' => 10))
             ->add('html', array('html' => $adresse, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '170', 'align' => 'L'))
