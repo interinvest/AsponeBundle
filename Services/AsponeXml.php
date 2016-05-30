@@ -95,7 +95,6 @@ class AsponeXml
         } catch (\Exception $e) {
             throw new \Exception('Problème lors de la lecture du fichier de millesime. ' . $e->getMessage());
         }
-
         /**
          * Test des formulaires dans la déclaration
          * Si présents dans le dictionnaire alors on les rempli
@@ -105,7 +104,7 @@ class AsponeXml
 
         $formulairesDeclarables = $declarable->getConfiguration();
         foreach ($formulairesDeclarables as $formulaire => $zones) {
-            if (!in_array($formulaire, $formulaires)) {
+            if (!in_array((string)$formulaire, $formulaires)) {
                 continue;
             }
             if (isset($forms[$formulaire])) {
@@ -279,7 +278,9 @@ class AsponeXml
         }
         $xsdFile = 'XmlEdi' . $xsd . '.xsd';
         $verif = new \DOMDocument();
-
+        $handle = fopen('/vagrant/td2/web/uploads/aspone/test' . time() . '.xml', 'w+');
+        fwrite($handle, $this->xml);
+        fclose($handle);
         $verif->loadXML($this->xml);
         if (!$verif->schemaValidate(__DIR__ . '/../Resources/xsd/' . $xsdFile)) {
             throw new \Exception('XML non valide', 0);
@@ -366,7 +367,7 @@ class AsponeXml
                                 if (strpos($data[0], 'IDENTIF') !== false) {
                                     $formulaire = 'Identif';
                                 }
-                                if ($data[1] == $millesimeToUse) {
+                                if ($data[1] == $millesimeToUse || $data[1] == date('Y')%100) {
                                     $formsZones[$formulaire][$data[2]] = array(
                                         'multi'  => $data[5],
                                         'retour' => $data[7] == 'Valeur' ? 'value' : 'array',

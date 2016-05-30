@@ -351,6 +351,21 @@ class AsponePdf
         $import->setOption('file', $this->getTplPath(2031));
         $import->execute($this->pdf);
 
+        $dateFin = date_create_from_format('Ymd', $this->crawler->filter("Declaration > ListeFormulaires > Identif > Zone#CB")->first()->text());
+        $dateDebut = date_create_from_format('Ymd', $this->crawler->filter("Declaration > ListeFormulaires > Identif > Zone#CA")->first()->text());
+
+        $crawlerForm = "Declaration > ListeFormulaires > Identif > Zone#AA > ";
+        $identif = $this->crawler->filter("{$crawlerForm}Designation")->first()->text();
+
+        $numero = $this->crawler->filter("{$crawlerForm}AdresseNumero")->count() ? $this->crawler->filter("{$crawlerForm}AdresseNumero")->first()->text() : '';
+        $type = $this->crawler->filter("{$crawlerForm}AdresseType")->count() ? $this->crawler->filter("{$crawlerForm}AdresseType")->first()->text() : '';
+        $voie = $this->crawler->filter("{$crawlerForm}AdresseVoie")->count() ? $this->crawler->filter("{$crawlerForm}AdresseVoie")->first()->text() : '';
+        $complement = $this->crawler->filter("{$crawlerForm}AdresseComplement")->count() ? $this->crawler->filter("{$crawlerForm}AdresseComplement")->first()->text() : '';
+        $codePostal = $this->crawler->filter("{$crawlerForm}AdresseCodePostal")->count() ? $this->crawler->filter("{$crawlerForm}AdresseCodePostal")->first()->text() : '';
+        $ville = $this->crawler->filter("{$crawlerForm}AdresseVille")->count() ? $this->crawler->filter("{$crawlerForm}AdresseVille")->first()->text() : '';
+
+        $adresse = $identif . '<br />' . $numero . $type . ' ' . $voie . ' ' . $complement . '<br />' . $codePostal . ' ' . $ville;
+
         $crawlerForm = "Declaration > ListeFormulaires > Formulaire[Nom=\"2031\"] > ";
 
         $aIdentif = $this->crawler->filter("{$crawlerForm}Zone#HB")->children();
@@ -376,12 +391,12 @@ class AsponePdf
 
         $this->pdf->setPage($page);
         $this->pdf->transaction()
-            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '65', 'align' => 'L'))
-            ->add('textOptions', array('size' => 8))
-            ->add('html', array('html' => $adresseSnc, 'w' => '70', 'h' => '4', 'x' => '130', 'y' => '75', 'align' => 'L'))
+            ->add('html', array('html' => $dateDebut->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '30', 'align' => 'L'))
+            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '35', 'align' => 'L'))
+            ->add('html', array('html' => $adresse, 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '65', 'align' => 'L'))
             ->add('textOptions', array('spacing' => '0', 'size' => 10))
-            ->add('html', array('html' => $c7CW . 'dqdqsd', 'w' => '40', 'h' => '4', 'x' => '94', 'y' => '205', 'align' => 'L'))
-            ->add('html', array('html' => $c7CX . '', 'w' => '40', 'h' => '4', 'x' => '135', 'y' => '205', 'align' => 'L'))
+            ->add('html', array('html' => $c7CW, 'w' => '40', 'h' => '4', 'x' => '94', 'y' => '205', 'align' => 'L'))
+            ->add('html', array('html' => $c7CX, 'w' => '40', 'h' => '4', 'x' => '135', 'y' => '205', 'align' => 'L'))
             ->execute();
 
         $this->pdf->setPage(2);
@@ -452,6 +467,9 @@ class AsponePdf
             ->add('textOptions', array('size' => 8))
             ->add('html', array('html' => isset($JD) ? $JD : '', 'w' => '90', 'h' => '4', 'x' => '195.5', 'y' => '22', 'align' => 'L'))
             ->add('textOptions', array('size' => 10))
+            ->add('textOptions', array('spacing' => 1.3))
+            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '174', 'y' => '52.5', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => 0))
             ->add('html', array('html' => isset($AC) ? $AC : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '76', 'align' => 'L'))
             ->add('html', array('html' => isset($BC) ? $BC : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '76', 'align' => 'L'))
             ->add('html', array('html' => isset($CC) ? $CC : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '76', 'align' => 'L'))
@@ -494,8 +512,12 @@ class AsponePdf
         $this->pdf->setPage($page);
         $this->pdf->transaction()
             ->add('textOptions', array('size' => 8))
+            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '100', 'y' => '12', 'align' => 'L'))
             ->add('html', array('html' => isset($JB) ? $JB : '', 'w' => '90', 'h' => '4', 'x' => '200', 'y' => '12', 'align' => 'L'))
             ->add('textOptions', array('size' => 10))
+            ->add('textOptions', array('spacing' => 1.3))
+            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '178', 'y' => '17', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => 0))
             ->add('html', array('html' => isset($BC) ? $BC : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '37', 'align' => 'L'))
             ->add('html', array('html' => isset($BG) ? $BG : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '60', 'align' => 'L'))
             ->add('html', array('html' => isset($BH) ? $BH : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '66', 'align' => 'L'))
@@ -534,6 +556,7 @@ class AsponePdf
         $this->pdf->setPage($page);
         $this->pdf->transaction()
             ->add('textOptions', array('size' => 8))
+            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '85', 'y' => '20', 'align' => 'L'))
             ->add('html', array('html' => isset($RQ) ? $RQ : '', 'w' => '90', 'h' => '4', 'x' => '197.5', 'y' => '19', 'align' => 'L'))
             ->add('textOptions', array('size' => 10))
             ->add('html', array('html' => isset($AC) ? $AC : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '53', 'align' => 'L'))
@@ -567,6 +590,7 @@ class AsponePdf
         $this->pdf->setPage($page);
         $this->pdf->transaction()
             ->add('textOptions', array('size' => 8))
+            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '36.5', 'align' => 'L'))
             ->add('html', array('html' => isset($PF) ? $PF : '', 'w' => '90', 'h' => '4', 'x' => '198.5', 'y' => '36.5', 'align' => 'L'))
             ->add('textOptions', array('size' => 10))
             ->add('html', array('html' => isset($PG) ? $PG : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '188', 'align' => 'L'))
@@ -586,6 +610,12 @@ class AsponePdf
         }
         $this->pdf->setPage($page);
         $this->pdf->transaction()
+            ->add('textOptions', array('size' => 10))
+            ->add('textOptions', array('spacing' => 1.3))
+            ->add('html', array('html' => $dateDebut->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '50', 'y' => '35', 'align' => 'L'))
+            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '35', 'align' => 'L'))
+            ->add('html', array('html' => $diffMonth, 'w' => '90', 'h' => '4', 'x' => '162', 'y' => '35', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => 0))
             ->add('textOptions', array('size' => 8))
             ->add('html', array('html' => isset($DB) ? $DB : '', 'w' => '90', 'h' => '4', 'x' => '189', 'y' => '34', 'align' => 'L'))
             ->add('textOptions', array('size' => 10))
@@ -603,6 +633,16 @@ class AsponePdf
         $this->pdf->transaction()
             ->add('textOptions', array('size' => 9))
             ->add('html', array('html' => isset($GS) ? $GS : '', 'w' => '90', 'h' => '4', 'x' => '198', 'y' => '23', 'align' => 'L'))
+            ->add('textOptions', array('size' => 12))
+            ->add('textOptions', array('spacing' => 2))
+            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '35', 'align' => 'L'))
+            ->add('html', array('html' => $siren, 'w' => '90', 'h' => '4', 'x' => '166', 'y' => '35', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => 0))
+            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '42', 'align' => 'L'))
+            ->add('textOptions', array('size' => 9))
+            ->add('html', array('html' => $numero . $type . ' ' . $voie . ' ' . $complement, 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '48', 'align' => 'L'))
+            ->add('html', array('html' => $codePostal, 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '55', 'align' => 'L'))
+            ->add('html', array('html' => $ville, 'w' => '90', 'h' => '4', 'x' => '80', 'y' => '55', 'align' => 'L'))
             ->add('textOptions', array('size' => 10))
             ->execute();
         $page++;
@@ -618,6 +658,16 @@ class AsponePdf
         $this->pdf->transaction()
             ->add('textOptions', array('size' => 9))
             ->add('html', array('html' => isset($GS) ? $GS : '', 'w' => '90', 'h' => '4', 'x' => '195', 'y' => '19', 'align' => 'L'))
+            ->add('textOptions', array('size' => 12))
+            ->add('textOptions', array('spacing' => 2))
+            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '28', 'align' => 'L'))
+            ->add('html', array('html' => $siren, 'w' => '90', 'h' => '4', 'x' => '163', 'y' => '28', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => 0))
+            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '35', 'align' => 'L'))
+            ->add('textOptions', array('size' => 9))
+            ->add('html', array('html' => $numero . $type . ' ' . $voie . ' ' . $complement, 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '41', 'align' => 'L'))
+            ->add('html', array('html' => $codePostal, 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '48', 'align' => 'L'))
+            ->add('html', array('html' => $ville, 'w' => '90', 'h' => '4', 'x' => '80', 'y' => '48', 'align' => 'L'))
             ->add('textOptions', array('size' => 10))
             ->execute();
 
