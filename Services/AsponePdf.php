@@ -504,7 +504,7 @@ class AsponePdf
         $this->pdf->setPage($page);
         $this->pdf->transaction()
             ->add('textOptions', array('size' => 8))
-            ->add('html', array('html' => isset($RQ) ? : '', 'w' => '90', 'h' => '4', 'x' => '197.5', 'y' => '19', 'align' => 'L'))
+            ->add('html', array('html' => isset($RQ) ? $RQ : '', 'w' => '90', 'h' => '4', 'x' => '197.5', 'y' => '19', 'align' => 'L'))
             ->add('textOptions', array('size' => 10))
             ->add('html', array('html' => isset($AC) ? $AC : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '53', 'align' => 'L'))
             ->add('html', array('html' => isset($DC) ? $DC : '', 'w' => '90', 'h' => '4', 'x' => '148', 'y' => '53', 'align' => 'L'))
@@ -782,7 +782,7 @@ class AsponePdf
         $return = array();
 
         foreach ($dictionnaire as $formulaire => $zones) {
-            if (substr($formulaire, 0, 4) == $form) {
+            if ($formulaire == $form) {
                 $return = array_keys($zones);
                 break;
             }
