@@ -51,7 +51,7 @@ class AsponePdf
         $this->rootDir = $this->container->get('kernel')->getRootDir();
 
         $this->xmlString = $declaration->getXml($this->container);
-        
+
         $this->pdf = new TCPDFLib();
         $this->pdf->printFooter = false;
 
@@ -336,8 +336,6 @@ class AsponePdf
     }
 
     /**
-     * @param $this->pdf
-     *
      * @return TCPDFLib
      */
     public function setPdf2031()
@@ -367,7 +365,7 @@ class AsponePdf
         }
         $c7CW = $c7CX = '';
         if ($this->crawler->filter("{$crawlerForm}Zone#CW")->count()) {
-            $c7CW = $this->crawler->filter("{$crawlerForm}Zone#CW")->text();
+            $c7CW = $this->crawler->filter("{$crawlerForm}Zone#CW")->first()->text();
         }
         if ($this->crawler->filter("{$crawlerForm}Zone#CX")->count()) {
             $c7CX = $this->crawler->filter("{$crawlerForm}Zone#CX")->first()->text();
@@ -379,10 +377,9 @@ class AsponePdf
             ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '65', 'align' => 'L'))
             ->add('textOptions', array('size' => 8))
             ->add('html', array('html' => $adresseSnc, 'w' => '70', 'h' => '4', 'x' => '130', 'y' => '75', 'align' => 'L'))
-            ->add('textOptions', array('spacing' => '3.40', 'size' => 10))
-            ->add('html', array('html' => $c7CW, 'w' => '40', 'h' => '4', 'x' => '94', 'y' => '205', 'align' => 'R'))
-            ->add('textOptions', array('spacing' => '0'))
-            ->add('html', array('html' => $c7CX, 'w' => '40', 'h' => '4', 'x' => '135', 'y' => '205', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => '0', 'size' => 10))
+            ->add('html', array('html' => $c7CW . 'dqdqsd', 'w' => '40', 'h' => '4', 'x' => '94', 'y' => '205', 'align' => 'L'))
+            ->add('html', array('html' => $c7CX . '', 'w' => '40', 'h' => '4', 'x' => '135', 'y' => '205', 'align' => 'L'))
             ->execute();
 
         $this->pdf->setPage(2);
