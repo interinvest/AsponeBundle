@@ -24,42 +24,42 @@ class DepositHistoriqueDetail
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=50, nullable=true)
+     * @ORM\Column(name="name", type="string", length=50, nullable=true, options={"default":""})
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="label", type="string", length=150, nullable=true)
+     * @ORM\Column(name="label", type="string", length=255, nullable=true, options={"default":""})
      */
     private $label;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="detaillabel", type="string", length=255, nullable=true)
+     * @ORM\Column(name="detaillabel", type="text", length=2500, nullable=true, options={"default":""})
      */
     private $detail;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="iserror", type="boolean", nullable=true)
+     * @ORM\Column(name="iserror", type="boolean", nullable=true, options={"default":false})
      */
-    private $iserror;
+    private $iserror = false;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isfinal", type="boolean", nullable=true)
+     * @ORM\Column(name="isfinal", type="boolean", nullable=true, options={"default":false})
      */
-    private $isfinal;
+    private $isfinal = false;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="code_erreur", type="integer", length=5, nullable=true)
+     * @ORM\Column(name="code_erreur", type="string", length=3, nullable=true, options={"default":""})
      */
     private $codeErreur;
 

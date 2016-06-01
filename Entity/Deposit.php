@@ -30,7 +30,7 @@ class Deposit
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=5, nullable=true)
+     * @ORM\Column(name="type", type="string", length=9, nullable=true, options={"default": ""})
      */
     private $type;
 
@@ -52,30 +52,30 @@ class Deposit
     /**
      * @var integer
      *
-     * @ORM\Column(name="retour_immediat", type="integer", length=2, nullable=true)
+     * @ORM\Column(name="retour_immediat", type="smallint", nullable=false, options={"default": 0})
      */
-    private $retourImmediat;
+    private $retourImmediat = 0;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="etat", type="integer", length=2, nullable=true)
+     * @ORM\Column(name="etat", type="smallint", nullable=false, options={"default": 0})
      */
-    private $etat;
+    private $etat = 0;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="numads", type="integer", length=10, nullable=true)
+     * @ORM\Column(name="numads", type="integer", nullable=true, options={"default": 0})
      */
-    private $numads;
+    private $numads = 0;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="interchangeid", type="integer", length=10, nullable=true)
+     * @ORM\Column(name="interchangeid", type="integer", nullable=true, options={"default": 0})
      */
-    private $interchangeid;
+    private $interchangeid = 0;
 
 
     public function __construct()
