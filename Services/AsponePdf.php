@@ -368,7 +368,7 @@ class AsponePdf
 
         $crawlerForm = "Declaration > ListeFormulaires > Formulaire[Nom=\"2031\"] > ";
 
-        $aIdentif = $this->crawler->filter("{$crawlerForm}Zone#HB")->children();
+        $aIdentif = $this->crawler->filter("{$crawlerForm}Zone#HB")->count() ? $this->crawler->filter("{$crawlerForm}Zone#HB")->children() : array();
         $identif = '';
         /** @var \DOMElement $zone */
         foreach ($aIdentif as $zone) {
