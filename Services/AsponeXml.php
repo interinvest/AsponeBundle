@@ -278,9 +278,9 @@ class AsponeXml
         }
         $xsdFile = 'XmlEdi' . $xsd . '.xsd';
         $verif = new \DOMDocument();
-        $handle = fopen('/vagrant/td2/web/uploads/aspone/test' . time() . '.xml', 'w+');
-        fwrite($handle, $this->xml);
-        fclose($handle);
+        //$handle = fopen('/vagrant/td2/web/uploads/aspone/test' . time() . '.xml', 'w+');
+        //fwrite($handle, $this->xml);
+        //fclose($handle);
         $verif->loadXML($this->xml);
         if (!$verif->schemaValidate(__DIR__ . '/../Resources/xsd/' . $xsdFile)) {
             throw new \Exception('XML non valide', 0);
