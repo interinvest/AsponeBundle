@@ -64,8 +64,8 @@ class AsponeDeposit
                 $declaration->setDepositId($oDeposit->getId());
                 $this->em->persist($declaration);
             }
-            $this->em->flush();
         }
+        $this->em->flush();
 
         return $deposits;
     }
