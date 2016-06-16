@@ -63,12 +63,12 @@ class AsponeXml
         $groupNode = $rootNode->addChild('GroupeFonctionnel');
         $groupNode->addAttribute('Type', 'INFENT');
 
-        $listeFormNode = $this->setDeclarableGroup($groupNode, $type, $declaration->getReferenceClient());
+        $reference = $declarable->getInfent() . '-' . $declaration->getId();
+        $listeFormNode = $this->setDeclarableGroup($groupNode, $type, $reference);
 
         $this->setFormulaires($listeFormNode, $declaration->getFormulaires());
         try {
             $this->xml = $rootNode->asXml();
-
             $this->validateXml($type);
             return $this->xml;
         } catch (\Exception $E) {
@@ -224,7 +224,7 @@ class AsponeXml
             if (is_array($zone)) {
                 $no = 0;
                 foreach ($zone as $k => $z) {
-                    if (!$z) {
+                    if ($z === false || is_null($z)) {
                         $no++;
                     }
                 }
@@ -247,6 +247,8 @@ class AsponeXml
                     if (!is_null($z)) {
                         if (is_array($z) && isset($z['Valeur']) && $z['Valeur'] !== false && $zone !== '') {
                             $zoneX->addChild('Valeur', $z['Valeur']);
+                        } elseif ($z === 0 || $z === 0.0) {
+                            $zoneX->addChild($k, 0);
                         } elseif (!is_array($z) && $z !== false && !empty($z)) {
                             $zoneX->addChild($k, $z);
                         }
@@ -278,9 +280,6 @@ class AsponeXml
         }
         $xsdFile = 'XmlEdi' . $xsd . '.xsd';
         $verif = new \DOMDocument();
-        //$handle = fopen('/vagrant/td2/web/uploads/aspone/test' . time() . '.xml', 'w+');
-        //fwrite($handle, $this->xml);
-        //fclose($handle);
         $verif->loadXML($this->xml);
         if (!$verif->schemaValidate(__DIR__ . '/../Resources/xsd/' . $xsdFile)) {
             throw new \Exception('XML non valide', 0);
@@ -358,6 +357,7 @@ class AsponeXml
                     } else {
                         $millesimeToUse = $millesimes[0];
                     }
+                    $this->millesime = $millesimeToUse;
                     if (strpos($fichier, (string)$millesimeToUse) !== false) {
                         $handle = fopen($path . $fichier, 'r');
                         $row = 0;

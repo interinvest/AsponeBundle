@@ -97,7 +97,6 @@ class AsponeMonitoring
                 $oHistorique->setName($historique['name']);
 
                 $this->em->persist($oHistorique);
-                $this->em->flush();
 
                 if ($historique['isError']) {
                     $deposit->setEtat(Deposit::ETAT_ERREUR);
@@ -206,7 +205,9 @@ class AsponeMonitoring
                     //recherche de la déclaration
                     $declarationRepo = $this->em->getRepository($this->container->getParameter('aspone.declarationRepository'));
                     if (isset($informations['referenceClient']) && $informations['referenceClient']) {
-                        $declarations = $declarationRepo->findBy(array('referenceClient' => str_replace('INFENT', '', $informations['referenceClient'])));
+                        $ref = explode('-', $informations['referenceClient']);
+                        $id = end($ref);
+                        $declarations = $declarationRepo->findBy(array('id' => $id));
                     } else {
                         if (isset($informations['referenceClient'])) {
                             unset($informations['referenceClient']);
@@ -220,9 +221,9 @@ class AsponeMonitoring
                         if ($oDeclaration->getType() == $type) {
                             $oDeclaration->setIdentifiant($identifiant);
                             $this->em->persist($oDeclaration);
-                            $this->em->flush();
                         }
                     }
+                    $this->em->flush();
                 } else {
                     $oDeclaration = $declaration;
                 }
@@ -247,7 +248,7 @@ class AsponeMonitoring
                         $oHistorique->setName($historique['name']);
 
                         $this->em->persist($oHistorique);
-                        $this->em->flush();
+
 
                         if ($historique['isError']) {
                             $oDeclaration->setEtat(Declaration::ETAT_ERREUR);
