@@ -77,6 +77,13 @@ class Deposit
      */
     private $interchangeid = 0;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="istest", type="boolean", nullable=true, options={"default": false})
+     */
+    private $istest = false;
+
 
     public function __construct()
     {
@@ -221,4 +228,22 @@ class Deposit
             $declaration->setDepositId($this->getId());
         }
     }
+
+    /**
+     * @return boolean
+     */
+    public function isIstest()
+    {
+        return $this->istest;
+    }
+
+    /**
+     * @param boolean $istest
+     */
+    public function setIstest($istest)
+    {
+        $this->istest = $istest;
+    }
+
+
 }

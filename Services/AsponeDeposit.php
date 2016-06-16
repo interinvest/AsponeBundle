@@ -53,6 +53,7 @@ class AsponeDeposit
             $oDeposit->setType($type);
             $oDeposit->setEtat(0);
             $oDeposit->setRetourImmediat(Deposit::ETAT_NON_FINI);
+            $oDeposit->setIstest($test);
             $this->em->persist($oDeposit);
             $this->em->flush(); //flush pour donner l'id aux declarations ensuite
 

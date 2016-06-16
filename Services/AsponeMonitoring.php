@@ -206,7 +206,7 @@ class AsponeMonitoring
                     //recherche de la déclaration
                     $declarationRepo = $this->em->getRepository($this->container->getParameter('aspone.declarationRepository'));
                     if (isset($informations['referenceClient']) && $informations['referenceClient']) {
-                        $declarations = $declarationRepo->findBy(array('referenceClient' => $informations['referenceClient']));
+                        $declarations = $declarationRepo->findBy(array('referenceClient' => str_replace('INFENT', '', $informations['referenceClient'])));
                     } else {
                         if (isset($informations['referenceClient'])) {
                             unset($informations['referenceClient']);
