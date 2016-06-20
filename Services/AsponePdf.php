@@ -32,6 +32,10 @@ class AsponePdf
     public $crawler;
     /** @var  TCPDFLib */
     private $pdf;
+    /** @var null  */
+    private $infosSignature = null;
+    /** @var null  */
+    private $infoEntete = null;
 
 
     public function __construct(Container $container, AsponeXml $asponeXml)
@@ -398,6 +402,23 @@ class AsponePdf
             ->add('html', array('html' => $c7CW, 'w' => '40', 'h' => '4', 'x' => '94', 'y' => '205', 'align' => 'L'))
             ->add('html', array('html' => $c7CX, 'w' => '40', 'h' => '4', 'x' => '135', 'y' => '205', 'align' => 'L'))
             ->execute();
+
+        if (!is_null($this->infoEntete)) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('spacing' => '0', 'size' => 12))
+                ->add('html', array('html' => $this->infoEntete ? $this->infoEntete : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '15', 'align' => 'L'))
+                ->execute();
+        }
+
+        if (!is_null($this->infosSignature)) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' =>$this->infosSignature['adresse'], 'w' => '90', 'h' => '4', 'x' => '80', 'y' => '260', 'align' => 'L'))
+                ->add('html', array('html' =>$this->infosSignature['faitA'], 'w' => '90', 'h' => '4', 'x' => '120', 'y' => '276', 'align' => 'L'))
+                ->add('html', array('html' =>$this->infosSignature['faitLe'], 'w' => '90', 'h' => '4', 'x' => '160', 'y' => '276', 'align' => 'L'))
+                ->add('html', array('html' =>$this->infosSignature['signature'], 'w' => '45', 'h' => '4', 'x' => '165', 'y' => '260', 'align' => 'L'))
+                ->execute();
+        }
 
         $this->pdf->setPage(2);
         $this->pdf->transaction()
@@ -975,5 +996,21 @@ class AsponePdf
     private function getNombreOccurrences($crawlerForm, $zone)
     {
         return $this->crawler->filter("{$crawlerForm}Zone#$zone > Occurrence")->count();
+    }
+
+    /**
+     * @param $infosSignature
+     */
+    public function setInfosSignature($infosSignature)
+    {
+        $this->infosSignature = $infosSignature;
+    }
+
+    /**
+     * @param $infoEntete
+     */
+    public function setInfoEntete($infoEntete)
+    {
+        $this->infoEntete = $infoEntete;
     }
 }

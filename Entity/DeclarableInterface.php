@@ -43,4 +43,11 @@ interface DeclarableInterface
     public function getRedacteur();
     public function getRedevable();
     public function getIdentif();
+
+    /**
+     * Return array : faitA, faitLe, adresse, signature
+     *
+     * @return array
+     */
+    public function getInformationsSignature();
 }

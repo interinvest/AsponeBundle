@@ -10,4 +10,7 @@ interface DeclarableTdfcInterface extends DeclarableInterface
     public function getTypeDeclaration();
 
     public function getExercice();
+
+    public function getIsLiquidation();
+
 }
