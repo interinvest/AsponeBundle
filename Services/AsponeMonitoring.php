@@ -87,36 +87,38 @@ class AsponeMonitoring
                 $this->em->remove($historique);
             }
             $this->em->flush();
-            foreach ($response['historiques'] as $historique) {
-                $oHistorique = new DepositHistorique();
-                $oHistorique->setDeposit($deposit);
-                $oHistorique->setDate(new \DateTime($historique['date']));
-                $oHistorique->setIserror($historique['isError']);
-                $oHistorique->setIsfinal($historique['isFinal']);
-                $oHistorique->setLabel($historique['label']);
-                $oHistorique->setName($historique['name']);
+            if (isset($response['historiques'])) {
+                foreach ($response['historiques'] as $historique) {
+                    $oHistorique = new DepositHistorique();
+                    $oHistorique->setDeposit($deposit);
+                    $oHistorique->setDate(new \DateTime($historique['date']));
+                    $oHistorique->setIserror($historique['isError']);
+                    $oHistorique->setIsfinal($historique['isFinal']);
+                    $oHistorique->setLabel($historique['label']);
+                    $oHistorique->setName($historique['name']);
 
-                $this->em->persist($oHistorique);
+                    $this->em->persist($oHistorique);
 
-                if ($historique['isError']) {
-                    $deposit->setEtat(Deposit::ETAT_ERREUR);
-                } elseif ($historique['isFinal'] && !$historique['isError']) {
-                    $deposit->setEtat(Deposit::ETAT_OK);
-                } elseif ($historique['name'] == 'DEPOSED') {
-                    $deposit->setEtat(Deposit::ETAT_OK);
-                }
-                $this->em->persist($deposit);
+                    if ($historique['isError']) {
+                        $deposit->setEtat(Deposit::ETAT_ERREUR);
+                    } elseif ($historique['isFinal'] && !$historique['isError']) {
+                        $deposit->setEtat(Deposit::ETAT_OK);
+                    } elseif ($historique['name'] == 'DEPOSED') {
+                        $deposit->setEtat(Deposit::ETAT_OK);
+                    }
+                    $this->em->persist($deposit);
 
-                foreach ($historique['detail'] as $detail) {
-                    $oDetail = new DepositHistoriqueDetail();
-                    $oDetail->setDepositHistorique($oHistorique);
-                    $oDetail->setIserror($detail['isError']);
-                    $oDetail->setIsfinal($detail['isFinal']);
-                    $oDetail->setLabel($detail['label']);
-                    $oDetail->setDetail($detail['detailledlabel']);
-                    $oDetail->setName($detail['name']);
-                    $oDetail->setDate(new \DateTime($detail['date']));
-                    $this->em->persist($oDetail);
+                    foreach ($historique['detail'] as $detail) {
+                        $oDetail = new DepositHistoriqueDetail();
+                        $oDetail->setDepositHistorique($oHistorique);
+                        $oDetail->setIserror($detail['isError']);
+                        $oDetail->setIsfinal($detail['isFinal']);
+                        $oDetail->setLabel($detail['label']);
+                        $oDetail->setDetail($detail['detailledlabel']);
+                        $oDetail->setName($detail['name']);
+                        $oDetail->setDate(new \DateTime($detail['date']));
+                        $this->em->persist($oDetail);
+                    }
                 }
             }
 

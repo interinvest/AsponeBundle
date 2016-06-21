@@ -69,6 +69,9 @@ class AsponeXml
         $this->setFormulaires($listeFormNode, $declaration->getFormulaires());
         try {
             $this->xml = $rootNode->asXml();
+//            $handle = fopen('/vagrant/td2/web/uploads/aspone/test' . time() . '.xml', 'w+');
+//            fwrite($handle, $this->xml);
+//            fclose($handle);
             $this->validateXml($type);
             return $this->xml;
         } catch (\Exception $E) {
@@ -121,7 +124,7 @@ class AsponeXml
                 foreach ($zones as $zone => $val) {
                     if (isset($forms[$formulaire][$zone])) {
                         $value = $this->getValue($declarable->getConfiguration(), $formulaire, $zone);
-                        if (!is_null($value)) {
+                        if (!is_null($value) && $value && !empty($value)) {
                             if ($forms[$formulaire][$zone]['multi'] == 'NON') {
                                 $this->setZones($formNode, array($zone => $value));
                             } else {
@@ -248,8 +251,8 @@ class AsponeXml
                         if (is_array($z) && isset($z['Valeur']) && $z['Valeur'] !== false && $zone !== '') {
                             $zoneX->addChild('Valeur', $z['Valeur']);
                         } elseif ($z === 0 || $z === 0.0) {
-                            $zoneX->addChild($k, 0);
-                        } elseif (!is_array($z) && $z !== false && !empty($z)) {
+                            $zoneX->addChild($k, "0");
+                        } elseif (!is_array($z) && $z !== false && $zone !== '') {
                             $zoneX->addChild($k, $z);
                         }
                     }
@@ -323,7 +326,9 @@ class AsponeXml
             "</GroupeFonctionnel>" .
             "</XmlEdi>"
         );
-
+//        $handle = fopen('/vagrant/td2/web/uploads/aspone/test' . time() . '.xml', 'w+');
+//        fwrite($handle, $rootNode->asXML());
+//        fclose($handle);
         return utf8_decode($rootNode->saveXML());
     }
 

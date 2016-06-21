@@ -36,12 +36,13 @@ class AsponeDeposit
      * @param string $type
      * @param int    $test
      *
-     * @return array
+     * @return int
      */
     public function createDeposit(array $declarations, $type, $test = 1)
     {
         $asponeXml = $this->container->get('aspone.services.xml');
-        $deposits = array();
+        $deposits = 0;
+
 
         /**
          * Il faut un maximum de 100 déclarations par deposit
@@ -49,23 +50,24 @@ class AsponeDeposit
         $declarationsCh = array_chunk($declarations, 100);
 
         foreach ($declarationsCh as $k => $declarations) {
-            $oDeposit = new Deposit();
-            $oDeposit->setType($type);
-            $oDeposit->setEtat(0);
-            $oDeposit->setRetourImmediat(Deposit::ETAT_NON_FINI);
-            $oDeposit->setIstest($test);
-            $this->em->persist($oDeposit);
-            $this->em->flush(); //flush pour donner l'id aux declarations ensuite
+            $xml = $asponeXml->concatXml($declarations, $test);
+            if ($xml) {
+                $oDeposit = new Deposit();
+                $oDeposit->setType($type);
+                $oDeposit->setEtat(0);
+                $oDeposit->setRetourImmediat(Deposit::ETAT_NON_FINI);
+                $oDeposit->setIstest($test);
+                $this->em->persist($oDeposit);
+                $this->em->flush(); //flush pour donner l'id aux declarations ensuite
 
-            $deposits[] = array('xml' => $asponeXml->concatXml($declarations, $test), 'deposit' => $oDeposit);
-
-            /** @var Declaration $declaration */
-            foreach ($declarations as $declaration) {
-                $declaration->setDepositId($oDeposit->getId());
-                $this->em->persist($declaration);
+                $deposits++;
+                echo $deposits . "\n";
+                /** @var Declaration $declaration */
+                foreach ($declarations as $declaration) {
+                    $declaration->setDepositId($oDeposit->getId());
+                }
             }
         }
-        $this->em->flush();
 
         return $deposits;
     }
@@ -102,7 +104,7 @@ class AsponeDeposit
      */
     public function sendDeposit($request, Deposit $deposit)
     {
-        $req = $request->asXML();
+        $req = ($request instanceof \SimpleXMLElement) ? $request->asXML() : $request;
         $this->initSoap();
         $this->soap->addDocument('Depot ' . $deposit->getType(), $deposit->getType(), $req);
 
@@ -114,9 +116,6 @@ class AsponeDeposit
             $identif = str_replace(array('SUCCESS', 'ERROR'), '', $response);
             $deposit->setIdentifiant($identif);
             $deposit->setEtat(Deposit::ETAT_NON_FINI);
-
-            $this->em->persist($deposit);
-            $this->em->flush();
 
             return $response;
         } else {
