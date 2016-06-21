@@ -3,6 +3,7 @@
 namespace InterInvest\AsponeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use InterInvest\AsponeBundle\Entity\DeclarationHistoriqueDetail;
 
 /**
  * DeclarationHistorique
@@ -64,6 +65,27 @@ class DeclarationHistorique
      * @ORM\Column(name="declaration_id", type="integer", nullable=true)
      */
     private $declarationId;
+
+    /**
+     * @ORM\OneToMany(targetEntity="DeclarationHistoriqueDetail", mappedBy="declarationHistorique")
+     */
+    private $detail;
+
+    /**
+     * @return mixed
+     */
+    public function getDetail()
+    {
+        return $this->detail;
+    }
+
+    /**
+     * @param mixed $detail
+     */
+    public function setDetail($detail)
+    {
+        $this->detail = $detail;
+    }
 
 
     /**
