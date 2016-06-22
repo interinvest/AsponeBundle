@@ -80,6 +80,7 @@ class AsponeMonitoring
 
             $historiqueRepo = $this->em->getRepository('AsponeBundle:DepositHistorique');
             $historiqueDetailRepo = $this->em->getRepository('AsponeBundle:DepositHistoriqueDetail');
+            $declarationRepo = $this->em->getRepository($this->container->getParameter('aspone.declarationrepository'));
             foreach ($historiqueRepo->findBy(array('deposit' => $deposit)) as $historique) {
                 foreach ($historiqueDetailRepo->findBy(array('depositHistorique' => $historique)) as $detail) {
                     $this->em->remove($detail);
@@ -101,6 +102,10 @@ class AsponeMonitoring
 
                     if ($historique['isError']) {
                         $deposit->setEtat(Deposit::ETAT_ERREUR);
+                        $oDeclarations = $declarationRepo->findBy(array('depositId' => $deposit->getId()));
+                        foreach ($oDeclarations as $oDeclaration) {
+                            $oDeclaration->setEtat(Declaration::ETAT_ERREUR);
+                        }
                     } elseif ($historique['isFinal'] && !$historique['isError']) {
                         $deposit->setEtat(Deposit::ETAT_OK);
                     } elseif ($historique['name'] == 'DEPOSED') {
