@@ -64,7 +64,7 @@ class DeclarationHistoriqueDetail
     private $codeErreur;
 
     /**
-     * @var datetime
+     * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
@@ -73,7 +73,7 @@ class DeclarationHistoriqueDetail
     /**
      * @var DeclarationHistorique
      *
-     * @ORM\ManyToOne(targetEntity="InterInvest\AsponeBundle\Entity\DeclarationHistorique")
+     * @ORM\ManyToOne(targetEntity="InterInvest\AsponeBundle\Entity\DeclarationHistorique", inversedBy="detail")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="declaration_historique_id", referencedColumnName="id")
      * })
@@ -194,7 +194,7 @@ class DeclarationHistoriqueDetail
     }
 
     /**
-     * @return datetime
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -202,7 +202,7 @@ class DeclarationHistoriqueDetail
     }
 
     /**
-     * @param datetime $date
+     * @param \DateTime $date
      */
     public function setDate($date)
     {

@@ -73,7 +73,7 @@ class DepositHistoriqueDetail
     /**
      * @var DepositHistorique
      *
-     * @ORM\ManyToOne(targetEntity="InterInvest\AsponeBundle\Entity\DepositHistorique", inversedBy="detail")
+     * @ORM\ManyToOne(targetEntity="InterInvest\AsponeBundle\Entity\DepositHistorique")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="deposit_historique_id", referencedColumnName="id")
      * })

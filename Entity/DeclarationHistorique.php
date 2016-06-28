@@ -52,7 +52,7 @@ class DeclarationHistorique
     private $isfinal = false;
 
     /**
-     * @var datetime
+     * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", length=2, nullable=true)
      */
@@ -169,7 +169,7 @@ class DeclarationHistorique
     }
 
     /**
-     * @return datetime
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -177,7 +177,7 @@ class DeclarationHistorique
     }
 
     /**
-     * @param datetime $date
+     * @param \DateTime $date
      */
     public function setDate($date)
     {
