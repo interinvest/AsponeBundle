@@ -64,7 +64,7 @@ class DepositHistoriqueDetail
     private $codeErreur;
 
     /**
-     * @var datetime
+     * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", length=2, nullable=true)
      */
@@ -73,7 +73,7 @@ class DepositHistoriqueDetail
     /**
      * @var DepositHistorique
      *
-     * @ORM\ManyToOne(targetEntity="InterInvest\AsponeBundle\Entity\DepositHistorique")
+     * @ORM\ManyToOne(targetEntity="InterInvest\AsponeBundle\Entity\DepositHistorique", inversedBy="detail")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="deposit_historique_id", referencedColumnName="id")
      * })
@@ -210,7 +210,7 @@ class DepositHistoriqueDetail
     }
 
     /**
-     * @return datetime
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -218,7 +218,7 @@ class DepositHistoriqueDetail
     }
 
     /**
-     * @param datetime $date
+     * @param \DateTime $date
      */
     public function setDate($date)
     {

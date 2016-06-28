@@ -51,7 +51,7 @@ class DepositHistorique
     private $isfinal = false;
 
     /**
-     * @var datetime
+     * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", length=2, nullable=true)
      */
@@ -165,7 +165,7 @@ class DepositHistorique
     }
 
     /**
-     * @return datetime
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -173,7 +173,7 @@ class DepositHistorique
     }
 
     /**
-     * @param datetime $date
+     * @param \DateTime $date
      */
     public function setDate($date)
     {
