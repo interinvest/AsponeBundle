@@ -873,6 +873,65 @@ class AsponePdf
     }
 
     /**
+     * @return TCPDFLib
+     */
+    public function setPdf2065()
+    {
+        if (is_null($this->pdf)) {
+            $this->pdf = new TCPDFLib();
+            $this->pdf->printFooter = false;
+        }
+
+        $page = $this->pdf->getNumPages() + 1;
+
+        $import = new ImportPdfAction();
+        $import->setOption('file', $this->getTplPath(2065));
+        $import->execute($this->pdf);
+
+        $this->pdf->setPage($page);
+
+        $crawlerForm = "Declaration > ListeFormulaires > Identif > Zone#AA > ";
+        $identif = $this->crawler->filter("{$crawlerForm}Designation")->first()->text();
+        $siren = $this->crawler->filter("{$crawlerForm}Identifiant")->first()->text();
+
+        $numero = $this->crawler->filter("{$crawlerForm}AdresseNumero")->count() ? $this->crawler->filter("{$crawlerForm}AdresseNumero")->first()->text() : '';
+        $type = $this->crawler->filter("{$crawlerForm}AdresseType")->count() ? $this->crawler->filter("{$crawlerForm}AdresseType")->first()->text() : '';
+        $voie = $this->crawler->filter("{$crawlerForm}AdresseVoie")->count() ? $this->crawler->filter("{$crawlerForm}AdresseVoie")->first()->text() : '';
+        $complement = $this->crawler->filter("{$crawlerForm}AdresseComplement")->count() ? $this->crawler->filter("{$crawlerForm}AdresseComplement")->first()->text() : '';
+        $codePostal = $this->crawler->filter("{$crawlerForm}AdresseCodePostal")->count() ? $this->crawler->filter("{$crawlerForm}AdresseCodePostal")->first()->text() : '';
+        $ville = $this->crawler->filter("{$crawlerForm}AdresseVille")->count() ? $this->crawler->filter("{$crawlerForm}AdresseVille")->first()->text() : '';
+
+        $adresse = $numero . $type . ' ' . $voie . ' ' . $complement . ' ' . $codePostal . ' ' . $ville;
+
+        $dateFin = date_create_from_format('Ymd', $this->crawler->filter("Declaration > ListeFormulaires > Identif > Zone#CB")->first()->text());
+        $dateDebut = date_create_from_format('Ymd', $this->crawler->filter("Declaration > ListeFormulaires > Identif > Zone#CA")->first()->text());
+
+        $diffMonth = floor(date_diff($dateDebut, $dateFin)->days / 30);
+
+        $this->pdf->transaction()
+            ->add('textOptions', array('size' => 8, 'spacing' => '0'))
+            ->add('html', array('html' => $dateDebut->format('d/m/Y'), 'w' => '90', 'h' => '4', 'x' => '40', 'y' => '30', 'align' => 'L'))
+            ->add('html', array('html' => $dateFin->format('d/m/Y'), 'w' => '90', 'h' => '4', 'x' => '82', 'y' => '30', 'align' => 'L'))
+            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '15', 'y' => '60', 'align' => 'L'))
+            ->add('html', array('html' => $adresse, 'w' => '150', 'h' => '4', 'x' => '110', 'y' => '60', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => '3.5'))
+            ->add('html', array('html' => $siren, 'w' => '150', 'h' => '4', 'x' => '30', 'y' => '68', 'align' => 'L'))
+            ->execute();
+
+        $crawlerForm = "Declaration > ListeFormulaires > Formulaire[Nom=\"2065\"] > ";
+        //traitement simplifié pour valeurs uniques
+        foreach ($this->getZones('IDF', '2065') as $zone) {
+            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ? $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() : '';
+        }
+        $this->pdf->transaction()
+            ->add('textOptions', array('spacing' => '0'))
+            ->add('html', array('html' => isset($AT) ? $AT : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '134', 'align' => 'L'))
+            ->execute();
+
+        return $this->pdf;
+    }
+
+    /**
      * @param $type
      * @param $form
      *
