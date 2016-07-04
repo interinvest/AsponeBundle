@@ -189,10 +189,10 @@ class AsponePdf
             ->add('html', array('html' => substr($referenceDossier,12,2), 'w' => '8', 'h' => '4', 'x' => '65', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => '652', 'w' => '15', 'h' => '4', 'x' => '108', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => 'RT', 'w' => '16', 'h' => '4', 'x' => '123', 'y' => '105', 'align' => 'C'))
-            ->add('textOptions', array('spacing' => '3.45'))
-            ->add('html', array('html' => $identifiantTvaSnc, 'w' => '91', 'h' => '4', 'x' => '17', 'y' => '109.5', 'align' => 'R'))
-            ->add('textOptions', array('spacing' => '0'))
-            ->add('html', array('html' => $neant ? 'X' : '', 'w' => '5', 'h' => '4', 'x' => '195', 'y' => '136', 'align' => 'L'))
+            ->add('textOptions', array('size' => 10, 'spacing' => '3.4'))
+            ->add('html', array('html' => $identifiantTvaSnc, 'w' => '91', 'h' => '4', 'x' => '18', 'y' => '108.5', 'align' => 'R'))
+            ->add('textOptions', array('size' => 12, 'spacing' => '0'))
+            ->add('html', array('html' => $neant ? 'X' : '', 'w' => '5', 'h' => '4', 'x' => '195', 'y' => '135', 'align' => 'L'))
             ->execute();
 
 
