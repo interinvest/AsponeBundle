@@ -101,6 +101,63 @@ class AsponePdf
     }
 
     /**
+     * @param $xml
+     *
+     * @return $this
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function initByXml($xml)
+    {
+        $this->rootDir = $this->container->get('kernel')->getRootDir();
+
+        $this->xmlString = $xml;
+
+        $this->pdf = new TCPDFLib();
+        $this->pdf->printFooter = false;
+
+        //vérification des formulaires pdf
+        try {
+            //tableau des formulaires trouvés pour éviter les doublons de traitement;
+            $formUsed = array();
+
+            $this->crawler = new Crawler($this->xmlString);
+            $forms = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire");
+            /** @var \DOMElement $form */
+            foreach ($forms as $form) {
+                $formNum = substr($form->getAttribute('Nom'), 0, 4);
+
+                if (!in_array($formNum, $formUsed)) {
+                    array_push($formUsed, $formNum);
+
+                    if (!file_exists($this->getTplPath($formNum))) {
+                        throw new \Exception("Template pdf inexistant (formulaire $formNum)");
+                    }
+
+                    try {
+                        //appel methode remplissage
+                        $methode = 'setPdf' . $formNum;
+
+                        if (!method_exists($this, $methode)) {
+                            throw new \Exception("Méthode $methode() inconnue");
+                        }
+
+                    } catch (\Exception $e) {
+                        throw new \Exception($e->getMessage() . ' ' . $e->getFile() . ' l.' . $e->getLine());
+                    }
+                }
+            }
+
+            $this->forms = $formUsed;
+
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage() . ' ' . $e->getFile() . ' l.' . $e->getLine());
+        }
+
+        return $this;
+    }
+
+    /**
      * @param $formNum
      *
      * @return string
@@ -119,18 +176,18 @@ class AsponePdf
      */
     public function savePdf($name, $declaration, $methode = 'F')
     {
-        $pathSave = $this->rootDir . $this->container->getParameter('aspone.xmlpath');
-        if (!file_exists($pathSave) || !is_dir($pathSave)) {
-            mkdir($pathSave);
-        }
-
-        $pathSave .=  $declaration->getType();
-
-        if (!file_exists($pathSave) || !is_dir($pathSave)) {
-            mkdir($pathSave);
-        }
-
         if ($methode == 'F') {
+            $pathSave = $this->rootDir . $this->container->getParameter('aspone.xmlpath');
+            if (!file_exists($pathSave) || !is_dir($pathSave)) {
+                mkdir($pathSave);
+            }
+
+            $pathSave .=  $declaration->getType();
+
+            if (!file_exists($pathSave) || !is_dir($pathSave)) {
+                mkdir($pathSave);
+            }
+
             $this->pdf->Output($pathSave . '/' . $name . '.pdf', 'F');
             return true;
         } else {

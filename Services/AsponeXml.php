@@ -36,13 +36,21 @@ class AsponeXml
      */
     public function setXmlFromDeclarable($declaration, $test = 1)
     {
-        $declarable = $declaration->getServiceDeclarable();
-        if (is_array($declarable)) {
-            if (!isset($declarable[1])) {
-                throw new \Exception('Entité manquante pour l\'appel au service ' . $declarable[0]);
+        if ($declaration instanceof Declaration) {
+            $declarable = $declaration->getServiceDeclarable();
+            if (is_array($declarable)) {
+                if (!isset($declarable[1])) {
+                    throw new \Exception('Entité manquante pour l\'appel au service ' . $declarable[0]);
+                }
+                $serviceDeclarable = $this->container->get($declarable[0]);
+                $declarable = $serviceDeclarable->init($declarable[1], $declaration->getFormulaires());
             }
-            $serviceDeclarable = $this->container->get($declarable[0]);
-            $declarable = $serviceDeclarable->init($declarable[1], $declaration->getFormulaires());
+            $formulaires = $declaration->getFormulaires();
+            $id = $declaration->getId();
+        } elseif (is_array($declaration)) {
+            $declarable = $declaration[0];
+            $formulaires = $declaration['formulaires'];
+            $id = 0;
         }
         $this->declarable = $declarable;
         $type = $declarable->getType();
@@ -63,10 +71,10 @@ class AsponeXml
         $groupNode = $rootNode->addChild('GroupeFonctionnel');
         $groupNode->addAttribute('Type', 'INFENT');
 
-        $reference = $declarable->getInfent() . '-' . $declaration->getId();
+        $reference = $declarable->getInfent() . '-' . $id;
         $listeFormNode = $this->setDeclarableGroup($groupNode, $type, $reference);
 
-        $this->setFormulaires($listeFormNode, $declaration->getFormulaires());
+        $this->setFormulaires($listeFormNode, $formulaires);
         try {
             $this->xml = $rootNode->asXml();
 //            $handle = fopen('/vagrant/td2/web/uploads/aspone/test' . time() . '.xml', 'w+');
