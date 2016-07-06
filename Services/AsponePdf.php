@@ -240,15 +240,15 @@ class AsponePdf
         $this->pdf->transaction()
             ->add('textOptions', array('size' => 10))
             ->add('html', array('html' => $adresseSnc, 'w' => '121', 'h' => '16', 'x' => '80', 'y' => '75', 'align' => 'L '))
-            ->add('textOptions', array('size' => 12))
+            ->add('textOptions', array('size' => 10))
             ->add('html', array('html' => substr($referenceDossier,0,7), 'w' => '32', 'h' => '4', 'x' => '5', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => substr($referenceDossier,7,6), 'w' => '26', 'h' => '4', 'x' => '38', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => substr($referenceDossier,12,2), 'w' => '8', 'h' => '4', 'x' => '65', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => '652', 'w' => '15', 'h' => '4', 'x' => '108', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => 'RT', 'w' => '16', 'h' => '4', 'x' => '123', 'y' => '105', 'align' => 'C'))
             ->add('textOptions', array('size' => 10, 'spacing' => '3.4'))
-            ->add('html', array('html' => $identifiantTvaSnc, 'w' => '91', 'h' => '4', 'x' => '18', 'y' => '108.5', 'align' => 'R'))
-            ->add('textOptions', array('size' => 12, 'spacing' => '0'))
+            ->add('html', array('html' => $identifiantTvaSnc, 'w' => '91', 'h' => '4', 'x' => '16', 'y' => '108.5', 'align' => 'L'))
+            ->add('textOptions', array('spacing' => '0'))
             ->add('html', array('html' => $neant ? 'X' : '', 'w' => '5', 'h' => '4', 'x' => '195', 'y' => '135', 'align' => 'L'))
             ->execute();
 
