@@ -247,7 +247,7 @@ class AsponePdf
             ->add('html', array('html' => '652', 'w' => '15', 'h' => '4', 'x' => '108', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => 'RT', 'w' => '16', 'h' => '4', 'x' => '123', 'y' => '105', 'align' => 'C'))
             ->add('textOptions', array('size' => 10, 'spacing' => '3.4'))
-            ->add('html', array('html' => $identifiantTvaSnc, 'w' => '91', 'h' => '4', 'x' => '16', 'y' => '108.5', 'align' => 'L'))
+            ->add('html', array('html' => $identifiantTvaSnc, 'w' => '91', 'h' => '4', 'x' => '37', 'y' => '108.5', 'align' => 'L'))
             ->add('textOptions', array('spacing' => '0'))
             ->add('html', array('html' => $neant ? 'X' : '', 'w' => '5', 'h' => '4', 'x' => '195', 'y' => '135', 'align' => 'L'))
             ->execute();
