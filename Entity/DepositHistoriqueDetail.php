@@ -59,7 +59,7 @@ class DepositHistoriqueDetail
     /**
      * @var string
      *
-     * @ORM\Column(name="code_erreur", type="string", length=3, nullable=true, options={"default":""})
+     * @ORM\Column(name="code_erreur", type="string", length=10, nullable=true, options={"default":""})
      */
     private $codeErreur;
 
