@@ -320,6 +320,7 @@ class AsponeMonitoring
 
         if ($resp->getElementsByTagName('rofDeclared')->length) {
             $final['infos'] = array(
+                'depositId'      => $resp->getElementsByTagName('depositId')->item(0)->nodeValue,
                 'declarantSiren' => $resp->getElementsByTagName('declarantSiren')->item(0)->nodeValue,
                 'periodeStart'   => $resp->getElementsByTagName('periodStart')->item(0)->nodeValue,
                 'periodeEnd'     => $resp->getElementsByTagName('periodEnd')->item(0)->nodeValue,
