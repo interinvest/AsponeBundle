@@ -35,10 +35,11 @@ class AsponeDeposit
      * @param array  $declarations
      * @param string $type
      * @param int    $test
+     * @param int    $limit
      *
      * @return int
      */
-    public function createDeposit(array $declarations, $type, $test = 1)
+    public function createDeposit(array $declarations, $type, $test = 1, $limit = 100)
     {
         $asponeXml = $this->container->get('aspone.services.xml');
         $deposits = 0;
@@ -47,7 +48,10 @@ class AsponeDeposit
         /**
          * Il faut un maximum de 100 déclarations par deposit
          */
-        $declarationsCh = array_chunk($declarations, 100);
+        if ($limit > 100) {
+            $limit = 100;
+        }
+        $declarationsCh = array_chunk($declarations, $limit);
 
         foreach ($declarationsCh as $k => $declarations) {
             $xml = $asponeXml->concatXml($declarations, $test);
