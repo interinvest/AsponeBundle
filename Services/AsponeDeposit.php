@@ -22,11 +22,11 @@ class AsponeDeposit
     /** @var SoapClient soap */
     public $soap;
 
-    public function __construct(EntityManager $em, Container $container, SoapClientBuilder $builder)
+    public function __construct(EntityManager $em, Container $container)
     {
         $this->em = $em;
         $this->container = $container;
-        $this->builder = $builder;
+        $this->builder = new SoapClientBuilder($this->container->getParameter('aspone.wsdl.teledeclarations'), array('debug'=>false));
     }
 
     /**
