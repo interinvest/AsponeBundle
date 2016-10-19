@@ -2,6 +2,7 @@
 
 namespace InterInvest\AsponeBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -16,6 +17,20 @@ abstract class Declaration
     const ETAT_NON_FINIE = 0;
     const ETAT_OK = 1;
     const ETAT_ERREUR = 2;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="DeclarationHistorique", mappedBy="declaration")
+     */
+    protected $hitoriques;
 
     public static $correspondancesTypes = array(
         'TVA'  => array('IDT', 'RBT'),
@@ -28,7 +43,15 @@ abstract class Declaration
         'IDF' => array(2033, 2031, 2083)
     );
 
-    abstract function getId();
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     abstract function setType($type);
     abstract function getType();
@@ -58,6 +81,15 @@ abstract class Declaration
 
     abstract function setFormulaires($formulaires);
     abstract function getFormulaires();
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->details = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Doit renvoyer un tableau avec le nom du service pour la création de l'objet déclarable et l'entité utilisée
@@ -90,5 +122,39 @@ abstract class Declaration
         $serviceXml = $container->get('aspone.services.xml');
 
         return $serviceXml->setXmlFromDeclarable($this, 1);
+    }
+
+    /**
+     * Add detail
+     *
+     * @param \InterInvest\AsponeBundle\Entity\DeclarationHistorique
+     *
+     * @return DeclarationHistorique
+     */
+    public function addHistorique(\InterInvest\AsponeBundle\Entity\DeclarationHistorique $historique)
+    {
+        $this->hitoriques[] = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Remove detail
+     *
+     * @param \InterInvest\AsponeBundle\Entity\DeclarationHistorique $detail
+     */
+    public function removeDetail(\InterInvest\AsponeBundle\Entity\DeclarationHistorique $historique)
+    {
+        $this->hitoriques->removeElement($detail);
+    }
+
+    /**
+     * Get detail
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getHistoriques()
+    {
+        return $this->hitoriques;
     }
 }

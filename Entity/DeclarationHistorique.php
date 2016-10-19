@@ -3,7 +3,7 @@
 namespace InterInvest\AsponeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use II\Bundle\FinancialBundle\Entity\AsponeDeclaration;
+use InterInvest\AsponeBundle\Entity\Declaration;
 use InterInvest\AsponeBundle\Entity\DeclarationHistoriqueDetail;
 
 /**
@@ -60,9 +60,9 @@ class DeclarationHistorique
     private $date;
 
     /**
-     * @var AsponeDeclaration
+     * @var Declaration
      *
-     * @ORM\ManyToOne(targetEntity="II\Bundle\FinancialBundle\Entity\AsponeDeclaration", inversedBy="historiques")
+     * @ORM\ManyToOne(targetEntity="Declaration", inversedBy="historiques")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="declaration_id", referencedColumnName="id")
      * })
@@ -72,7 +72,7 @@ class DeclarationHistorique
     /**
      * @ORM\OneToMany(targetEntity="DeclarationHistoriqueDetail", mappedBy="declarationHistorique")
      */
-    private $detail;
+    private $details;
 
     
     /**
@@ -80,7 +80,7 @@ class DeclarationHistorique
      */
     public function __construct()
     {
-        $this->detail = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->details = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -246,7 +246,7 @@ class DeclarationHistorique
      */
     public function addDetail(\InterInvest\AsponeBundle\Entity\DeclarationHistoriqueDetail $detail)
     {
-        $this->detail[] = $detail;
+        $this->details[] = $detail;
 
         return $this;
     }
@@ -258,16 +258,16 @@ class DeclarationHistorique
      */
     public function removeDetail(\InterInvest\AsponeBundle\Entity\DeclarationHistoriqueDetail $detail)
     {
-        $this->detail->removeElement($detail);
+        $this->details->removeElement($detail);
     }
 
     /**
      * Get detail
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getDetail()
+    public function getDetails()
     {
-        return $this->detail;
+        return $this->details;
     }
 }
