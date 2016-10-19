@@ -63,6 +63,9 @@ class DeclarationHistorique
      * @var AsponeDeclaration
      *
      * @ORM\ManyToOne(targetEntity="II\Bundle\FinancialBundle\Entity\AsponeDeclaration", inversedBy="historiques")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="declaration_id", referencedColumnName="id")
+     * })
      */
     private $declaration;
 
