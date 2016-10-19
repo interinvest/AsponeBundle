@@ -3,7 +3,6 @@
 namespace InterInvest\AsponeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use InterInvest\AsponeBundle\Entity\Declaration;
 use InterInvest\AsponeBundle\Entity\DeclarationHistoriqueDetail;
 
 /**
@@ -59,34 +58,38 @@ class DeclarationHistorique
      */
     private $date;
 
+
     /**
-     * @var Declaration
+     * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Declaration", inversedBy="historiques")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="declaration_id", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="declaration_id", type="integer", nullable=true)
      */
-    private $declaration;
+    private $declarationId;
 
     /**
      * @ORM\OneToMany(targetEntity="DeclarationHistoriqueDetail", mappedBy="declarationHistorique")
      */
-    private $details;
+    private $detail;
 
-    
     /**
-     * Constructor
+     * @return mixed
      */
-    public function __construct()
+    public function getDetail()
     {
-        $this->details = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->detail;
     }
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @param mixed $detail
+     */
+    public function setDetail($detail)
+    {
+        $this->detail = $detail;
+    }
+
+
+    /**
+     * @return int
      */
     public function getId()
     {
@@ -94,22 +97,14 @@ class DeclarationHistorique
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return DeclarationHistorique
+     * @param int $id
      */
-    public function setName($name)
+    public function setId($id)
     {
-        $this->name = $name;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -118,22 +113,14 @@ class DeclarationHistorique
     }
 
     /**
-     * Set label
-     *
-     * @param string $label
-     *
-     * @return DeclarationHistorique
+     * @param string $name
      */
-    public function setLabel($label)
+    public function setName($name)
     {
-        $this->label = $label;
-
-        return $this;
+        $this->name = $name;
     }
 
     /**
-     * Get label
-     *
      * @return string
      */
     public function getLabel()
@@ -142,22 +129,14 @@ class DeclarationHistorique
     }
 
     /**
-     * Set iserror
-     *
-     * @param boolean $iserror
-     *
-     * @return DeclarationHistorique
+     * @param string $label
      */
-    public function setIserror($iserror)
+    public function setLabel($label)
     {
-        $this->iserror = $iserror;
-
-        return $this;
+        $this->label = $label;
     }
 
     /**
-     * Get iserror
-     *
      * @return boolean
      */
     public function getIserror()
@@ -166,22 +145,14 @@ class DeclarationHistorique
     }
 
     /**
-     * Set isfinal
-     *
-     * @param boolean $isfinal
-     *
-     * @return DeclarationHistorique
+     * @param boolean $iserror
      */
-    public function setIsfinal($isfinal)
+    public function setIserror($iserror)
     {
-        $this->isfinal = $isfinal;
-
-        return $this;
+        $this->iserror = $iserror;
     }
 
     /**
-     * Get isfinal
-     *
      * @return boolean
      */
     public function getIsfinal()
@@ -190,22 +161,14 @@ class DeclarationHistorique
     }
 
     /**
-     * Set date
-     *
-     * @param \DateTime $date
-     *
-     * @return DeclarationHistorique
+     * @param boolean $isfinal
      */
-    public function setDate($date)
+    public function setIsfinal($isfinal)
     {
-        $this->date = $date;
-
-        return $this;
+        $this->isfinal = $isfinal;
     }
 
     /**
-     * Get date
-     *
      * @return \DateTime
      */
     public function getDate()
@@ -214,60 +177,26 @@ class DeclarationHistorique
     }
 
     /**
-     * Set declaration
-     *
-     * @param \II\Bundle\FinancialBundle\Entity\AsponeDeclaration $declaration
-     *
-     * @return DeclarationHistorique
+     * @param \DateTime $date
      */
-    public function setDeclaration(\II\Bundle\FinancialBundle\Entity\AsponeDeclaration $declaration = null)
+    public function setDate($date)
     {
-        $this->declaration = $declaration;
-
-        return $this;
+        $this->date = $date;
     }
 
     /**
-     * Get declaration
-     *
-     * @return \II\Bundle\FinancialBundle\Entity\AsponeDeclaration
+     * @return int
      */
-    public function getDeclaration()
+    public function getDeclarationId()
     {
-        return $this->declaration;
+        return $this->declarationId;
     }
 
     /**
-     * Add detail
-     *
-     * @param \InterInvest\AsponeBundle\Entity\DeclarationHistoriqueDetail $detail
-     *
-     * @return DeclarationHistorique
+     * @param int $declarationId
      */
-    public function addDetail(\InterInvest\AsponeBundle\Entity\DeclarationHistoriqueDetail $detail)
+    public function setDeclarationId($declarationId)
     {
-        $this->details[] = $detail;
-
-        return $this;
-    }
-
-    /**
-     * Remove detail
-     *
-     * @param \InterInvest\AsponeBundle\Entity\DeclarationHistoriqueDetail $detail
-     */
-    public function removeDetail(\InterInvest\AsponeBundle\Entity\DeclarationHistoriqueDetail $detail)
-    {
-        $this->details->removeElement($detail);
-    }
-
-    /**
-     * Get detail
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getDetails()
-    {
-        return $this->details;
+        $this->declarationId = $declarationId;
     }
 }

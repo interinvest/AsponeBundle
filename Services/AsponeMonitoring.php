@@ -247,7 +247,7 @@ class AsponeMonitoring
                     }
                     foreach ($response['historiques'] as $historique) {
                         $oHistorique = new DeclarationHistorique();
-                        $oHistorique->setDeclaration($oDeclaration);
+                        $oHistorique->setDeclarationId($oDeclaration->getId());
                         $oHistorique->setDate(new \DateTime($historique['date']));
                         $oHistorique->setIserror($historique['isError']);
                         $oHistorique->setIsfinal($historique['isFinal']);

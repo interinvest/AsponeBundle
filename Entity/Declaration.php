@@ -2,38 +2,26 @@
 
 namespace InterInvest\AsponeBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\DependencyInjection\Container;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AsponeDeclaration
+ * @ORM\MappedSuperclass
  */
 abstract class Declaration
 {
-    const TYPE_RBT  = 'RBT';
-    const TYPE_IDT  = 'IDT';
-    const TYPE_IDF  = 'IDF';
+    const TYPE_RBT = 'RBT';
+    const TYPE_IDT = 'IDT';
+    const TYPE_IDF = 'IDF';
 
     const ETAT_NON_FINIE = 0;
     const ETAT_OK = 1;
     const ETAT_ERREUR = 2;
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="DeclarationHistorique", mappedBy="declaration")
-     */
-    protected $hitoriques;
 
     public static $correspondancesTypes = array(
-        'TVA'  => array('IDT', 'RBT'),
+        'TVA' => array('IDT', 'RBT'),
         'TDFC' => array('CVA', 'CRM', 'IAT', 'IDF', 'ILF', 'LIS', 'LOY'),
     );
 
@@ -44,42 +32,48 @@ abstract class Declaration
     );
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @ORM\OneToMany(targetEntity="InterInvest\AsponeBundle\Entity\DeclarationHistorique", mappedBy="declaration")
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    protected $historiques;
+
+    abstract function getId();
 
     abstract function setType($type);
+
     abstract function getType();
 
     abstract function getIdentifiant();
+
     abstract function setIdentifiant($identifant);
 
     abstract function getEtat();
+
     abstract function setEtat($etat);
 
     abstract function getDeposit();
+
     abstract function setDeposit($deposit);
 
     abstract function getDeclarantSiren();
+
     abstract function setDeclarantSiren($declarantSirent);
 
     abstract function getPeriodeStart();
+
     abstract function setPeriodeStart($periodeStart);
 
     abstract function getPeriodeEnd();
+
     abstract function setPeriodeEnd($periodeEnd);
 
     abstract function archiveXml($xml, $path);
 
     abstract function setReferenceClient($referenceClient);
+
     abstract function getReferenceClient();
 
     abstract function setFormulaires($formulaires);
+
     abstract function getFormulaires();
 
 
@@ -88,7 +82,7 @@ abstract class Declaration
      */
     public function __construct()
     {
-        $this->details = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->historiques = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -133,7 +127,7 @@ abstract class Declaration
      */
     public function addHistorique(\InterInvest\AsponeBundle\Entity\DeclarationHistorique $historique)
     {
-        $this->hitoriques[] = $historique;
+        $this->historiques[] = $historique;
 
         return $this;
     }
@@ -145,7 +139,7 @@ abstract class Declaration
      */
     public function removeDetail(\InterInvest\AsponeBundle\Entity\DeclarationHistorique $historique)
     {
-        $this->hitoriques->removeElement($detail);
+        $this->historiques->removeElement($historique);
     }
 
     /**
@@ -155,6 +149,6 @@ abstract class Declaration
      */
     public function getHistoriques()
     {
-        return $this->hitoriques;
+        return $this->historiques;
     }
 }
