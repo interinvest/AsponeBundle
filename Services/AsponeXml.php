@@ -55,13 +55,6 @@ class AsponeXml
         $this->declarable = $declarable;
         $type = $declarable->getType();
         $millesime = $declarable->getAnnee() % 100;
-        /*
-         * On déclare le dernier trimestre de l'année précédente durant le 1er mois de l'année en cours
-         * Donc on prend le millesime précédent
-         */
-        if (date('m') == 1) {
-            $millesime--;
-        }
         if ($millesime < 10) {
             $millesime = '0' . $millesime;
         }
