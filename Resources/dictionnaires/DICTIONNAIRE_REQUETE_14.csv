@@ -1,0 +1,19 @@
+Formulaire;Millésime;Zone;Type;Donnée;Répétable;Table/Format;Balise XML;Intitulé;Commentaire
+R-IDENTIF;14;AA;NAD;0000.3164.01;NON;;AdresseVille;Adresse du demandeur, ville;
+R-IDENTIF;14;AA;NAD;0000.3251.01;NON;;AdresseCodePostal;Adresse du demandeur, code postal;
+R-IDENTIF;14;AA;NAD;C059.3042.01;NON;;AdresseNumero, AdresseType, AdresseVoie;Adresse du demandeur, numéro, type et nom voie;
+R-IDENTIF;14;AA;NAD;C059.3042.02;NON;;AdresseComplement;Adresse du demandeur, complément d'adresse;
+R-IDENTIF;14;AA;NAD;C080.3036.01;NON;;Designation;Identification du demandeur, désignation ou nom prénom;
+R-IDENTIF;14;AA;NAD;C080.3036.02;NON;;DesignationSuite1;Identification du demandeur , qualité ou complément de désignation;
+R-IDENTIF;14;AA;NAD;C080.3036.03;NON;;DesignationSuite2;Identification du demandeur, titre du demandeur;
+R-IDENTIF;14;AA;NAD;C082.3039.01;NON;;Identifiant;Identifiant du demandeur numéro SIREN;
+R-IDENTIF;14;AB;NAD;0000.3164.01;NON;;AdresseVille;Adresse du déclarant, ville;
+R-IDENTIF;14;AB;NAD;0000.3251.01;NON;;AdresseCodePostal;Adresse du déclarant, code postal;
+R-IDENTIF;14;AB;NAD;C059.3042.01;NON;;AdresseNumero, AdresseType, AdresseVoie;Adresse du déclarant, numéro, type et nom voie;
+R-IDENTIF;14;AB;NAD;C059.3042.02;NON;;AdresseComplement;Adresse du déclarant, complément d'adresse;
+R-IDENTIF;14;AB;NAD;C080.3036.01;NON;;Designation;Identification du déclarant , désignation ou nom prénom;
+R-IDENTIF;14;AB;NAD;C080.3036.02;NON;;DesignationSuite1;Identification du déclarant , qualité ou complément de désignation;
+R-IDENTIF;14;AB;NAD;C080.3036.03;NON;;DesignationSuite2;Identification du déclarant, titre du redevable;
+R-IDENTIF;14;AB;NAD;C082.3039.01;NON;;Identifiant;Identifiant du déclarant numéro SIREN;
+R-IDENTIF;14;BA;CCI;C889.7111.01;NON;REQ;Valeur;Code de la demande d'information;
+R-IDENTIF;14;BB;CCI;C889.7111.01;NON;TBX;Valeur;Mode unitaire;
