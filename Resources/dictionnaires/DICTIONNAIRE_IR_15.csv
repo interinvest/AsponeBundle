@@ -121,6 +121,21 @@ Formulaire;Millésime;Zone;Type;Donnée;Répétable;Table/Format;Balise XML;Intitulé
 2042-I-2;15;CD;CCI;C889.7111.01;NON;TBX;Valeur;ASE- Si vous souhaitez demander l'annulation de l'adresse spéciale d'envoi connue de l'administration, cochez la case;
 2042-I-2;15;CE;NAD;C080.3036.01;NON;;Designation;ASE- Nom du colocataire (en cas de colocation);35 alphanumérique
 2042-I-2;15;CE;NAD;C080.3036.02;NON;;DesignationSuite1;ASE- Prénom du colocataire (en cas de colocation);35 alphanumérique
+2042-I-3;15;AA;DTM;C507.2380.01;NON;102;Valeur;Changement de situation de famille intervenu en N-1 : Date du mariage / Pacs N-1;Format attendu : yyyyMMdd
+2042-I-3;15;AB;CCI;C889.7111.01;NON;SF1;Valeur;Changement de situation de famille intervenu en N-1 : Situation de famille au 1er janvier N;
+2042-I-3;15;AC;CCI;C889.7111.01;NON;SF2;Valeur;Changement de situation de famille intervenu en N : Nature du changement de situation de famille;
+2042-I-3;15;BA;DTM;C507.2380.01;NON;102;Valeur;Mariage / Pacs : Date du Mariage ou du Pacs;Format attendu : yyyyMMdd
+2042-I-3;15;BB;CCI;C889.7111.01;NON;TBX;Valeur;Mariage / Pacs : en cas de mariage avec votre partenaire PACS, cochez la case;
+2042-I-3;15;BC;CCI;C889.7111.01;NON;TBX;Valeur;Mariage / Pacs : Optez-vous pour la déclaration séparée?;
+2042-I-3;15;BD;NAD;C082.3039.01;NON;;Identifiant;Mariage / Pacs : si vousn optez pour la déclaration séparée, SPI du conjoint ou du partenaire;
+2042-I-3;15;CA;DTM;C507.2380.01;NON;102;Valeur;Divorce / Séparation / Rupture de Pacs : date de Séparation / Séparation / Ruprure de Pacs;Format attendu : yyyyMMdd
+2042-I-3;15;CB;CCI;C889.7111.01;NON;SF3;Valeur;Divorce / Séparation / Rupture de Pacs : votre état matrimonial après Divorce / Séparation;
+2042-I-3;15;DA;DTM;C507.2380.01;NON;102;Valeur;Décès d'une personne seule (C,V,D) ou Couple (M, P) dont les membres du foyer sont décédés le même jour : date du décès;Format attendu : yyyyMMdd
+2042-I-3;15;EA;CCI;C889.7111.01;NON;NDD;Valeur;Couple marié ou Pacsé au 1er janvier N en l'absnece de décès simultanné des membres du foyer : Déclaration commune pour la période avant décès ou déclaration en tant que personne seule (conjoint survivant) pour la période après décès;
+2042-I-3;15;EB;CCI;C889.7111.01;NON;PV3;Valeur;Couple marié ou Pacsé au 1er janvier N en l'absnece de décès simultanné des membres du foyer : Si vous souscrivez une déclaration commune en tant que couple Marié ou Pacsé pour la période avant décès, veuillez préciser la date de décès de votre conjoint et sa qualité dans le couple (D1,D2) : Qualité du conjoint décédé;
+2042-I-3;15;EC;DTM;C507.2380.01;NON;102;Valeur;Couple marié ou Pacsé au 1er janvier N en l'absnece de décès simultanné des membres du foyer : Si vous souscrivez une déclaration commune en tant que couple Marié ou Pacsé pour la période avant décès, veuillez préciser la date de décès de votre conjoint et sa qualité dans le couple (D1,D2) : Date de décès du conjoint;Format attendu : yyyyMMdd
+2042-I-3;15;ED;DTM;C507.2380.01;NON;102;Valeur;Si vous souscrivez cette déclaration en tant que personne seule, conjoint survivant : date de décès de votre conjoint;Format attendu : yyyyMMdd
+2042-I-3;15;EF;DTM;C507.2380.01;NON;102;Valeur;Dans le cas particulier du décès des deux membres du couple à des dates différentes : date de décès du 2ème défunt;Format attendu : yyyyMMdd
 2042-0;15;AA;FII;C078.3194.01;NON;;Iban;IBAN;
 2042-0;15;AA;FII;C088.3433.01;NON;;Bic;BIC;
 2042-0;15;AB;CCI;C889.7111.01;NON;TCB;Valeur;Titulaire du compte - veuillez préciser : ° 1- Déclarant 1, ° 2- Déclarant 2, ° 3- Déclarant 1 ou Déclarant 2;

@@ -863,28 +863,6 @@ P-IDENTIF;15;KF;DTM;C507.2380.01;NON;610;Valeur;Échéance;Format attendu : yyyyMM
 2572;16;RZ;MOA;C516.5004.01;NON;;Valeur;Taxes assimilées à l'IS de l'exercice - Contribution Sociale (CSB) sur l'IS due au titre de l'exercice, avant toute déduction (case 123 x 3,3%);
 2572;16;TA;MOA;C516.5004.01;NON;;Valeur;Impôt sur les Sociétés (au taux normal);
 2572;16;TB;MOA;C516.5004.01;NON;;Valeur;Impôt sur les Sociétés (au taux réduit);
-2573;16;AA;CCI;C889.7111.01;NON;TBX;Valeur;Société bénéficiant du régime fiscal des groupes de sociétés;
-2573;16;AB;CCI;C889.7111.01;OUI;CRB;Valeur;Nature de la créance ou du crédit d'impôt;
-2573;16;AC;DTM;C507.2380.01;OUI;602;Valeur;Année ou exercice d'origine de la créance;Format attendu : yyyy
-2573;16;AF;MOA;C516.5004.01;OUI;;Valeur;Montant de l'intérêt légal à déduire (Uniquement pour les RAD en procédure collective);
-2573;16;AG;MOA;C516.5004.01;OUI;;Valeur;Montant du remboursement sollicité;
-2573;16;AH;CCI;C889.7111.01;OUI;COL;Valeur;En cas de demande formulée suite à l'ouverture d'une procédure collective : Nature de la procédure;
-2573;16;AI;DTM;C507.2380.01;OUI;102;Valeur;En cas de demande formulée suite à l'ouverture d'une procédure collective : Date d'ouverture de la procédure;Format attendu : yyyyMMdd
-2573;16;BA;NAD;C082.3039.01;NON;;Identifiant;SIREN de la société absorbante ou bénéficiaire des apports;
-2573;16;BB;DTM;C507.2380.01;OUI;102;Valeur;Date de clôture de l'exercice de détermination du crédit, de la créance ou de la réduction d'impôt;Format attendu : yyyyMMdd
-2573;16;BC;DTM;C507.2380.01;OUI;102;Valeur;Date de cession;Format attendu : yyyyMMdd
-2573;16;BD;NAD;C082.3039.01;OUI;;Identifiant;SIREN de la société à l'origine de la créance;
-2573;16;BE;MOA;C516.5004.01;OUI;;Valeur;Montant de la créance cédée;
-2573;16;CA;NAD;C082.3039.01;NON;;Identifiant;SIREN de la société absorbante ou bénéficiaire des apports;
-2573;16;CB;CCI;C889.7111.01;OUI;CTR;Valeur;Nature du crédit, de la créance ou de la réduction d'impôt Sauf RAD;
-2573;16;CC;DTM;C507.2380.01;OUI;102;Valeur;Date de clôture de l'exercice de détermination du crédit, de la créance ou de la réduction d'impôt;Format attendu : yyyyMMdd
-2573;16;CD;DTM;C507.2380.01;OUI;102;Valeur;Date du transfert;Format attendu : yyyyMMdd
-2573;16;CE;NAD;C082.3039.01;OUI;;Identifiant;SIREN de la société à l'origine de la créance;
-2573;16;CF;MOA;C516.5004.01;OUI;;Valeur;Montant de la créance transférée;
-2573;16;KA;CCI;C889.7111.01;OUI;ENT;Valeur;Motif de la demande : Jeune entreprise innovante (JEI), ou PME au sens communautaire (PME), ou entreprise nouvelle (ENN);
-2573;16;KB;CCI;C889.7111.01;OUI;IMP;Valeur;Utilisation de la créance - Contribution utilisée;
-2573;16;KC;DTM;C507.2380.01;OUI;102;Valeur;Utilisation de la créance - Date de l'échéance;Format attendu : yyyyMMdd
-2573;16;KD;MOA;C516.5004.01;OUI;;Valeur;Utilisation de la créance - Montant à utiliser;
 2777D;16;AA;MOA;C516.5004.01;NON;;Valeur;Revenus distribués - Base Imposable;
 2777D;16;AB;MOA;C516.5004.01;NON;;Valeur;Intérêts de comptes courants et comptes bloqués d'associés versés  - 1 - hors Etat ou territoire non coopératif - Base Imposable;
 2777D;16;AC;MOA;C516.5004.01;NON;;Valeur;Intérêts de comptes courants et comptes bloqués d'associés versés  - 2 - dans un Etat ou territoire non coopératif - Base Imposable;
@@ -1042,6 +1020,144 @@ P-IDENTIF;16;KF;DTM;C507.2380.01;NON;610;Valeur;Échéance;Format attendu : yyyyMM
 2502;17;GE;MOA;C516.5004.01;NON;;Valeur;Paiement ou excédent - Report année suivante sur VP 2501;
 2502;17;GF;MOA;C516.5004.01;NON;;Valeur;Paiement ou excédent - Montant versé sur une 2502 déjà déposée au titre de la période.;
 2502;17;GH;MOA;C516.5004.01;NON;;Valeur;Remboursement demandé sur une 2502 déjà déposée au titre de la période.;
+2571;17;CA;MOA;C516.5004.01;NON;;Valeur;Impôt sur les sociétés - Montant à payer;
+2571;17;CC;MOA;C516.5004.01;NON;;Valeur;Contribution sur les Revenus Locatifs;
+2571;17;CD;MOA;C516.5004.01;NON;;Valeur;Contribution Sociale - Montant à payer;
+2571;17;CE;MOA;C516.5004.01;NON;;Valeur;Montant d'impôt sur les sociétés et contributions assimilées à payer;
+2571;17;CG;MOA;C516.5004.01;NON;;Valeur;Montant à payer de la contribution additionnelle à l'impôt sur les sociétés sur les dividendes;
+2571;17;CH;MOA;C516.5004.01;NON;;Valeur;Montant total à payer;
+2571;17;CL;MOA;C516.5004.01;NON;;Valeur;Montant à payer de la plus-value article 208C du CGI (SIIC);
+2571;17;DA;CCI;C889.7111.01;NON;TBX;Valeur;Impôt sur les sociétés - Minoration (art. v1668 du CGI) - case à cocher;
+2571;17;DB;CCI;C889.7111.01;NON;TBX;Valeur;Contribution Sociale - Minoration (art. v1668 du CGI) - case à cocher;
+2571;17;FA;MOA;C516.5004.01;NON;;Valeur;Impôt sur les sociétés - Imputation;
+2571;17;FB;MOA;C516.5004.01;NON;;Valeur;Imputation IS, dont crédit d'impôt compétitivité;
+2571;17;FC;MOA;C516.5004.01;NON;;Valeur;Imputation IS, dont report en arrière de déficit;
+2571;17;FD;MOA;C516.5004.01;NON;;Valeur;Imputation IS, dont crédit d'impôt pour investissement en Corse;
+2571;17;FE;MOA;C516.5004.01;NON;;Valeur;Imputation IS, dont crédit d'impôt recherche;
+2571;17;FF;MOA;C516.5004.01;NON;;Valeur;Imputation IS, dont mécénat;
+2571;17;FG;MOA;C516.5004.01;NON;;Valeur;Imputation IS, dont excédent du précédent exercice;
+2571;17;FH;MOA;C516.5004.01;NON;;Valeur;Dont Paiement par imputation;
+2571;17;FK;CCI;C889.7111.01;NON;IMR;Valeur;Dont Contribution utilisée pour l'imputation (TS /TVA/TVS);TS, TVA,TVS
+2571;17;FM;DTM;C507.2380.01;NON;102;Valeur;Dont Date échéance de la contribution utilisée;SSAAMMJJ, Format attendu : yyyyMMdd
+2571;17;FN;MOA;C516.5004.01;NON;;Valeur;Montant de l'imposition à payer après imputation;
+2572;17;AD;MOA;C516.5004.01;NON;;Valeur;Totaux - Montant restant à payer;
+2572;17;BD;MOA;C516.5004.01;NON;;Valeur;Totaux - Excédents constatés;
+2572;17;CA;MOA;C516.5004.01;NON;;Valeur;Montant total à payer (= (case 05 - case 10) ou = 0 si montant négatif );
+2572;17;DA;MOA;C516.5004.01;NON;;Valeur;Montant total de l'excédent (= (case 10 - case 05) ou = 0 si montant négatif);
+2572;17;EA;MOA;C516.5004.01;NON;;Valeur;Montant de l'excédent imputé sur le premier acompte de l'exercice suivant;
+2572;17;EB;MOA;C516.5004.01;NON;;Valeur;Remboursement d'excédent de versement demandé (case 12 - case 13 - case 130);
+2572;17;GC;MOA;C516.5004.01;NON;;Valeur;Impôt sur les plus values nettes;
+2572;17;GD;MOA;C516.5004.01;NON;;Valeur;Autre impôt à taux particulier;
+2572;17;GE;MOA;C516.5004.01;NON;;Valeur;Total de l'IS brut;
+2572;17;IA;MOA;C516.5004.01;NON;;Valeur;Données utiles au calcul des acomptes de l'exercice suivant - Montant d'Impôt exclu du calcul des acomptes IS;
+2572;17;JA;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et non restituables - Crédits d'impôts sur valeurs mobilières imputables sur l'IS;
+2572;17;KA;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - FOR Crédit d'impôt formation des dirigeants d'entreprise;
+2572;17;KB;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - FAM Crédits d'impôt famille;
+2572;17;KC;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - APR Crédit d'impôt en faveur de l'apprentissage;
+2572;17;KD;MOA;C516.5004.01;NON;;Valeur;CIO - Crédit d'impôt Outre mer Productif;
+2572;17;LA;MOA;C516.5004.01;NON;;Valeur;Créances reportables et restituables - CIR Crédit impôt recherche au titre de  N;
+2572;17;LB;MOA;C516.5004.01;NON;;Valeur;Créances reportables et restituables - RAD Report en arrière de déficits au titre de N;
+2572;17;LC;MOA;C516.5004.01;NON;;Valeur;Créances reportables et non restituables - MEC Réduction d'impôt au titre du mécénat au titre de N;
+2572;17;LD;MOA;C516.5004.01;NON;;Valeur;Créances reportables et non restituables - Dont réduction d'impôt au titre du mécénat provenant de dons effectués à des organismes situés en UE/EEE;
+2572;17;LE;MOA;C516.5004.01;NON;;Valeur;Créances reportables et restituables - CIC Crédit d'impôt Compétitivité Emploi - dont préfinancement;
+2572;17;LF;MOA;C516.5004.01;NON;;Valeur;Créances reportables et restituables - CIC Crédit d'impôt Compétitivité Emploi au titre de  N;
+2572;17;MA;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et non restituables - Crédits d'impôts étrangers, autres que sur valeurs mobilières,  imputables sur IS;
+2572;17;MB;MOA;C516.5004.02;NON;;Valeur;Créances non reportables et non restituables - Crédits d'impôt étrangers, autres que sur valeurs mobilières;
+2572;17;MD;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et non restituables - Nouvelles créances non répertoriées ci-dessus;
+2572;17;ME;MOA;C516.5004.01;NON;;Valeur;Crédit d'impôts étrangers, autres que valeurs mobilières;
+2572;17;MH;MOA;C516.5004.01;NON;;Valeur;VEL - Réduction d'impôt pour mise à disposition d'une flotte de vélos;
+2572;17;NA;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - RAC Crédit pour le rachat d'une entreprise par ses salariés;
+2572;17;NB;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - CIN Crédit d'impôt pour dépenses de production d'oeuvres cinématographiques;
+2572;17;NC;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - EXP Crédit d'impôt pour dépenses de prospection commerciale;
+2572;17;ND;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - PTZ Crédit d'impôt en faveur de la premiére accession à la propriété;
+2572;17;NE;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - BIO Crédit d'impôt en faveur de l'agriculture biologique;
+2572;17;NF;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - PHO Crédit d'impôt pour production d'oeuvre phonographique;
+2572;17;NG;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - MAI Crédit d'impôt en faveur des maîtres restaurateurs;
+2572;17;NJ;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - ART Crédit d'impôt en faveur des métiers d'art;
+2572;17;NK;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - CJV Crédit d'impôt en faveur des créateurs de jeux vidéo;
+2572;17;NL;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables -  CAI Crédit d'impôt en faveur de l'intéressement;
+2572;17;NM;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - CPE Crédit d'impôt sur les avances remboursables pour travaux d'amélioration de la performance énergétique;
+2572;17;NN;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - CCI Crédit d'impôt cinéma international;
+2572;17;NO;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - Nouvelles créances non répertoriées ci - dessus;
+2572;17;OB;MOA;C516.5004.01;NON;;Valeur;Créances reportables et restituables  - COR Crédit d'impôt pour investissement en Corse au titre de N;
+2572;17;OC;MOA;C516.5004.01;NON;;Valeur;Créances reportables et restituables - Nouvelles créances non répertoriées de N;
+2572;17;OD;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - PTR Crédit d'impôt prêt à taux zéro renforcé PTZ+;
+2572;17;OE;MOA;C516.5004.01;NON;;Valeur;CIO - Crédit d'impôt Outre mer Productif - Montant du préfinancement;
+2572;17;OF;MOA;C516.5004.01;NON;;Valeur;COL - Crédit d'impôt Outre mer Logement;
+2572;17;OG;MOA;C516.5004.01;NON;;Valeur;COL - Crédit d'impôt Outre mer Logement  - Montant du préfinancement;
+2572;17;OH;MOA;C516.5004.01;NON;;Valeur;CIC - Crédit d'impôt Compétitivité Emploi, uniquement exercices > 12 mois au titre de N-1;
+2572;17;OJ;MOA;C516.5004.01;NON;;Valeur;CIC - Crédit d'impôt Compétitivité Emploi, uniquement exercices > 12 mois au titre de N-1 ... Montant du préfinancement;
+2572;17;OK;MOA;C516.5004.01;NON;;Valeur;CSV - Crédit d'impôt spectacle vivant;
+2572;17;PA;MOA;C516.5004.01;NON;;Valeur;Montant de la Contribution Sociale sur l'IS due au titre de l'exercice (case 124);
+2572;17;PB;MOA;C516.5004.01;NON;;Valeur;Versements effectués (acomptes et/ou soldes) moins remboursements déjà obtenus;
+2572;17;PC;MOA;C516.5004.01;NON;;Valeur;Montant du chiffre d'affaire soumis à la contribution annuelle sur les Revenus Locatifs;
+2572;17;PD;MOA;C516.5004.01;NON;;Valeur;Versements effectués (acomptes et/ou soldes) moins remboursements déjà obtenus;
+2572;17;PE;CCI;C889.7111.01;NON;IMP;Valeur;Utilisation de l'excédent - Contribution visée;
+2572;17;PF;DTM;C507.2380.01;NON;102;Valeur;Utilisation de l'excédent - Date limite de paiement;Format attendu : yyyyMMdd
+2572;17;PG;MOA;C516.5004.01;NON;;Valeur;Utilisation de l'excédent - Montant à imputer;
+2572;17;PH;CCI;C889.7111.01;NON;IMR;Valeur;Paiement de l'IS - Contribution visée;
+2572;17;PJ;DTM;C507.2380.01;NON;102;Valeur;Paiement de l'IS - Date limite de paiement;Format attendu : yyyyMMdd
+2572;17;PK;MOA;C516.5004.01;NON;;Valeur;Paiement de l'IS - Montant à imputer;
+2572;17;PL;MOA;C516.5004.01;NON;;Valeur;Montant à payer après imputation d'une autre taxe (= case 11 - case 133);
+2572;17;PM;MOA;C516.5004.01;NON;;Valeur;Contribution Annuelle sur les Revenus Locatifs due  (Case 126 x 2,5 %);
+2572;17;PN;MOA;C516.5004.01;NON;;Valeur;Impôt sur les sociétés - Montant restant à payer (cases 119 - 69);
+2572;17;PQ;MOA;C516.5004.01;NON;;Valeur;Impôt sur les sociétés - Excédents constatés (cases 69 - 119);
+2572;17;PR;MOA;C516.5004.01;NON;;Valeur;Contribution exceptionnelle - Montant restant à payer;
+2572;17;PS;MOA;C516.5004.01;NON;;Valeur;Contribution exceptionnelle - Excédents constatés;
+2572;17;PT;MOA;C516.5004.01;NON;;Valeur;Contribution Sociale - Montant restant à payer;
+2572;17;PU;MOA;C516.5004.01;NON;;Valeur;Contribution Sociale - Excédents constatés;
+2572;17;PV;MOA;C516.5004.01;NON;;Valeur;Contribution sur les Revenus Locatifs - Montant restant à payer;
+2572;17;PW;MOA;C516.5004.01;NON;;Valeur;Contribution sur les Revenus Locatifs - Excédents constatés;
+2572;17;RA;MOA;C516.5004.01;NON;;Valeur;Base de l'Impôt sur les sociétés (au taux normal);
+2572;17;RB;MOA;C516.5004.01;NON;;Valeur;Base de l'Impôt sur les sociétés (au taux réduit);
+2572;17;RC;MOA;C516.5004.01;NON;;Valeur;Créances non reportables et restituables - AUD Crédit d'impôt pour dépense de la production d'œuvres audiovisuelles;
+2572;17;RD;RFF;C506.1154.01;NON;;Valeur;Type de créance portée dans la case 49;
+2572;17;RE;MOA;C516.5004.01;NON;;Valeur;Sous total (total des lignes II-C , case 118 ,  cases 22+23+24+25+26+27+30+45+48+52+53+56+58+59+60+61+62+49+ 63 + 66 - 67 - 68 + 70);
+2572;17;RF;MOA;C516.5004.01;NON;;Valeur;Montant de l'IS dû après imputation des créances non reportables et restituables de l'exercice (case 116-118);
+2572;17;RG;MOA;C516.5004.01;NON;;Valeur;Sous total (total des lignes II-A en Case 107);
+2572;17;RH;MOA;C516.5004.01;NON;;Valeur;Montant de l'IS dû après imputation des créances non restituables (case 15-107);
+2572;17;RJ;MOA;C516.5004.01;NON;;Valeur;MEC - Solde de la créance des exercices antérieurs (Exercices N-5 à N-1);
+2572;17;RK;MOA;C516.5004.01;NON;;Valeur;COR - Solde de la créance des exercices antérieurs (Exercices N-10 à N-1);
+2572;17;RL;MOA;C516.5004.01;NON;;Valeur;RAD - Solde de la créance des exercices antérieurs (Exercices N-5 à N-1);
+2572;17;RM;MOA;C516.5004.01;NON;;Valeur;CIR - Solde de la créance des exercices antérieurs (Exercices N-3 à N-1);
+2572;17;RN;MOA;C516.5004.01;NON;;Valeur;CIC - Solde de la créance des exercices antérieurs (Exercices N-3 à  N-1);
+2572;17;RP;MOA;C516.5004.01;NON;;Valeur;Sous total (total des lignes II-B  en case 115, soit les cases (35+109+64+136+110+33+111+112+31+113+50) - 65 - 135;
+2572;17;RR;RFF;C506.1154.01;NON;;Valeur;Type de créance portée dans la case 50;
+2572;17;RS;MOA;C516.5004.01;NON;;Valeur;Montant de l'IS dû après imputation des créances reportables dans la limite de l'impôt dû  (case 116);
+2572;17;RT;MOA;C516.5004.01;NON;;Valeur;Versements effectués (acomptes et/ou soldes) moins remboursements déjà obtenus;
+2572;17;RU;MOA;C516.5004.01;NON;;Valeur;Base de la Contribution exceptionnelle sur l'IS au titre de l'exercice;
+2572;17;RV;MOA;C516.5004.01;NON;;Valeur;Montant de la Contribution exceptionnelle au titre de l'exercice (case 41);
+2572;17;RW;MOA;C516.5004.01;NON;;Valeur;Base de la contribution sociale sur l'IS;
+2572;17;RX;MOA;C516.5004.01;NON;;Valeur;Montant de la Contribution exceptionnelle due au titre de l'exercice (case 41 - 20);
+2572;17;RY;MOA;C516.5004.01;NON;;Valeur;Versements effectués (acomptes et/ou soldes) moins remboursements déjà obtenus;
+2572;17;RZ;MOA;C516.5004.01;NON;;Valeur;Taxes assimilées à l'IS de l'exercice - Contribution Sociale (CSB) sur l'IS due au titre de l'exercice, avant toute déduction (case 123 x 3,3%);
+2572;17;TA;MOA;C516.5004.01;NON;;Valeur;Impôt sur les Sociétés (au taux normal);
+2572;17;TB;MOA;C516.5004.01;NON;;Valeur;Impôt sur les Sociétés (au taux réduit);
+2573;17;AA;CCI;C889.7111.01;NON;TBX;Valeur;Société bénéficiant du régime fiscal des groupes de sociétés;
+2573;17;AB;CCI;C889.7111.01;OUI;CRB;Valeur;Nature de la créance ou du crédit d'impôt;
+2573;17;AC;DTM;C507.2380.01;OUI;602;Valeur;Année ou exercice d'origine de la créance;Format attendu : yyyy
+2573;17;AF;MOA;C516.5004.01;OUI;;Valeur;Montant de l'intérêt légal à déduire (Uniquement pour les RAD en procédure collective);
+2573;17;AG;MOA;C516.5004.01;OUI;;Valeur;Montant du remboursement sollicité;
+2573;17;AH;CCI;C889.7111.01;OUI;COL;Valeur;En cas de demande formulée suite à l'ouverture d'une procédure collective : Nature de la procédure;
+2573;17;AI;DTM;C507.2380.01;OUI;102;Valeur;En cas de demande formulée suite à l'ouverture d'une procédure collective : Date d'ouverture de la procédure;Format attendu : yyyyMMdd
+2573;17;AJ;MOA;C516.5004.01;NON;;Valeur;Total du montant des remboursements sollicités;
+2573;17;BA;NAD;C082.3039.01;NON;;Identifiant;SIREN de la société absorbante ou bénéficiaire des apports;
+2573;17;BB;DTM;C507.2380.01;OUI;102;Valeur;Date de clôture de l'exercice de détermination du crédit, de la créance ou de la réduction d'impôt;Format attendu : yyyyMMdd
+2573;17;BC;DTM;C507.2380.01;OUI;102;Valeur;Date de cession;Format attendu : yyyyMMdd
+2573;17;BD;NAD;C082.3039.01;OUI;;Identifiant;SIREN de la société à l'origine de la créance;
+2573;17;BE;MOA;C516.5004.01;OUI;;Valeur;Montant de la créance cédée;
+2573;17;BF;MOA;C516.5004.01;NON;;Valeur;Total du montant des cessions de créances demandées;
+2573;17;CA;NAD;C082.3039.01;NON;;Identifiant;SIREN de la société absorbante ou bénéficiaire des apports;
+2573;17;CB;CCI;C889.7111.01;OUI;CTR;Valeur;Nature du crédit, de la créance ou de la réduction d'impôt Sauf RAD;
+2573;17;CC;DTM;C507.2380.01;OUI;102;Valeur;Date de clôture de l'exercice de détermination du crédit, de la créance ou de la réduction d'impôt;Format attendu : yyyyMMdd
+2573;17;CD;DTM;C507.2380.01;OUI;102;Valeur;Date du transfert;Format attendu : yyyyMMdd
+2573;17;CE;NAD;C082.3039.01;OUI;;Identifiant;SIREN de la société à l'origine de la créance;
+2573;17;CF;MOA;C516.5004.01;OUI;;Valeur;Montant de la créance transférée;
+2573;17;CG;MOA;C516.5004.01;NON;;Valeur;Total du montant des transferts de créances;
+2573;17;KA;CCI;C889.7111.01;OUI;ENT;Valeur;Motif de la demande : Jeune entreprise innovante (JEI), ou PME au sens communautaire (PME), ou entreprise nouvelle (ENN);
+2573;17;KB;CCI;C889.7111.01;OUI;IMP;Valeur;Utilisation de la créance - Contribution utilisée;
+2573;17;KC;DTM;C507.2380.01;OUI;102;Valeur;Utilisation de la créance - Date de l'échéance;Format attendu : yyyyMMdd
+2573;17;KD;MOA;C516.5004.01;OUI;;Valeur;Utilisation de la créance - Montant à utiliser;
 2777D;17;AA;MOA;C516.5004.01;NON;;Valeur;Revenus distribués - Base Imposable;
 2777D;17;AB;MOA;C516.5004.01;NON;;Valeur;Intérêts de comptes courants et comptes bloqués d'associés versés  - 1 - hors Etat ou territoire non coopératif - Base Imposable;
 2777D;17;AC;MOA;C516.5004.01;NON;;Valeur;Intérêts de comptes courants et comptes bloqués d'associés versés  - 2 - dans un Etat ou territoire non coopératif - Base Imposable;
