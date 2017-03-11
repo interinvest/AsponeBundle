@@ -16,7 +16,7 @@ class AsponePdf
 {
     /** @var Container */
     private $container;
-    /** @var AsponeXml  */
+    /** @var AsponeXml */
     private $asponeXml;
 
     /** @var  string */
@@ -26,15 +26,15 @@ class AsponePdf
     /** @var  string */
     private $rootDir;
 
-    /** @var array  */
+    /** @var array */
     private $forms = array();
     /** @var  Crawler */
     public $crawler;
     /** @var  TCPDFLib */
     private $pdf;
-    /** @var null  */
+    /** @var null */
     private $infosSignature = null;
-    /** @var null  */
+    /** @var null */
     private $infoEntete = null;
 
 
@@ -58,7 +58,6 @@ class AsponePdf
 
         $this->pdf = new TCPDFLib();
         $this->pdf->printFooter = false;
-
         //vérification des formulaires pdf
         try {
             //tableau des formulaires trouvés pour éviter les doublons de traitement;
@@ -68,6 +67,7 @@ class AsponePdf
             $forms = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire");
             /** @var \DOMElement $form */
             foreach ($forms as $form) {
+
                 $formNum = substr($form->getAttribute('Nom'), 0, 4);
 
                 if (!in_array($formNum, $formUsed)) {
@@ -168,9 +168,9 @@ class AsponePdf
     }
 
     /**
-     * @param string      $name
+     * @param string $name
      * @param Declaration $declaration
-     * @param string      $methode
+     * @param string $methode
      *
      * @return bool
      */
@@ -182,7 +182,7 @@ class AsponePdf
                 mkdir($pathSave);
             }
 
-            $pathSave .=  $declaration->getType();
+            $pathSave .= $declaration->getType();
 
             if (!file_exists($pathSave) || !is_dir($pathSave)) {
                 mkdir($pathSave);
@@ -196,7 +196,7 @@ class AsponePdf
     }
 
     /**
-     * @param $this->pdf
+     * @param $this ->pdf
      *
      * @return TCPDFLib
      * @throws \Exception
@@ -219,20 +219,20 @@ class AsponePdf
         $codePostalSnc = $this->crawler->filter("Declaration > Redevable > Adresse > AdresseCodePostal")->first()->text();
         $villeSnc = $this->crawler->filter("Declaration > Redevable > Adresse > AdresseVille")->first()->text();
 
-        $adresseSnc = $nomSnc.'<br />'.$adresseVoieSnc.' '.$adresseComplementSnc.'<br />'.$codePostalSnc.' '.$villeSnc;
+        $adresseSnc = $nomSnc . '<br />' . $adresseVoieSnc . ' ' . $adresseComplementSnc . '<br />' . $codePostalSnc . ' ' . $villeSnc;
 
         $referenceDossier = '';
-        if($this->crawler->filter("Declaration > ListeDestinataires > Destinataire > ReferenceDossier")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeDestinataires > Destinataire > ReferenceDossier")->count() == 1) {
             $referenceDossier = $this->crawler->filter("Declaration > ListeDestinataires > Destinataire > ReferenceDossier")->text();
         }
 
         $identifiantTvaSnc = '';
-        if($this->crawler->filter("Declaration > ListeFormulaires > Identif > Zone > Identifiant")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Identif > Zone > Identifiant")->count() == 1) {
             $identifiantTvaSnc = $this->crawler->filter("Declaration > ListeFormulaires > Identif > Zone > Identifiant")->text();
         }
 
         $neant = '';
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KF > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KF > Valeur")->count() == 1) {
             $neant = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KF > Valeur")->text();
         }
 
@@ -241,9 +241,9 @@ class AsponePdf
             ->add('textOptions', array('size' => 10))
             ->add('html', array('html' => $adresseSnc, 'w' => '121', 'h' => '16', 'x' => '80', 'y' => '75', 'align' => 'L '))
             ->add('textOptions', array('size' => 10))
-            ->add('html', array('html' => substr($referenceDossier,0,7), 'w' => '32', 'h' => '4', 'x' => '5', 'y' => '105', 'align' => 'C'))
-            ->add('html', array('html' => substr($referenceDossier,7,6), 'w' => '26', 'h' => '4', 'x' => '38', 'y' => '105', 'align' => 'C'))
-            ->add('html', array('html' => substr($referenceDossier,12,2), 'w' => '8', 'h' => '4', 'x' => '65', 'y' => '105', 'align' => 'C'))
+            ->add('html', array('html' => substr($referenceDossier, 0, 7), 'w' => '32', 'h' => '4', 'x' => '5', 'y' => '105', 'align' => 'C'))
+            ->add('html', array('html' => substr($referenceDossier, 7, 6), 'w' => '26', 'h' => '4', 'x' => '38', 'y' => '105', 'align' => 'C'))
+            ->add('html', array('html' => substr($referenceDossier, 12, 2), 'w' => '8', 'h' => '4', 'x' => '65', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => '652', 'w' => '15', 'h' => '4', 'x' => '108', 'y' => '105', 'align' => 'C'))
             ->add('html', array('html' => 'RT', 'w' => '16', 'h' => '4', 'x' => '123', 'y' => '105', 'align' => 'C'))
             ->add('textOptions', array('size' => 10, 'spacing' => '3.4'))
@@ -255,69 +255,69 @@ class AsponePdf
 
         // page 2
         $this->pdf->setPage(2);
-        $tvaLoyerHT                 = '';
-        $tvaAutoLiquide             = '';
-        $baseHT                     = '';
-        $tvaDue                     = '';
-        $totalDue                   = '';
-        $tvaDossier                 = '';
-        $tvaHonoraire               = '';
-        $autreTva                   = '';
-        $reportCredit               = '';
-        $totalDeductible            = '';
-        $TVANPR                     = '';
-        $creditTva                  = '';
-        $remboursementDemande       = '';
-        $creditAReporter            = '';
-        $tvaAPayer                  = '';
-        $totalAPayer                = '';
+        $tvaLoyerHT = '';
+        $tvaAutoLiquide = '';
+        $baseHT = '';
+        $tvaDue = '';
+        $totalDue = '';
+        $tvaDossier = '';
+        $tvaHonoraire = '';
+        $autreTva = '';
+        $reportCredit = '';
+        $totalDeductible = '';
+        $TVANPR = '';
+        $creditTva = '';
+        $remboursementDemande = '';
+        $creditAReporter = '';
+        $tvaAPayer = '';
+        $totalAPayer = '';
 
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#CA > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#CA > Valeur")->count() == 1) {
             $tvaLoyerHT = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#CA > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#CG > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#CG > Valeur")->count() == 1) {
             $tvaAutoLiquide = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#CG > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#FM > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#FM > Valeur")->count() == 1) {
             $baseHT = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#FM > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#GM > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#GM > Valeur")->count() == 1) {
             $tvaDue = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#GM > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#GH > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#GH > Valeur")->count() == 1) {
             $totalDue = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#GH > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HA > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HA > Valeur")->count() == 1) {
             $tvaDossier = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HA > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HB > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HB > Valeur")->count() == 1) {
             $tvaHonoraire = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HB > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HC > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HC > Valeur")->count() == 1) {
             $autreTva = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HC > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HD > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HD > Valeur")->count() == 1) {
             $reportCredit = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HD > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HG > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HG > Valeur")->count() == 1) {
             $totalDeductible = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#HG > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KG > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KG > Valeur")->count() == 1) {
             $TVANPR = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KG > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#JA > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#JA > Valeur")->count() == 1) {
             $creditTva = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#JA > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#JB > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#JB > Valeur")->count() == 1) {
             $remboursementDemande = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#JB > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#JC > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#JC > Valeur")->count() == 1) {
             $creditAReporter = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#JC > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KA > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KA > Valeur")->count() == 1) {
             $tvaAPayer = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KA > Valeur")->text();
         }
-        if($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KE > Valeur")->count() == 1) {
+        if ($this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KE > Valeur")->count() == 1) {
             $totalAPayer = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#KE > Valeur")->text();
         }
 
@@ -344,7 +344,7 @@ class AsponePdf
     }
 
     /**
-     * @param $this->pdf
+     * @param $this ->pdf
      *
      * @return TCPDFLib
      */
@@ -374,7 +374,7 @@ class AsponePdf
         $croixDemandeDeposee = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#DI")->first()->text();
         $sommeRemboursee = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire > Zone#DN")->first()->text();
 
-        $adresseSnc = $nomSnc.'<br />'.$adresseVoieSnc.'<br />'.$adresseComplementSnc.'<br />'.$codePostalSnc.' '.$villeSnc;
+        $adresseSnc = $nomSnc . '<br />' . $adresseVoieSnc . '<br />' . $adresseComplementSnc . '<br />' . $codePostalSnc . ' ' . $villeSnc;
 
         $this->pdf->setPage(1);
         $this->pdf->transaction()
@@ -383,7 +383,7 @@ class AsponePdf
             ->add('html', array('html' => $identifiantTvaSnc, 'w' => '80.5', 'h' => '4', 'x' => '62', 'y' => '128', 'align' => 'R'))
             ->add('textOptions', array('spacing' => '0'))
             ->add('html', array('html' => $entFr, 'w' => '4', 'h' => '4', 'x' => '181.6', 'y' => '141.5', 'align' => 'L'))
-            ->add('html', array('html' => $nomGerant.' '.$statutGerant, 'w' => '80', 'h' => '4', 'x' => '63', 'y' => '181', 'align' => 'L'))
+            ->add('html', array('html' => $nomGerant . ' ' . $statutGerant, 'w' => '80', 'h' => '4', 'x' => '63', 'y' => '181', 'align' => 'L'))
             ->add('html', array('html' => $sommeDemandee, 'w' => '80', 'h' => '4', 'x' => '94', 'y' => '198.5', 'align' => 'L'))
             ->add('html', array('html' => $croixACrediter, 'w' => '4', 'h' => '4', 'x' => '132.3', 'y' => '203', 'align' => 'L'))
             ->add('html', array('html' => $ville, 'w' => '48', 'h' => '4', 'x' => '109', 'y' => '225', 'align' => 'L'))
@@ -433,13 +433,13 @@ class AsponePdf
         $identif = '';
         /** @var \DOMElement $zone */
         foreach ($aIdentif as $zone) {
-            $identif .= $zone->textContent .  '<br />';
+            $identif .= $zone->textContent . '<br />';
         }
         $aBG = $this->crawler->filter("{$crawlerForm}Zone#BG")->children();
         $adresseSnc = '';
         /** @var \DOMElement $zone */
         foreach ($aBG as $zone) {
-            $adresseSnc .= $zone->textContent .  ' ';
+            $adresseSnc .= $zone->textContent . ' ';
         }
         $c7CW = $c7CX = '';
         if ($this->crawler->filter("{$crawlerForm}Zone#CW")->count()) {
@@ -470,10 +470,10 @@ class AsponePdf
         if (!is_null($this->infosSignature)) {
             $this->pdf->transaction()
                 ->add('textOptions', array('size' => 8))
-                ->add('html', array('html' =>$this->infosSignature['adresse'], 'w' => '90', 'h' => '4', 'x' => '80', 'y' => '260', 'align' => 'L'))
-                ->add('html', array('html' =>$this->infosSignature['faitA'], 'w' => '90', 'h' => '4', 'x' => '120', 'y' => '276', 'align' => 'L'))
-                ->add('html', array('html' =>$this->infosSignature['faitLe'], 'w' => '90', 'h' => '4', 'x' => '160', 'y' => '276', 'align' => 'L'))
-                ->add('html', array('html' =>$this->infosSignature['signature'], 'w' => '45', 'h' => '4', 'x' => '165', 'y' => '260', 'align' => 'L'))
+                ->add('html', array('html' => $this->infosSignature['adresse'], 'w' => '90', 'h' => '4', 'x' => '80', 'y' => '260', 'align' => 'L'))
+                ->add('html', array('html' => $this->infosSignature['faitA'], 'w' => '90', 'h' => '4', 'x' => '120', 'y' => '276', 'align' => 'L'))
+                ->add('html', array('html' => $this->infosSignature['faitLe'], 'w' => '90', 'h' => '4', 'x' => '160', 'y' => '276', 'align' => 'L'))
+                ->add('html', array('html' => $this->infosSignature['signature'], 'w' => '45', 'h' => '4', 'x' => '165', 'y' => '260', 'align' => 'L'))
                 ->execute();
         }
 
@@ -753,7 +753,7 @@ class AsponePdf
     }
 
     /**
-     * @param  $this->pdf
+     * @param  $this ->pdf
      *
      * @return TCPDFLib
      */
@@ -763,6 +763,7 @@ class AsponePdf
             $this->pdf = new TCPDFLib();
             $this->pdf->printFooter = false;
         }
+
         $pageOrientation = array(
             1 => 'P',
             2 => 'L',
@@ -822,8 +823,8 @@ class AsponePdf
         //associés
         $nbOccurrences = $this->getNombreOccurrences($crawlerForm, 'AA');
         for ($i = 1; $i <= $nbOccurrences; $i++) {
-            if(($i%20 == 0 || $i == 1) && $i < $nbOccurrences){
-                $max = $i+20;
+            if (($i % 20 == 0 || $i == 1) && $i < $nbOccurrences) {
+                $max = $i + 20;
 
                 $import = new ImportPdfAction();
                 $import->setOption('file', $this->getTplPath('aide2083'));
@@ -851,18 +852,99 @@ class AsponePdf
                 $currentPage++;
             }
         }
+        //associés
+        $nbOccurrences = $this->getNombreOccurrences($crawlerForm, 'BA');
+        $ys = array("HM" => 52,
+            "HC" => 56.5,
+            "HR" => 61,
+            "PL" => 65.5,
+            "TM" => 70,
+            "TT" => 74.5,
+            "TA" => 79,
+            "AD" => 83.3,
+            "IN" => 89,
+            "PE" => 95.2,
+            "AGO" => 99.4,
+            "AGI" => 103.7,
+            "AQ" => 108,
+            "ERE" => 112.3,
+            "ERB" => 116.7,
+            "ERS" => 122.2,
+            "ER" => 128,
+            "SP" => 132.5,
+            "TEL" => 136.3,
+            "BTP" => 142,
+            "ART" => 147.7,
+            "TO" => 152,
+            "PO" => 156.5,
+            "SI" => 160.5,
+            "RD" => 165,
+            "CAN" => 169,
+            "AU" => 173.2,
+            "LOL" => 177.2,
+            "LOI" => 181.5,
+            "LOS" => 186,
+        );
+        $formOccur = $this->crawler->filter(substr($crawlerForm, 0, -3));
+        for ($j = 1; $j <= $nbOccurrences; $j++) {
 
+            $import = new ImportPdfAction();
+            $import->setOption('file', $this->getTplPath(2083));
+            $import->setOption('orientation', $pageOrientation);
+            $import->setOption('pages', array(2));
+            $import->execute($this->pdf);
+            $this->pdf->setPage($currentPage);
+            $codeInvest = $this->crawler->filter("{$crawlerForm}Zone#BA > Occurrence")->eq($j - 1)->text();
+            if (!in_array($codeInvest, array("LOL", "LOI", "LOS"))) {
+                $zones = array(
+                    'BB' => 63,
+                    'BC' => 71,
+                    'BW' => 82,
+                    'BX' => 96,
+                    'BD' => 126,
+                );
+            } else {
+                $zones = array();
+            }
+            $zones += array(
+                'BE' => 140.5,
+                'BF' => 154,
+//                'TG' => 96,
+                'BG' => 183,
+                'BH' => 198,
+                'BJ' => 215,
+                'BK' => 222,
+                'BL' => 235,
+                'BM' => 250,
+                'BN' => 268,
+                'BP' => 277,
+            );
+
+            $transaction = $this->pdf->transaction();
+            $transaction->add('textOptions', array('size' => 7));
+            foreach ($zones as $zone => $x) {
+                $textOccur = $formOccur->filter("Zone#$zone > Occurrence")->eq($j - 1);
+                $align = 'L';
+                if(in_array($zone, array("BC"))){
+                    $textOccur = $textOccur->filter("AdresseCodePostal");
+                }
+                $text = $textOccur->text();
+                if(in_array($zone, array("BW", "BD", "BE", "BF", "BP"))){
+                    $text = date_create_from_format("Ymd", $text)->format("d/m/Y");
+                }
+                if(in_array($zone, array("BX", "BG", "BH", "BK", "BL", "BM"))){
+                    $align = "R";
+                }
+                $transaction->add('html', array('html' => $text, 'w' => '15', 'h' => '4', 'x' => $x, 'y' => $ys[$codeInvest], 'align' => $align));
+            }
+            $transaction->execute();
+            $currentPage++;
+        }
         $import = new ImportPdfAction();
         $import->setOption('file', $this->getTplPath(2083));
         $import->setOption('orientation', $pageOrientation);
-        $import->setOption('pages', array(2, 3, 4, 5));
+        $import->setOption('pages', array(3, 4, 5));
         $import->execute($this->pdf);
-
-        $this->pdf->setPage($currentPage);
-        $this->pdf->transaction()
-            ->add('textOptions', array('size' => 9))
-            ->execute();
-        $currentPage++;
 
         $this->pdf->setPage($currentPage);
         $zones = array('BQ' => 48, 'BR' => 74, 'BS' => array(123, 'date' => 'Valeur'), 'BT' => 155, 'BU' => 210);
@@ -879,7 +961,7 @@ class AsponePdf
             'EG' => 50,
             'EH' => 55,
             'EJ' => 60,
-            'ET' => array(65,'date' => 'Valeur'),
+            'ET' => array(65, 'date' => 'Valeur'),
             'EU' => 80,
             'EK' => 100,
             'EL' => array(115, 'date' => 'Valeur'),
@@ -924,10 +1006,24 @@ class AsponePdf
             'TC' => array(210, 'int' => 'Valeur'),
             'TD' => array(250, 'int' => 'Valeur'),
         );
-        $this->setMultiValues($crawlerForm, $zones, 100, 4.5, 6);
+        $this->setMultiValues($crawlerForm, $zones, 100, 4.25, 6);
 
+        $signatureOccur = $this->crawler->filter("$crawlerForm Zone#TF");
+        $nom = $signatureOccur->filter("Designation")->text();
+        $qualite = $signatureOccur->filter("DesignationSuite1")->text();
+        $ville = $signatureOccur->filter("AdresseVille")->text();
+        $DateSign = date_create_from_format("Ymd", $this->crawler->filter("$crawlerForm Zone#TE")->text())->format("d/m/Y");
+        $this->pdf->transaction()
+            ->add('textOptions', array('size' => 10))
+            ->add('html', array('html' => $nom, 'w' => '90', 'h' => '10', 'x' => '50', 'y' => '165', 'align' => 'L'))
+            ->add('html', array('html' => $qualite, 'w' => '90', 'h' => '10', 'x' => '50', 'y' => '174', 'align' => 'L'))
+            ->add('textOptions', array('size' => 8))
+            ->add('html', array('html' => $ville, 'w' => '90', 'h' => '10', 'x' => '80', 'y' => '181', 'align' => 'L'))
+            ->add('html', array('html' => $DateSign, 'w' => '90', 'h' => '4', 'x' => '180', 'y' => '181', 'align' => 'L'))
+            ->execute();
         return $this->pdf;
     }
+
 
     /**
      * @return TCPDFLib
@@ -1058,8 +1154,7 @@ class AsponePdf
                 $this->pdf->transaction()
                     ->add('textOptions', array('size' => $size))
                     ->add('html', array('html' => $text, 'w' => '90', 'h' => '4', 'x' => $x, 'y' => $y, 'align' => 'L'))
-                    ->execute()
-                ;
+                    ->execute();
                 $y += $yIndent;
                 $i++;
             }
@@ -1094,7 +1189,7 @@ class AsponePdf
             switch ($key) {
                 case 'date':
                     $date = date_create_from_format('Ymd', $this->crawler->filter("{$crawlerForm}Zone#$id > Occurrence[Numero=$i] > $value")->first()->text());
-                    $text = $date->format('d-m-Y');
+                    $text = $date->format('d/m/Y');
                     break;
                 case 'int':
                     $text = intval($this->crawler->filter("{$crawlerForm}Zone#$id > Occurrence[Numero=$i] > $value")->first()->text());
