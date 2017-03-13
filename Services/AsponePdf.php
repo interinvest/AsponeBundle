@@ -909,7 +909,7 @@ class AsponePdf
             $zones += array(
                 'BE' => 140.5,
                 'BF' => 154,
-//                'TG' => 96,
+                'TG' => 168,
                 'BG' => 183,
                 'BH' => 198,
                 'BJ' => 215,
@@ -932,7 +932,7 @@ class AsponePdf
                 if(in_array($zone, array("BW", "BD", "BE", "BF", "BP"))){
                     $text = date_create_from_format("Ymd", $text)->format("d/m/Y");
                 }
-                if(in_array($zone, array("BX", "BG", "BH", "BK", "BL", "BM"))){
+                if(in_array($zone, array("BX", "BG", "BH", "BK", "BL", "BM", "TG"))){
                     $align = "R";
                 }
                 $transaction->add('html', array('html' => $text, 'w' => '15', 'h' => '4', 'x' => $x, 'y' => $ys[$codeInvest], 'align' => $align));
