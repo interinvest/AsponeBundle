@@ -1008,19 +1008,21 @@ class AsponePdf
         );
         $this->setMultiValues($crawlerForm, $zones, 100, 4.25, 6);
 
-        $signatureOccur = $this->crawler->filter("$crawlerForm Zone#TF");
-        $nom = $signatureOccur->filter("Designation")->text();
-        $qualite = $signatureOccur->filter("DesignationSuite1")->text();
-        $ville = $signatureOccur->filter("AdresseVille")->text();
-        $DateSign = date_create_from_format("Ymd", $this->crawler->filter("$crawlerForm Zone#TE")->text())->format("d/m/Y");
-        $this->pdf->transaction()
-            ->add('textOptions', array('size' => 10))
-            ->add('html', array('html' => $nom, 'w' => '90', 'h' => '10', 'x' => '50', 'y' => '165', 'align' => 'L'))
-            ->add('html', array('html' => $qualite, 'w' => '90', 'h' => '10', 'x' => '50', 'y' => '174', 'align' => 'L'))
-            ->add('textOptions', array('size' => 8))
-            ->add('html', array('html' => $ville, 'w' => '90', 'h' => '10', 'x' => '80', 'y' => '181', 'align' => 'L'))
-            ->add('html', array('html' => $DateSign, 'w' => '90', 'h' => '4', 'x' => '180', 'y' => '181', 'align' => 'L'))
-            ->execute();
+
+
+
+        if (!is_null($this->infosSignature)) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 10))
+                ->add('html', array('html' => $this->infosSignature['nom'], 'w' => '90', 'h' => '4', 'x' => '70', 'y' => '166', 'align' => 'L'))
+                ->add('html', array('html' => $this->infosSignature['qualite'], 'w' => '90', 'h' => '4', 'x' => '70', 'y' => '175', 'align' => 'L'))
+                ->add('html', array('html' => $this->infosSignature['adresse'], 'w' => '90', 'h' => '4', 'x' => '180', 'y' => '166', 'align' => 'L'))
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $this->infosSignature['faitA'], 'w' => '90', 'h' => '4', 'x' => '80', 'y' => '181', 'align' => 'L'))
+                ->add('html', array('html' => $this->infosSignature['faitLe'], 'w' => '90', 'h' => '4', 'x' => '180', 'y' => '181', 'align' => 'L'))
+                ->add('html', array('html' => $this->infosSignature['signature'], 'w' => '45', 'h' => '4', 'x' => '250', 'y' => '178', 'align' => 'L'))
+                ->execute();
+        }
         return $this->pdf;
     }
 
