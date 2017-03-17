@@ -538,7 +538,9 @@ class AsponePdf
 
         //traitement simplifié pour valeurs uniques
         foreach ($this->getZones('IDF', $nom) as $zone) {
-            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ? $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() : '';
+            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ?
+                ($this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() == 0 ? '' :
+                    $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
 
         $this->pdf->transaction()
@@ -572,6 +574,7 @@ class AsponePdf
             ->add('html', array('html' => isset($FL) ? $FL : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '214', 'align' => 'L'))
             ->add('html', array('html' => isset($FM) ? $FM : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '219.5', 'align' => 'L'))
             ->add('html', array('html' => isset($FN) ? $FN : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '225', 'align' => 'L'))
+            ->add('html', array('html' => isset($EE) ? $EE : '', 'w' => '90', 'h' => '4', 'x' => '150', 'y' => '230', 'align' => 'L'))
             ->add('html', array('html' => isset($FP) ? $FP : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '230', 'align' => 'L'))
             ->add('html', array('html' => isset($FQ) ? $FQ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '236', 'align' => 'L'))
             ->add('html', array('html' => isset($FR) ? $FR : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '242', 'align' => 'L'))
@@ -585,7 +588,9 @@ class AsponePdf
 
         //traitement simplifié pour valeurs uniques
         foreach ($this->getZones('IDF', $nom) as $zone) {
-            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ? $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() : '';
+            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ?
+                ($this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() == 0 ? '' :
+                    $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
         $this->pdf->transaction()
@@ -629,7 +634,9 @@ class AsponePdf
 
         //traitement simplifié pour valeurs uniques
         foreach ($this->getZones('IDF', $nom) as $zone) {
-            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ? $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() : '';
+            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ?
+                ($this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() == 0 ? '' :
+                    $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
         $this->pdf->transaction()
@@ -663,7 +670,9 @@ class AsponePdf
 
         //traitement simplifié pour valeurs uniques
         foreach ($this->getZones('IDF', $nom) as $zone) {
-            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ? $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() : '';
+            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ?
+                ($this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() == 0 ? '' :
+                    $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
         $this->pdf->transaction()
@@ -684,7 +693,9 @@ class AsponePdf
 
         //traitement simplifié pour valeurs uniques
         foreach ($this->getZones('IDF', $nom) as $zone) {
-            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ? $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() : '';
+            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ?
+                ($this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() == 0 ? '' :
+                    $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
         $this->pdf->transaction()
@@ -705,7 +716,9 @@ class AsponePdf
 
         //traitement simplifié pour valeurs uniques
         foreach ($this->getZones('IDF', $nom) as $zone) {
-            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ? $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() : '';
+            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ?
+                ($this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() == 0 ? '' :
+                    $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
         $this->pdf->transaction()
@@ -730,7 +743,9 @@ class AsponePdf
 
         //traitement simplifié pour valeurs uniques
         foreach ($this->getZones('IDF', $nom) as $zone) {
-            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ? $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() : '';
+            $$zone = $this->crawler->filter("{$crawlerForm}Zone#$zone")->count() ?
+                ($this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text() == 0 ? '' :
+                    $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
         $this->pdf->transaction()
