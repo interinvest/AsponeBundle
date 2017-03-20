@@ -618,7 +618,7 @@ class AsponePdf
             ->add('html', array('html' => isset($CC) ? $CC : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '168', 'align' => 'L'))
             ->add('html', array('html' => isset($CD) ? $CD : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '175', 'align' => 'L'))
             ->add('html', array('html' => isset($ED) ? $ED : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '175', 'align' => 'L'))
-            ->add('html', array('html' => isset($CF) ? $CF : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '181', 'align' => 'L'))
+            ->add('html', array('html' => isset($CF) ? $CF : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '187', 'align' => 'L'))
             ->add('html', array('html' => isset($EL) ? $EL : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '244', 'align' => 'L'))
             ->add('html', array('html' => isset($CM) ? $CM : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '262', 'align' => 'L'))
             ->add('html', array('html' => isset($EM) ? $EM : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '262', 'align' => 'L'))
