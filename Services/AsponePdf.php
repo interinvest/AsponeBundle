@@ -2,6 +2,7 @@
 /**
  * Gère les pdf liés aux déclarations AspOne
  */
+
 namespace InterInvest\AsponeBundle\Services;
 
 
@@ -779,6 +780,7 @@ class AsponePdf
             $this->pdf->printFooter = false;
         }
 
+        $millesime = $this->crawler->filter("Declaration > ListeFormulaires > Identif")->attr("Millesime");
         $pageOrientation = array(
             1 => 'P',
             2 => 'L',
@@ -924,7 +926,6 @@ class AsponePdf
             $zones += array(
                 'BE' => 140.5,
                 'BF' => 154,
-                'TG' => 183,
                 'BG' => 168,
                 'BH' => 198,
                 'BJ' => 215,
@@ -935,19 +936,26 @@ class AsponePdf
                 'BP' => 277,
             );
 
+            if ($millesime >= 16) {
+
+                $zones += array(
+                    'TG' => 183,
+                );
+            }
+
             $transaction = $this->pdf->transaction();
             $transaction->add('textOptions', array('size' => 7));
             foreach ($zones as $zone => $x) {
                 $textOccur = $formOccur->filter("Zone#$zone > Occurrence")->eq($j - 1);
                 $align = 'L';
-                if(in_array($zone, array("BC"))){
+                if (in_array($zone, array("BC"))) {
                     $textOccur = $textOccur->filter("AdresseCodePostal");
                 }
                 $text = $textOccur->text();
-                if(in_array($zone, array("BW", "BD", "BE", "BF", "BP"))){
+                if (in_array($zone, array("BW", "BD", "BE", "BF", "BP"))) {
                     $text = date_create_from_format("Ymd", $text)->format("d/m/Y");
                 }
-                if(in_array($zone, array("BX", "BG", "BH", "BK", "BL", "BM", "TG"))){
+                if (in_array($zone, array("BX", "BG", "BH", "BK", "BL", "BM", "TG"))) {
                     $align = "R";
                 }
                 $transaction->add('html', array('html' => $text, 'w' => '15', 'h' => '4', 'x' => $x, 'y' => $ys[$codeInvest], 'align' => $align));
@@ -1022,8 +1030,6 @@ class AsponePdf
             'TD' => array(250, 'int' => 'Valeur'),
         );
         $this->setMultiValues($crawlerForm, $zones, 100, 4.25, 6);
-
-
 
 
         if (!is_null($this->infosSignature)) {
