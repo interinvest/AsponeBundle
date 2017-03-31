@@ -946,6 +946,9 @@ class AsponePdf
             $transaction = $this->pdf->transaction();
             $transaction->add('textOptions', array('size' => 7));
             foreach ($zones as $zone => $x) {
+                if(!$formOccur->filter("Zone#$zone > Occurrence")->count()){
+                    continue;
+                }
                 $textOccur = $formOccur->filter("Zone#$zone > Occurrence")->eq($j - 1);
                 $align = 'L';
                 if (in_array($zone, array("BC"))) {
@@ -970,7 +973,7 @@ class AsponePdf
         $import->execute($this->pdf);
 
         $this->pdf->setPage($currentPage);
-        $zones = array('BQ' => 48, 'BR' => 74, 'BS' => array(123, 'date' => 'Valeur'), 'BT' => 155, 'BU' => 210);
+        $zones = array('BA'=> 20, 'BQ' => 48, 'BR' => 74, 'BS' => array(123, 'date' => 'Valeur'), 'BT' => 155, 'BU' => 210);
         $this->setMultiValues($crawlerForm, $zones, 40, 7, 10);
         $currentPage++;
 
