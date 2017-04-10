@@ -54,8 +54,7 @@ class AsponeXml
         }
         $this->declarable = $declarable;
         $type = $declarable->getType();
-        //$millesime = $declarable->getAnnee() % 100;
-        $millesime = 17;
+        $millesime = date('Y') % 100;
         if ($millesime < 10) {
             $millesime = '0' . $millesime;
         }
