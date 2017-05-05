@@ -52,8 +52,11 @@ class AsponeDeposit
             $limit = 100;
         }
         $declarationsCh = array_chunk($declarations, $limit);
-
+        unset($declarations);
+        echo "Début : ". Date('H:i:s'). "\n";
         foreach ($declarationsCh as $k => $declarations) {
+            $deposits++;
+            echo "- Création déposit N° " . $deposits . "\n";
             $xml = $asponeXml->concatXml($declarations, $test);
             if ($xml) {
                 $oDeposit = new Deposit();
@@ -62,17 +65,16 @@ class AsponeDeposit
                 $oDeposit->setRetourImmediat(Deposit::ETAT_NON_FINI);
                 $oDeposit->setIstest($test);
                 $this->em->persist($oDeposit);
-                $this->em->flush(); //flush pour donner l'id aux declarations ensuite
-
-                $deposits++;
-                echo $deposits . "\n";
+                $this->em->flush();
                 /** @var Declaration $declaration */
                 foreach ($declarations as $declaration) {
                     $declaration->setDepositId($oDeposit->getId());
                 }
             }
+            unset($xml);
         }
 
+        echo "Fin : ". Date('H:i:s'). "\n";
         return $deposits;
     }
 
