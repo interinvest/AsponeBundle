@@ -70,6 +70,7 @@ class AsponeXml
         $this->setFormulaires($listeFormNode, $formulaires);
         try {
             $this->xml = $rootNode->asXml();
+            //var_dump($this->xml); die;
 //            $handle = fopen('/vagrant/td2/web/uploads/aspone/test' . time() . '.xml', 'w+');
 //            fwrite($handle, $this->xml);
 //            fclose($handle);
@@ -127,15 +128,19 @@ class AsponeXml
                         $value = $this->getValue($declarable->getConfiguration(), $formulaire, $zone);
                         if (!is_null($value) && $value && !empty($value)) {
                             if ($forms[$formulaire][$zone]['multi'] == 'NON') {
+
                                 $this->setZones($formNode, array($zone => $value));
                             } else {
                                 $zoneX = $formNode->addChild('Zone');
                                 $zoneX->addAttribute('id', $zone);
                                 $i = 1;
+
                                 foreach ($value as $vals) {
                                     $zoneY = $zoneX->addChild('Occurrence');
                                     $zoneY->addAttribute('Numero', $i);
-                                    $this->setZones($zoneY, $vals, false);
+                                    if(!is_null($vals)) {
+                                        $this->setZones($zoneY, $vals, false);
+                                    }
                                     $i++;
                                 }
                             }
@@ -207,6 +212,7 @@ class AsponeXml
 
         $zoneAaNode = $node->addChild('Zone');
         $zoneAaNode->addAttribute('id', 'AA');
+
         $this->setZones($zoneAaNode, $declaration->getIdentif(), true, true);
     }
 
@@ -304,8 +310,11 @@ class AsponeXml
         $path = $this->container->get('kernel')->getRootDir() . $this->container->getParameter('aspone.xmlPath');
         $xmlContent = "";
 
+        $i = 0;
         /* @var Declaration $declaration */
         foreach ($declarations as $declaration) {
+            $i++;
+            echo "- - Création de l'XML pour la déclaration ". $declaration->getId(). "\n";
             $document = $declaration->getXml($this->container);
             if ($document) {
                 /** @var \SimpleXMLElement $content */
@@ -320,7 +329,8 @@ class AsponeXml
                 }
             }
         }
-        $rootNode = new \SimpleXMLElement("<?xml version='1.0' encoding='ISO-8859-1'?>" .
+
+        $rootNode = new \SimpleXMLElement("<?xml version='1.0' encoding='ISO-8859-1'?>".
             "<XmlEdi Test='$test'>" .
             "<GroupeFonctionnel Type=\"INFENT\">" .
             $xmlContent .
