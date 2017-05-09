@@ -65,13 +65,14 @@ class AsponeDeposit
                 $oDeposit->setRetourImmediat(Deposit::ETAT_NON_FINI);
                 $oDeposit->setIstest($test);
                 $this->em->persist($oDeposit);
-                $this->em->flush();
+                //$this->em->flush();
                 /** @var Declaration $declaration */
                 foreach ($declarations as $declaration) {
-                    $declaration->setDepositId($oDeposit->getId());
+                    $declaration->setDeposit($oDeposit);
                 }
+                //$this->em->flush();
             }
-            unset($xml);
+            //unset($xml);
         }
 
         echo "Fin : ". Date('H:i:s'). "\n";
