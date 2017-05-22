@@ -36,6 +36,7 @@ class AsponeXml
      */
     public function setXmlFromDeclarable(Declaration $declaration, $test = 1)
     {
+
         if ($declaration instanceof Declaration) {
             $declarable = $declaration->getServiceDeclarable();
             if (is_array($declarable)) {
@@ -372,9 +373,12 @@ class AsponeXml
                     $millesimes = $output[0];
                     if (in_array($this->millesime, $millesimes)) {
                         $millesimeToUse = $this->millesime;
+                    }elseif($this->millesime = Date('Y')){
+                        $millesimeToUse = max($millesimes);
                     } else {
                         $millesimeToUse = $millesimes[0];
                     }
+
                     //$this->millesime = $millesimeToUse;
                     if (strpos($fichier, (string)$millesimeToUse) !== false) {
                         $handle = fopen($path . $fichier, 'r');
