@@ -34,7 +34,7 @@ class AsponeXml
      * @return mixed
      * @throws \Exception
      */
-    public function setXmlFromDeclarable($declaration, $test = 1)
+    public function setXmlFromDeclarable(Declaration $declaration, $test = 1)
     {
         if ($declaration instanceof Declaration) {
             $declarable = $declaration->getServiceDeclarable();
@@ -54,7 +54,7 @@ class AsponeXml
         }
         $this->declarable = $declarable;
         $type = $declarable->getType();
-        $millesime = date('Y') % 100;
+        $millesime = $declaration->getDeclarationBilan()->getAnnee();
         if ($millesime < 10) {
             $millesime = '0' . $millesime;
         }
@@ -100,6 +100,7 @@ class AsponeXml
         } catch (\Exception $e) {
             throw new \Exception('Problème lors de la lecture du fichier de millesime. ' . $e->getMessage());
         }
+
         /**
          * Test des formulaires dans la déclaration
          * Si présents dans le dictionnaire alors on les rempli
@@ -119,7 +120,8 @@ class AsponeXml
                 } else {
                     $formNode = $node->addChild('Identif');
                 }
-                $formNode->addAttribute('Millesime', $this->millesime);
+
+                $formNode->addAttribute('Millesime', substr($this->millesime,-2));
                 if ($formulaire == 'Identif') {
                     $this->setAA($formNode);
                 }
@@ -373,7 +375,7 @@ class AsponeXml
                     } else {
                         $millesimeToUse = $millesimes[0];
                     }
-                    $this->millesime = $millesimeToUse;
+                    //$this->millesime = $millesimeToUse;
                     if (strpos($fichier, (string)$millesimeToUse) !== false) {
                         $handle = fopen($path . $fichier, 'r');
                         $row = 0;

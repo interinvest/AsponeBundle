@@ -165,7 +165,11 @@ class AsponePdf
      */
     private function getTplPath($formNum)
     {
-        return __DIR__ . '/../Resources/templates/' . $formNum . '.pdf';
+        $this->crawler = new Crawler($this->xmlString);
+        $el = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire")->first();
+        $millesime = $el->attr('Millesime');
+//var_dump(__DIR__ . '/../Resources/templates/20'.$millesime.'/' . $formNum.'_20'.$millesime.'.pdf');
+        return __DIR__ . '/../Resources/templates/20'.$millesime.'/' . $formNum.'_20'.$millesime.'.pdf';
     }
 
     /**
@@ -404,6 +408,10 @@ class AsponePdf
      */
     public function setPdf2031()
     {
+        $this->crawler = new Crawler($this->xmlString);
+        $el = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire")->first();
+        $millesime = $el->attr('Millesime');
+
         if (is_null($this->pdf)) {
             $this->pdf = new TCPDFLib();
             $this->pdf->printFooter = false;
@@ -450,16 +458,26 @@ class AsponePdf
             $c7CX = $this->crawler->filter("{$crawlerForm}Zone#CX")->first()->text();
         }
 
-
         $this->pdf->setPage($page);
-        $this->pdf->transaction()
-            ->add('html', array('html' => $dateDebut->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '30', 'align' => 'L'))
-            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '35', 'align' => 'L'))
-            ->add('html', array('html' => $adresse, 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '65', 'align' => 'L'))
-            ->add('textOptions', array('spacing' => '0', 'size' => 10))
-            ->add('html', array('html' => $c7CW, 'w' => '40', 'h' => '4', 'x' => '94', 'y' => '205', 'align' => 'L'))
-            ->add('html', array('html' => $c7CX, 'w' => '40', 'h' => '4', 'x' => '135', 'y' => '205', 'align' => 'L'))
-            ->execute();
+        if($millesime == 17) {
+            $this->pdf->transaction()
+                ->add('html', array('html' => $dateDebut->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '30', 'align' => 'L'))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '35', 'align' => 'L'))
+                ->add('html', array('html' => $adresse, 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '50', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '0', 'size' => 10))
+                ->add('html', array('html' => $c7CW, 'w' => '40', 'h' => '4', 'x' => '70', 'y' => '205', 'align' => 'L'))
+                ->add('html', array('html' => $c7CX, 'w' => '40', 'h' => '4', 'x' => '120', 'y' => '205', 'align' => 'L'))
+                ->execute();
+        } else {
+            $this->pdf->transaction()
+                ->add('html', array('html' => $dateDebut->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '30', 'align' => 'L'))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '35', 'align' => 'L'))
+                ->add('html', array('html' => $adresse, 'w' => '90', 'h' => '4', 'x' => '45', 'y' => '65', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '0', 'size' => 10))
+                ->add('html', array('html' => $c7CW, 'w' => '40', 'h' => '4', 'x' => '94', 'y' => '205', 'align' => 'L'))
+                ->add('html', array('html' => $c7CX, 'w' => '40', 'h' => '4', 'x' => '135', 'y' => '205', 'align' => 'L'))
+                ->execute();
+        }
 
         if (!is_null($this->infoEntete)) {
             $this->pdf->transaction()
@@ -490,6 +508,11 @@ class AsponePdf
      */
     public function setPdf2033()
     {
+        $this->crawler = new Crawler($this->xmlString);
+        $el = $this->crawler->filter("Declaration > ListeFormulaires > Formulaire")->first();
+        $millesime = $el->attr('Millesime');
+
+
         if (is_null($this->pdf)) {
             $this->pdf = new TCPDFLib();
             $this->pdf->printFooter = false;
@@ -522,17 +545,40 @@ class AsponePdf
 
         $diffMonth = floor(date_diff($dateDebut, $dateFin)->days / 30);
 
-        $this->pdf->transaction()
-            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '50', 'y' => '22', 'align' => 'L'))
-            ->add('textOptions', array('size' => 8))
-            ->add('html', array('html' => $adresse, 'w' => '150', 'h' => '4', 'x' => '40', 'y' => '30', 'align' => 'L'))
-            ->add('textOptions', array('spacing' => '3.4', 'size' => 12))
-            ->add('html', array('html' => $siren, 'w' => '150', 'h' => '4', 'x' => '32', 'y' => '35', 'align' => 'L'))
-            ->add('textOptions', array('spacing' => '3.4', 'size' => 10))
-            ->add('html', array('html' => $diffMonth, 'w' => '150', 'h' => '4', 'x' => '67', 'y' => '41', 'align' => 'L'))
-            ->add('textOptions', array('spacing' => '0'))
-            ->execute();
-
+        if($millesime == 15) {
+            $this->pdf->transaction()
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '50', 'y' => '19', 'align' => 'L'))
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $adresse, 'w' => '150', 'h' => '4', 'x' => '40', 'y' => '27', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '3.6', 'size' => 12))
+                ->add('html', array('html' => $siren, 'w' => '150', 'h' => '4', 'x' => '28', 'y' => '33', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '3.4', 'size' => 10))
+                ->add('html', array('html' => $diffMonth, 'w' => '150', 'h' => '4', 'x' => '64', 'y' => '39', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '0'))
+                ->execute();
+        } elseif($millesime == 17) {
+            $this->pdf->transaction()
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '50', 'y' => '21', 'align' => 'L'))
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $adresse, 'w' => '150', 'h' => '4', 'x' => '40', 'y' => '28', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '3.4', 'size' => 12))
+                ->add('html', array('html' => $siren, 'w' => '150', 'h' => '4', 'x' => '29', 'y' => '35', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '3.4', 'size' => 10))
+                ->add('html', array('html' => $diffMonth, 'w' => '150', 'h' => '4', 'x' => '64', 'y' => '41', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '0'))
+                ->execute();
+        } else {
+            $this->pdf->transaction()
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '50', 'y' => '22', 'align' => 'L'))
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $adresse, 'w' => '150', 'h' => '4', 'x' => '40', 'y' => '30', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '3.4', 'size' => 12))
+                ->add('html', array('html' => $siren, 'w' => '150', 'h' => '4', 'x' => '32', 'y' => '35', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '3.4', 'size' => 10))
+                ->add('html', array('html' => $diffMonth, 'w' => '150', 'h' => '4', 'x' => '67', 'y' => '41', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => '0'))
+                ->execute();
+        }
         //2033A
         $nom = '2033A';
         $crawlerForm = "Declaration > ListeFormulaires > Formulaire[Nom=\"$nom\"] > ";
@@ -544,43 +590,121 @@ class AsponePdf
                     $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
 
-        $this->pdf->transaction()
-            ->add('textOptions', array('size' => 8))
-            ->add('html', array('html' => isset($JD) ? $JD : '', 'w' => '90', 'h' => '4', 'x' => '195.5', 'y' => '22', 'align' => 'L'))
-            ->add('textOptions', array('size' => 10))
-            ->add('textOptions', array('spacing' => 1.3))
-            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '174', 'y' => '52.5', 'align' => 'L'))
-            ->add('textOptions', array('spacing' => 0))
-            ->add('html', array('html' => isset($AC) ? $AC : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '76', 'align' => 'L'))
-            ->add('html', array('html' => isset($BC) ? $BC : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '76', 'align' => 'L'))
-            ->add('html', array('html' => isset($CC) ? $CC : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '76', 'align' => 'L'))
-            ->add('html', array('html' => isset($AE) ? $AE : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '87', 'align' => 'L'))
-            ->add('html', array('html' => isset($BE) ? $BE : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '87', 'align' => 'L'))
-            ->add('html', array('html' => isset($CE) ? $CE : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '87', 'align' => 'L'))
-            ->add('html', array('html' => isset($AJ) ? $AJ : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '110', 'align' => 'L'))
-            ->add('html', array('html' => isset($CJ) ? $CJ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '110', 'align' => 'L'))
-            ->add('html', array('html' => isset($AK) ? $AK : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '116', 'align' => 'L'))
-            ->add('html', array('html' => isset($CK) ? $CK : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '116', 'align' => 'L'))
-            ->add('html', array('html' => isset($AQ) ? $AQ : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '139', 'align' => 'L'))
-            ->add('html', array('html' => isset($BQ) ? $BQ : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '139', 'align' => 'L'))
-            ->add('html', array('html' => isset($CQ) ? $CQ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '139', 'align' => 'L'))
-            ->add('html', array('html' => isset($AR) ? $AR : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '145', 'align' => 'L'))
-            ->add('html', array('html' => isset($BR) ? $BR : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '145', 'align' => 'L'))
-            ->add('html', array('html' => isset($CR) ? $CR : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '145', 'align' => 'L'))
-            ->add('html', array('html' => isset($FA) ? $FA : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '157', 'align' => 'L'))
-            ->add('html', array('html' => isset($FF) ? $FF : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '179', 'align' => 'L'))
-            ->add('html', array('html' => isset($FG) ? $FG : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '191', 'align' => 'L'))
-            ->add('html', array('html' => isset($FH) ? $FH : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '196.5', 'align' => 'L'))
-            ->add('html', array('html' => isset($FJ) ? $FJ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '203', 'align' => 'L'))
-            ->add('html', array('html' => isset($FL) ? $FL : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '214', 'align' => 'L'))
-            ->add('html', array('html' => isset($FM) ? $FM : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '219.5', 'align' => 'L'))
-            ->add('html', array('html' => isset($FN) ? $FN : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '225', 'align' => 'L'))
-            ->add('html', array('html' => isset($EE) ? $EE : '', 'w' => '90', 'h' => '4', 'x' => '150', 'y' => '230', 'align' => 'L'))
-            ->add('html', array('html' => isset($FP) ? $FP : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '230', 'align' => 'L'))
-            ->add('html', array('html' => isset($FQ) ? $FQ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '236', 'align' => 'L'))
-            ->add('html', array('html' => isset($FR) ? $FR : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '242', 'align' => 'L'))
-            ->add('html', array('html' => isset($FS) ? $FS : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '248', 'align' => 'L'))
-            ->execute();
+        if($millesime == 15) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => isset($JD) ? $JD : '', 'w' => '90', 'h' => '4', 'x' => '197', 'y' => '20', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('textOptions', array('spacing' => 1.4))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '176', 'y' => '51', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => isset($AC) ? $AC : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '76', 'align' => 'L'))
+                ->add('html', array('html' => isset($BC) ? $BC : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '76', 'align' => 'L'))
+                ->add('html', array('html' => isset($CC) ? $CC : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '76', 'align' => 'L'))
+                ->add('html', array('html' => isset($AE) ? $AE : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '89', 'align' => 'L'))
+                ->add('html', array('html' => isset($BE) ? $BE : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '89', 'align' => 'L'))
+                ->add('html', array('html' => isset($CE) ? $CE : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '89', 'align' => 'L'))
+                ->add('html', array('html' => isset($AJ) ? $AJ : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '114', 'align' => 'L'))
+                ->add('html', array('html' => isset($CJ) ? $CJ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '114', 'align' => 'L'))
+                ->add('html', array('html' => isset($AK) ? $AK : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '120', 'align' => 'L'))
+                ->add('html', array('html' => isset($CK) ? $CK : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '120', 'align' => 'L'))
+                ->add('html', array('html' => isset($AQ) ? $AQ : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '146', 'align' => 'L'))
+                ->add('html', array('html' => isset($BQ) ? $BQ : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '146', 'align' => 'L'))
+                ->add('html', array('html' => isset($CQ) ? $CQ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '146', 'align' => 'L'))
+                ->add('html', array('html' => isset($AR) ? $AR : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '152', 'align' => 'L'))
+                ->add('html', array('html' => isset($BR) ? $BR : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '152', 'align' => 'L'))
+                ->add('html', array('html' => isset($CR) ? $CR : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '152', 'align' => 'L'))
+                ->add('html', array('html' => isset($FA) ? $FA : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '165', 'align' => 'L'))
+                ->add('html', array('html' => isset($FF) ? $FF : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '197', 'align' => 'L'))
+                ->add('html', array('html' => isset($FG) ? $FG : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '204', 'align' => 'L'))
+                ->add('html', array('html' => isset($FH) ? $FH : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '209', 'align' => 'L'))
+                ->add('html', array('html' => isset($FJ) ? $FJ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '215', 'align' => 'L'))
+                ->add('html', array('html' => isset($FL) ? $FL : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '229', 'align' => 'L'))
+                ->add('html', array('html' => isset($FM) ? $FM : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '235', 'align' => 'L'))
+                ->add('html', array('html' => isset($FN) ? $FN : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '241', 'align' => 'L'))
+                ->add('html', array('html' => isset($EE) ? $EE : '', 'w' => '90', 'h' => '4', 'x' => '150', 'y' => '247', 'align' => 'L'))
+                ->add('html', array('html' => isset($FP) ? $FP : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '247', 'align' => 'L'))
+                ->add('html', array('html' => isset($FQ) ? $FQ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '253', 'align' => 'L'))
+                ->add('html', array('html' => isset($FR) ? $FR : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '260', 'align' => 'L'))
+                ->add('html', array('html' => isset($FS) ? $FS : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '266', 'align' => 'L'))
+                ->execute();
+        } elseif($millesime == 17) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => isset($JD) ? $JD : '', 'w' => '90', 'h' => '4', 'x' => '199', 'y' => '20', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('textOptions', array('spacing' => 1.4))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '177', 'y' => '52', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => isset($AC) ? $AC : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '76', 'align' => 'L'))
+                ->add('html', array('html' => isset($BC) ? $BC : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '76', 'align' => 'L'))
+                ->add('html', array('html' => isset($CC) ? $CC : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '76', 'align' => 'L'))
+                ->add('html', array('html' => isset($AE) ? $AE : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '89', 'align' => 'L'))
+                ->add('html', array('html' => isset($BE) ? $BE : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '89', 'align' => 'L'))
+                ->add('html', array('html' => isset($CE) ? $CE : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '89', 'align' => 'L'))
+                ->add('html', array('html' => isset($AJ) ? $AJ : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '113', 'align' => 'L'))
+                ->add('html', array('html' => isset($CJ) ? $CJ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '113', 'align' => 'L'))
+                ->add('html', array('html' => isset($AK) ? $AK : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '119', 'align' => 'L'))
+                ->add('html', array('html' => isset($CK) ? $CK : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '119', 'align' => 'L'))
+                ->add('html', array('html' => isset($AQ) ? $AQ : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '143', 'align' => 'L'))
+                ->add('html', array('html' => isset($BQ) ? $BQ : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '143', 'align' => 'L'))
+                ->add('html', array('html' => isset($CQ) ? $CQ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '143', 'align' => 'L'))
+                ->add('html', array('html' => isset($AR) ? $AR : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '149', 'align' => 'L'))
+                ->add('html', array('html' => isset($BR) ? $BR : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '149', 'align' => 'L'))
+                ->add('html', array('html' => isset($CR) ? $CR : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '149', 'align' => 'L'))
+                ->add('html', array('html' => isset($FA) ? $FA : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '161', 'align' => 'L'))
+                ->add('html', array('html' => isset($FF) ? $FF : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '190', 'align' => 'L'))
+                ->add('html', array('html' => isset($FG) ? $FG : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '197', 'align' => 'L'))
+                ->add('html', array('html' => isset($FH) ? $FH : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '203', 'align' => 'L'))
+                ->add('html', array('html' => isset($FJ) ? $FJ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '209', 'align' => 'L'))
+                ->add('html', array('html' => isset($FL) ? $FL : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '220', 'align' => 'L'))
+                ->add('html', array('html' => isset($FM) ? $FM : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '227', 'align' => 'L'))
+                ->add('html', array('html' => isset($FN) ? $FN : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '233', 'align' => 'L'))
+                ->add('html', array('html' => isset($EE) ? $EE : '', 'w' => '90', 'h' => '4', 'x' => '150', 'y' => '239', 'align' => 'L'))
+                ->add('html', array('html' => isset($FP) ? $FP : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '239', 'align' => 'L'))
+                ->add('html', array('html' => isset($FQ) ? $FQ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '245', 'align' => 'L'))
+                ->add('html', array('html' => isset($FR) ? $FR : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '251', 'align' => 'L'))
+                ->add('html', array('html' => isset($FS) ? $FS : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '257', 'align' => 'L'))
+                ->execute();
+        } else {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => isset($JD) ? $JD : '', 'w' => '90', 'h' => '4', 'x' => '195.5', 'y' => '22', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('textOptions', array('spacing' => 1.3))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '174', 'y' => '52.5', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => isset($AC) ? $AC : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '76', 'align' => 'L'))
+                ->add('html', array('html' => isset($BC) ? $BC : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '76', 'align' => 'L'))
+                ->add('html', array('html' => isset($CC) ? $CC : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '76', 'align' => 'L'))
+                ->add('html', array('html' => isset($AE) ? $AE : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '87', 'align' => 'L'))
+                ->add('html', array('html' => isset($BE) ? $BE : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '87', 'align' => 'L'))
+                ->add('html', array('html' => isset($CE) ? $CE : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '87', 'align' => 'L'))
+                ->add('html', array('html' => isset($AJ) ? $AJ : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '110', 'align' => 'L'))
+                ->add('html', array('html' => isset($CJ) ? $CJ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '110', 'align' => 'L'))
+                ->add('html', array('html' => isset($AK) ? $AK : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '116', 'align' => 'L'))
+                ->add('html', array('html' => isset($CK) ? $CK : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '116', 'align' => 'L'))
+                ->add('html', array('html' => isset($AQ) ? $AQ : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '139', 'align' => 'L'))
+                ->add('html', array('html' => isset($BQ) ? $BQ : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '139', 'align' => 'L'))
+                ->add('html', array('html' => isset($CQ) ? $CQ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '139', 'align' => 'L'))
+                ->add('html', array('html' => isset($AR) ? $AR : '', 'w' => '90', 'h' => '4', 'x' => '110', 'y' => '145', 'align' => 'L'))
+                ->add('html', array('html' => isset($BR) ? $BR : '', 'w' => '90', 'h' => '4', 'x' => '145', 'y' => '145', 'align' => 'L'))
+                ->add('html', array('html' => isset($CR) ? $CR : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '145', 'align' => 'L'))
+                ->add('html', array('html' => isset($FA) ? $FA : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '157', 'align' => 'L'))
+                ->add('html', array('html' => isset($FF) ? $FF : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '179', 'align' => 'L'))
+                ->add('html', array('html' => isset($FG) ? $FG : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '191', 'align' => 'L'))
+                ->add('html', array('html' => isset($FH) ? $FH : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '196.5', 'align' => 'L'))
+                ->add('html', array('html' => isset($FJ) ? $FJ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '203', 'align' => 'L'))
+                ->add('html', array('html' => isset($FL) ? $FL : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '214', 'align' => 'L'))
+                ->add('html', array('html' => isset($FM) ? $FM : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '219.5', 'align' => 'L'))
+                ->add('html', array('html' => isset($FN) ? $FN : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '225', 'align' => 'L'))
+                ->add('html', array('html' => isset($EE) ? $EE : '', 'w' => '90', 'h' => '4', 'x' => '150', 'y' => '230', 'align' => 'L'))
+                ->add('html', array('html' => isset($FP) ? $FP : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '230', 'align' => 'L'))
+                ->add('html', array('html' => isset($FQ) ? $FQ : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '236', 'align' => 'L'))
+                ->add('html', array('html' => isset($FR) ? $FR : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '242', 'align' => 'L'))
+                ->add('html', array('html' => isset($FS) ? $FS : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '248', 'align' => 'L'))
+                ->execute();
+        }
         $page++;
 
         //2033B
@@ -594,40 +718,112 @@ class AsponePdf
                     $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
-        $this->pdf->transaction()
-            ->add('textOptions', array('size' => 8))
-            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '100', 'y' => '12', 'align' => 'L'))
-            ->add('html', array('html' => isset($JB) ? $JB : '', 'w' => '90', 'h' => '4', 'x' => '200', 'y' => '12', 'align' => 'L'))
-            ->add('textOptions', array('size' => 10))
-            ->add('textOptions', array('spacing' => 1.3))
-            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '178', 'y' => '17', 'align' => 'L'))
-            ->add('textOptions', array('spacing' => 0))
-            ->add('html', array('html' => isset($BC) ? $BC : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '37', 'align' => 'L'))
-            ->add('html', array('html' => isset($BG) ? $BG : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '60', 'align' => 'L'))
-            ->add('html', array('html' => isset($BH) ? $BH : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '66', 'align' => 'L'))
-            ->add('html', array('html' => isset($BN) ? $BN : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '94', 'align' => 'L'))
-            ->add('html', array('html' => isset($BP) ? $BP : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '100', 'align' => 'L'))
-            ->add('html', array('html' => isset($BS) ? $BS : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '116', 'align' => 'L'))
-            ->add('html', array('html' => isset($BT) ? $BT : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '123', 'align' => 'L'))
-            ->add('html', array('html' => isset($BU) ? $BU : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '129', 'align' => 'L'))
-            ->add('html', array('html' => isset($BV) ? $BV : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '140', 'align' => 'L'))
-            ->add('html', array('html' => isset($BW) ? $BW : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '146', 'align' => 'L'))
-            ->add('html', array('html' => isset($BX) ? $BX : '', 'w' => '90', 'h' => '4', 'x' => '85', 'y' => '152', 'align' => 'L'))
-            ->add('html', array('html' => isset($BY) ? $BY : '', 'w' => '90', 'h' => '4', 'x' => '85', 'y' => '158', 'align' => 'L'))
-            ->add('html', array('html' => isset($BZ) ? $BZ : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '152', 'align' => 'L'))
-            ->add('html', array('html' => isset($CA) ? $CA : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '158', 'align' => 'L'))
-            ->add('html', array('html' => isset($CC) ? $CC : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '168', 'align' => 'L'))
-            ->add('html', array('html' => isset($CD) ? $CD : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '175', 'align' => 'L'))
-            ->add('html', array('html' => isset($ED) ? $ED : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '175', 'align' => 'L'))
-            ->add('html', array('html' => isset($CF) ? $CF : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '187', 'align' => 'L'))
-            ->add('html', array('html' => isset($EL) ? $EL : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '244', 'align' => 'L'))
-            ->add('html', array('html' => isset($CM) ? $CM : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '262', 'align' => 'L'))
-            ->add('html', array('html' => isset($EM) ? $EM : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '262', 'align' => 'L'))
-            ->add('html', array('html' => isset($EP) ? $EP : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '272', 'align' => 'L'))
-            ->add('html', array('html' => isset($CR) ? $CR : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '278', 'align' => 'L'))
-            ->add('html', array('html' => isset($ER) ? $ER : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '278', 'align' => 'L'))
-            ->add('html', array('html' => isset($JA) ? $JA : '', 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '272', 'align' => 'L'))
-            ->execute();
+        if($millesime == 15) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '100', 'y' => '9', 'align' => 'L'))
+                ->add('html', array('html' => isset($JB) ? $JB : '', 'w' => '90', 'h' => '4', 'x' => '198', 'y' => '9', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('textOptions', array('spacing' => 1.3))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '174', 'y' => '15', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => isset($BC) ? $BC : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '35', 'align' => 'L'))
+                ->add('html', array('html' => isset($BG) ? $BG : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '59', 'align' => 'L'))
+                ->add('html', array('html' => isset($BH) ? $BH : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '66', 'align' => 'L'))
+                ->add('html', array('html' => isset($BN) ? $BN : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '96', 'align' => 'L'))
+                ->add('html', array('html' => isset($BP) ? $BP : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '103', 'align' => 'L'))
+                ->add('html', array('html' => isset($BS) ? $BS : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '121', 'align' => 'L'))
+                ->add('html', array('html' => isset($BT) ? $BT : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '127', 'align' => 'L'))
+                ->add('html', array('html' => isset($BU) ? $BU : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '134', 'align' => 'L'))
+                ->add('html', array('html' => isset($BV) ? $BV : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '146', 'align' => 'L'))
+                ->add('html', array('html' => isset($BW) ? $BW : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '152', 'align' => 'L'))
+                ->add('html', array('html' => isset($BX) ? $BX : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '159', 'align' => 'L'))
+                ->add('html', array('html' => isset($BY) ? $BY : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '165', 'align' => 'L'))
+                ->add('html', array('html' => isset($BZ) ? $BZ : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '171', 'align' => 'L'))
+                ->add('html', array('html' => isset($CA) ? $CA : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '178', 'align' => 'L'))
+                ->add('html', array('html' => isset($CC) ? $CC : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '190', 'align' => 'L'))
+                ->add('html', array('html' => isset($CD) ? $CD : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '197', 'align' => 'L'))
+                ->add('html', array('html' => isset($ED) ? $ED : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '197', 'align' => 'L'))
+                ->add('html', array('html' => isset($CF) ? $CF : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '209', 'align' => 'L'))
+                ->add('html', array('html' => isset($EL) ? $EL : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '246', 'align' => 'L'))
+                ->add('html', array('html' => isset($CM) ? $CM : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '253', 'align' => 'L'))
+                ->add('html', array('html' => isset($EM) ? $EM : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '253', 'align' => 'L'))
+                ->add('html', array('html' => isset($EP) ? $EP : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '265', 'align' => 'L'))
+                ->add('html', array('html' => isset($CR) ? $CR : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '272', 'align' => 'L'))
+                ->add('html', array('html' => isset($ER) ? $ER : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '272', 'align' => 'L'))
+                ->add('html', array('html' => isset($JA) ? $JA : '', 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '264', 'align' => 'L'))
+                ->execute();
+        } elseif($millesime == 17) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '100', 'y' => '14', 'align' => 'L'))
+                ->add('html', array('html' => isset($JB) ? $JB : '', 'w' => '90', 'h' => '4', 'x' => '200', 'y' => '13', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('textOptions', array('spacing' => 1.3))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '177', 'y' => '19', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => isset($BC) ? $BC : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '37', 'align' => 'L'))
+                ->add('html', array('html' => isset($BG) ? $BG : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '58', 'align' => 'L'))
+                ->add('html', array('html' => isset($BH) ? $BH : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '63', 'align' => 'L'))
+                ->add('html', array('html' => isset($BN) ? $BN : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '90', 'align' => 'L'))
+                ->add('html', array('html' => isset($BP) ? $BP : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '95', 'align' => 'L'))
+                ->add('html', array('html' => isset($BS) ? $BS : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '111', 'align' => 'L'))
+                ->add('html', array('html' => isset($BT) ? $BT : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '117', 'align' => 'L'))
+                ->add('html', array('html' => isset($BU) ? $BU : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '122', 'align' => 'L'))
+                ->add('html', array('html' => isset($BV) ? $BV : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '132', 'align' => 'L'))
+                ->add('html', array('html' => isset($BW) ? $BW : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '138', 'align' => 'L'))
+                ->add('html', array('html' => isset($BX) ? $BX : '', 'w' => '90', 'h' => '4', 'x' => '85', 'y' => '142', 'align' => 'L'))
+                ->add('html', array('html' => isset($BY) ? $BY : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '148', 'align' => 'L'))
+                ->add('html', array('html' => isset($BZ) ? $BZ : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '142', 'align' => 'L'))
+                ->add('html', array('html' => isset($CA) ? $CA : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '153', 'align' => 'L'))
+                ->add('html', array('html' => isset($CC) ? $CC : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '168', 'align' => 'L'))
+                ->add('html', array('html' => isset($CD) ? $CD : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '175', 'align' => 'L'))
+                ->add('html', array('html' => isset($ED) ? $ED : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '175', 'align' => 'L'))
+                ->add('html', array('html' => isset($CF) ? $CF : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '186', 'align' => 'L'))
+                ->add('html', array('html' => isset($EL) ? $EL : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '251', 'align' => 'L'))
+                ->add('html', array('html' => isset($CM) ? $CM : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '267', 'align' => 'L'))
+                ->add('html', array('html' => isset($EM) ? $EM : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '267', 'align' => 'L'))
+                ->add('html', array('html' => isset($EP) ? $EP : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '278', 'align' => 'L'))
+                ->add('html', array('html' => isset($CR) ? $CR : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '283', 'align' => 'L'))
+                ->add('html', array('html' => isset($ER) ? $ER : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '283', 'align' => 'L'))
+                ->add('html', array('html' => isset($JA) ? $JA : '', 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '277', 'align' => 'L'))
+                ->execute();
+        } else {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '100', 'y' => '12', 'align' => 'L'))
+                ->add('html', array('html' => isset($JB) ? $JB : '', 'w' => '90', 'h' => '4', 'x' => '200', 'y' => '12', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('textOptions', array('spacing' => 1.3))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '178', 'y' => '17', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => isset($BC) ? $BC : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '37', 'align' => 'L'))
+                ->add('html', array('html' => isset($BG) ? $BG : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '60', 'align' => 'L'))
+                ->add('html', array('html' => isset($BH) ? $BH : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '66', 'align' => 'L'))
+                ->add('html', array('html' => isset($BN) ? $BN : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '94', 'align' => 'L'))
+                ->add('html', array('html' => isset($BP) ? $BP : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '100', 'align' => 'L'))
+                ->add('html', array('html' => isset($BS) ? $BS : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '116', 'align' => 'L'))
+                ->add('html', array('html' => isset($BT) ? $BT : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '123', 'align' => 'L'))
+                ->add('html', array('html' => isset($BU) ? $BU : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '129', 'align' => 'L'))
+                ->add('html', array('html' => isset($BV) ? $BV : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '140', 'align' => 'L'))
+                ->add('html', array('html' => isset($BW) ? $BW : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '146', 'align' => 'L'))
+                ->add('html', array('html' => isset($BX) ? $BX : '', 'w' => '90', 'h' => '4', 'x' => '85', 'y' => '152', 'align' => 'L'))
+                ->add('html', array('html' => isset($BY) ? $BY : '', 'w' => '90', 'h' => '4', 'x' => '85', 'y' => '158', 'align' => 'L'))
+                ->add('html', array('html' => isset($BZ) ? $BZ : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '152', 'align' => 'L'))
+                ->add('html', array('html' => isset($CA) ? $CA : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '158', 'align' => 'L'))
+                ->add('html', array('html' => isset($CC) ? $CC : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '168', 'align' => 'L'))
+                ->add('html', array('html' => isset($CD) ? $CD : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '175', 'align' => 'L'))
+                ->add('html', array('html' => isset($ED) ? $ED : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '175', 'align' => 'L'))
+                ->add('html', array('html' => isset($CF) ? $CF : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '187', 'align' => 'L'))
+                ->add('html', array('html' => isset($EL) ? $EL : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '244', 'align' => 'L'))
+                ->add('html', array('html' => isset($CM) ? $CM : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '262', 'align' => 'L'))
+                ->add('html', array('html' => isset($EM) ? $EM : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '262', 'align' => 'L'))
+                ->add('html', array('html' => isset($EP) ? $EP : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '272', 'align' => 'L'))
+                ->add('html', array('html' => isset($CR) ? $CR : '', 'w' => '90', 'h' => '4', 'x' => '151', 'y' => '278', 'align' => 'L'))
+                ->add('html', array('html' => isset($ER) ? $ER : '', 'w' => '90', 'h' => '4', 'x' => '181', 'y' => '278', 'align' => 'L'))
+                ->add('html', array('html' => isset($JA) ? $JA : '', 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '272', 'align' => 'L'))
+                ->execute();
+        }
         $page++;
         //2033C
         $nom = '2033C';
@@ -640,30 +836,57 @@ class AsponePdf
                     $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
-        $this->pdf->transaction()
-            ->add('textOptions', array('size' => 8))
-            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '85', 'y' => '20', 'align' => 'L'))
-            ->add('html', array('html' => isset($RQ) ? $RQ : '', 'w' => '90', 'h' => '4', 'x' => '197.5', 'y' => '19', 'align' => 'L'))
-            ->add('textOptions', array('size' => 10))
-            ->add('html', array('html' => isset($AC) ? $AC : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '53', 'align' => 'L'))
-            ->add('html', array('html' => isset($DC) ? $DC : '', 'w' => '90', 'h' => '4', 'x' => '148', 'y' => '53', 'align' => 'L'))
-            ->add('html', array('html' => isset($AF) ? $AF : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '70', 'align' => 'L'))
-            ->add('html', array('html' => isset($BF) ? $BF : '', 'w' => '90', 'h' => '4', 'x' => '86', 'y' => '70', 'align' => 'L'))
-            ->add('html', array('html' => isset($CF) ? $CF : '', 'w' => '90', 'h' => '4', 'x' => '118', 'y' => '70', 'align' => 'L'))
-            ->add('html', array('html' => isset($DF) ? $DF : '', 'w' => '90', 'h' => '4', 'x' => '148', 'y' => '70', 'align' => 'L'))
-            ->add('html', array('html' => isset($AK) ? $AK : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '92', 'align' => 'L'))
-            ->add('html', array('html' => isset($BK) ? $BK : '', 'w' => '90', 'h' => '4', 'x' => '86', 'y' => '92', 'align' => 'L'))
-            ->add('html', array('html' => isset($CK) ? $CK : '', 'w' => '90', 'h' => '4', 'x' => '118', 'y' => '92', 'align' => 'L'))
-            ->add('html', array('html' => isset($DK) ? $DK : '', 'w' => '90', 'h' => '4', 'x' => '148', 'y' => '92', 'align' => 'L'))
-            ->add('html', array('html' => isset($FE) ? $FE : '', 'w' => '90', 'h' => '4', 'x' => '71.5', 'y' => '133', 'align' => 'L'))
-            ->add('html', array('html' => isset($GE) ? $GE : '', 'w' => '90', 'h' => '4', 'x' => '106', 'y' => '133', 'align' => 'L'))
-            ->add('html', array('html' => isset($HE) ? $HE : '', 'w' => '90', 'h' => '4', 'x' => '140', 'y' => '133', 'align' => 'L'))
-            ->add('html', array('html' => isset($JE) ? $JE : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '133', 'align' => 'L'))
-            ->add('html', array('html' => isset($FH) ? $FH : '', 'w' => '90', 'h' => '4', 'x' => '71.5', 'y' => '151', 'align' => 'L'))
-            ->add('html', array('html' => isset($GH) ? $GH : '', 'w' => '90', 'h' => '4', 'x' => '106', 'y' => '151', 'align' => 'L'))
-            ->add('html', array('html' => isset($HH) ? $HH : '', 'w' => '90', 'h' => '4', 'x' => '140', 'y' => '151', 'align' => 'L'))
-            ->add('html', array('html' => isset($JH) ? $JH : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '151', 'align' => 'L'))
-            ->execute();
+        if($millesime == 15) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '85', 'y' => '20', 'align' => 'L'))
+                ->add('html', array('html' => isset($RQ) ? $RQ : '', 'w' => '90', 'h' => '4', 'x' => '199', 'y' => '19', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('html', array('html' => isset($AC) ? $AC : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '53', 'align' => 'L'))
+                ->add('html', array('html' => isset($DC) ? $DC : '', 'w' => '90', 'h' => '4', 'x' => '150', 'y' => '53', 'align' => 'L'))
+                ->add('html', array('html' => isset($AF) ? $AF : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '68', 'align' => 'L'))
+                ->add('html', array('html' => isset($BF) ? $BF : '', 'w' => '90', 'h' => '4', 'x' => '86', 'y' => '68', 'align' => 'L'))
+                ->add('html', array('html' => isset($CF) ? $CF : '', 'w' => '90', 'h' => '4', 'x' => '118', 'y' => '68', 'align' => 'L'))
+                ->add('html', array('html' => isset($DF) ? $DF : '', 'w' => '90', 'h' => '4', 'x' => '150', 'y' => '68', 'align' => 'L'))
+                ->add('html', array('html' => isset($AK) ? $AK : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '88', 'align' => 'L'))
+                ->add('html', array('html' => isset($BK) ? $BK : '', 'w' => '90', 'h' => '4', 'x' => '86', 'y' => '88', 'align' => 'L'))
+                ->add('html', array('html' => isset($CK) ? $CK : '', 'w' => '90', 'h' => '4', 'x' => '118', 'y' => '88', 'align' => 'L'))
+                ->add('html', array('html' => isset($DK) ? $DK : '', 'w' => '90', 'h' => '4', 'x' => '150', 'y' => '88', 'align' => 'L'))
+                ->add('html', array('html' => isset($FE) ? $FE : '', 'w' => '90', 'h' => '4', 'x' => '71.5', 'y' => '125', 'align' => 'L'))
+                ->add('html', array('html' => isset($GE) ? $GE : '', 'w' => '90', 'h' => '4', 'x' => '106', 'y' => '125', 'align' => 'L'))
+                ->add('html', array('html' => isset($HE) ? $HE : '', 'w' => '90', 'h' => '4', 'x' => '143', 'y' => '125', 'align' => 'L'))
+                ->add('html', array('html' => isset($JE) ? $JE : '', 'w' => '90', 'h' => '4', 'x' => '179', 'y' => '125', 'align' => 'L'))
+                ->add('html', array('html' => isset($FH) ? $FH : '', 'w' => '90', 'h' => '4', 'x' => '71.5', 'y' => '140', 'align' => 'L'))
+                ->add('html', array('html' => isset($GH) ? $GH : '', 'w' => '90', 'h' => '4', 'x' => '106', 'y' => '140', 'align' => 'L'))
+                ->add('html', array('html' => isset($HH) ? $HH : '', 'w' => '90', 'h' => '4', 'x' => '143', 'y' => '140', 'align' => 'L'))
+                ->add('html', array('html' => isset($JH) ? $JH : '', 'w' => '90', 'h' => '4', 'x' => '179', 'y' => '140', 'align' => 'L'))
+                ->execute();
+        } else {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '85', 'y' => '20', 'align' => 'L'))
+                ->add('html', array('html' => isset($RQ) ? $RQ : '', 'w' => '90', 'h' => '4', 'x' => '197.5', 'y' => '19', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('html', array('html' => isset($AC) ? $AC : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '53', 'align' => 'L'))
+                ->add('html', array('html' => isset($DC) ? $DC : '', 'w' => '90', 'h' => '4', 'x' => '148', 'y' => '53', 'align' => 'L'))
+                ->add('html', array('html' => isset($AF) ? $AF : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '70', 'align' => 'L'))
+                ->add('html', array('html' => isset($BF) ? $BF : '', 'w' => '90', 'h' => '4', 'x' => '86', 'y' => '70', 'align' => 'L'))
+                ->add('html', array('html' => isset($CF) ? $CF : '', 'w' => '90', 'h' => '4', 'x' => '118', 'y' => '70', 'align' => 'L'))
+                ->add('html', array('html' => isset($DF) ? $DF : '', 'w' => '90', 'h' => '4', 'x' => '148', 'y' => '70', 'align' => 'L'))
+                ->add('html', array('html' => isset($AK) ? $AK : '', 'w' => '90', 'h' => '4', 'x' => '57', 'y' => '92', 'align' => 'L'))
+                ->add('html', array('html' => isset($BK) ? $BK : '', 'w' => '90', 'h' => '4', 'x' => '86', 'y' => '92', 'align' => 'L'))
+                ->add('html', array('html' => isset($CK) ? $CK : '', 'w' => '90', 'h' => '4', 'x' => '118', 'y' => '92', 'align' => 'L'))
+                ->add('html', array('html' => isset($DK) ? $DK : '', 'w' => '90', 'h' => '4', 'x' => '148', 'y' => '92', 'align' => 'L'))
+                ->add('html', array('html' => isset($FE) ? $FE : '', 'w' => '90', 'h' => '4', 'x' => '71.5', 'y' => '133', 'align' => 'L'))
+                ->add('html', array('html' => isset($GE) ? $GE : '', 'w' => '90', 'h' => '4', 'x' => '106', 'y' => '133', 'align' => 'L'))
+                ->add('html', array('html' => isset($HE) ? $HE : '', 'w' => '90', 'h' => '4', 'x' => '140', 'y' => '133', 'align' => 'L'))
+                ->add('html', array('html' => isset($JE) ? $JE : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '133', 'align' => 'L'))
+                ->add('html', array('html' => isset($FH) ? $FH : '', 'w' => '90', 'h' => '4', 'x' => '71.5', 'y' => '151', 'align' => 'L'))
+                ->add('html', array('html' => isset($GH) ? $GH : '', 'w' => '90', 'h' => '4', 'x' => '106', 'y' => '151', 'align' => 'L'))
+                ->add('html', array('html' => isset($HH) ? $HH : '', 'w' => '90', 'h' => '4', 'x' => '140', 'y' => '151', 'align' => 'L'))
+                ->add('html', array('html' => isset($JH) ? $JH : '', 'w' => '90', 'h' => '4', 'x' => '175', 'y' => '151', 'align' => 'L'))
+                ->execute();
+        }
         $page++;
         //2033D
         $nom = '2033D';
@@ -676,17 +899,43 @@ class AsponePdf
                     $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
-        $this->pdf->transaction()
-            ->add('textOptions', array('size' => 8))
-            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '36.5', 'align' => 'L'))
-            ->add('html', array('html' => isset($PF) ? $PF : '', 'w' => '90', 'h' => '4', 'x' => '198.5', 'y' => '36.5', 'align' => 'L'))
-            ->add('textOptions', array('size' => 10))
-            ->add('html', array('html' => isset($PG) ? $PG : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '188', 'align' => 'L'))
-            ->add('html', array('html' => isset($PH) ? $PH : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '194', 'align' => 'L'))
-            ->add('html', array('html' => isset($PJ) ? $PJ : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '202', 'align' => 'L'))
-            ->add('html', array('html' => isset($MG) ? $MG : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '209', 'align' => 'L'))
-            ->add('html', array('html' => isset($MH) ? $MH : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '216', 'align' => 'L'))
-            ->execute();
+        if($millesime == 15) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '85', 'y' => '32', 'align' => 'L'))
+                ->add('html', array('html' => isset($PF) ? $PF : '', 'w' => '90', 'h' => '4', 'x' => '198.5', 'y' => '35', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('html', array('html' => isset($PG) ? $PG : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '189', 'align' => 'L'))
+                ->add('html', array('html' => isset($PH) ? $PH : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '196', 'align' => 'L'))
+                ->add('html', array('html' => isset($PJ) ? $PJ : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '202', 'align' => 'L'))
+                ->add('html', array('html' => isset($MG) ? $MG : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '209', 'align' => 'L'))
+                ->add('html', array('html' => isset($MH) ? $MH : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '216', 'align' => 'L'))
+                ->execute();
+        } elseif($millesime == 17) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '33', 'align' => 'L'))
+                ->add('html', array('html' => isset($PF) ? $PF : '', 'w' => '90', 'h' => '4', 'x' => '198.5', 'y' => '35', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('html', array('html' => isset($PG) ? $PG : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '193', 'align' => 'L'))
+                ->add('html', array('html' => isset($PH) ? $PH : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '199', 'align' => 'L'))
+                ->add('html', array('html' => isset($PJ) ? $PJ : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '206', 'align' => 'L'))
+                ->add('html', array('html' => isset($MG) ? $MG : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '215', 'align' => 'L'))
+                ->add('html', array('html' => isset($MH) ? $MH : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '222', 'align' => 'L'))
+                ->execute();
+        } else {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '36.5', 'align' => 'L'))
+                ->add('html', array('html' => isset($PF) ? $PF : '', 'w' => '90', 'h' => '4', 'x' => '198.5', 'y' => '36.5', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->add('html', array('html' => isset($PG) ? $PG : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '189', 'align' => 'L'))
+                ->add('html', array('html' => isset($PH) ? $PH : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '194', 'align' => 'L'))
+                ->add('html', array('html' => isset($PJ) ? $PJ : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '202', 'align' => 'L'))
+                ->add('html', array('html' => isset($MG) ? $MG : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '209', 'align' => 'L'))
+                ->add('html', array('html' => isset($MH) ? $MH : '', 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '216', 'align' => 'L'))
+                ->execute();
+        }
         $page++;
         //2033E
         $nom = '2033E';
@@ -699,17 +948,45 @@ class AsponePdf
                     $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
-        $this->pdf->transaction()
-            ->add('textOptions', array('size' => 10))
-            ->add('textOptions', array('spacing' => 1.3))
-            ->add('html', array('html' => $dateDebut->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '50', 'y' => '35', 'align' => 'L'))
-            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '35', 'align' => 'L'))
-            ->add('html', array('html' => $diffMonth, 'w' => '90', 'h' => '4', 'x' => '162', 'y' => '35', 'align' => 'L'))
-            ->add('textOptions', array('spacing' => 0))
-            ->add('textOptions', array('size' => 8))
-            ->add('html', array('html' => isset($DB) ? $DB : '', 'w' => '90', 'h' => '4', 'x' => '189', 'y' => '34', 'align' => 'L'))
-            ->add('textOptions', array('size' => 10))
-            ->execute();
+        if($millesime == 15) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 10))
+                ->add('textOptions', array('spacing' => 1.3))
+                ->add('html', array('html' => $dateDebut->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '40', 'y' => '33', 'align' => 'L'))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '98', 'y' => '33', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 4))
+                ->add('html', array('html' => $diffMonth, 'w' => '90', 'h' => '4', 'x' => '176', 'y' => '33', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => isset($DB) ? $DB : '', 'w' => '90', 'h' => '4', 'x' => '193', 'y' => '26', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->execute();
+        } elseif($millesime == 17) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 10))
+                ->add('textOptions', array('spacing' => 1.3))
+                ->add('html', array('html' => $dateDebut->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '33', 'align' => 'L'))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '33', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 5))
+                ->add('html', array('html' => $diffMonth, 'w' => '90', 'h' => '4', 'x' => '156', 'y' => '33', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => isset($DB) ? $DB : '', 'w' => '90', 'h' => '4', 'x' => '188', 'y' => '25', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->execute();
+        } else {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 10))
+                ->add('textOptions', array('spacing' => 1.3))
+                ->add('html', array('html' => $dateDebut->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '50', 'y' => '35', 'align' => 'L'))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '90', 'y' => '35', 'align' => 'L'))
+                ->add('html', array('html' => $diffMonth, 'w' => '90', 'h' => '4', 'x' => '162', 'y' => '35', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('textOptions', array('size' => 8))
+                ->add('html', array('html' => isset($DB) ? $DB : '', 'w' => '90', 'h' => '4', 'x' => '189', 'y' => '34', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->execute();
+        }
         $page++;
         //2033F
         $nom = '2033F';
@@ -722,21 +999,55 @@ class AsponePdf
                     $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
-        $this->pdf->transaction()
-            ->add('textOptions', array('size' => 9))
-            ->add('html', array('html' => isset($GS) ? $GS : '', 'w' => '90', 'h' => '4', 'x' => '198', 'y' => '23', 'align' => 'L'))
-            ->add('textOptions', array('size' => 12))
-            ->add('textOptions', array('spacing' => 2))
-            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '35', 'align' => 'L'))
-            ->add('html', array('html' => $siren, 'w' => '90', 'h' => '4', 'x' => '166', 'y' => '35', 'align' => 'L'))
-            ->add('textOptions', array('spacing' => 0))
-            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '42', 'align' => 'L'))
-            ->add('textOptions', array('size' => 9))
-            ->add('html', array('html' => $numero . $type . ' ' . $voie . ' ' . $complement, 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '48', 'align' => 'L'))
-            ->add('html', array('html' => $codePostal, 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '55', 'align' => 'L'))
-            ->add('html', array('html' => $ville, 'w' => '90', 'h' => '4', 'x' => '80', 'y' => '55', 'align' => 'L'))
-            ->add('textOptions', array('size' => 10))
-            ->execute();
+        if($millesime == 15) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 9))
+                ->add('html', array('html' => isset($GS) ? $GS : '', 'w' => '90', 'h' => '4', 'x' => '198', 'y' => '23', 'align' => 'L'))
+                ->add('textOptions', array('size' => 12))
+                ->add('textOptions', array('spacing' => 2))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '36', 'y' => '45', 'align' => 'L'))
+                ->add('html', array('html' => $siren, 'w' => '90', 'h' => '4', 'x' => '165', 'y' => '45', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '52', 'align' => 'L'))
+                ->add('textOptions', array('size' => 9))
+                ->add('html', array('html' => $numero . $type . ' ' . $voie . ' ' . $complement, 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '60', 'align' => 'L'))
+                ->add('html', array('html' => $codePostal, 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '68', 'align' => 'L'))
+                ->add('html', array('html' => $ville, 'w' => '90', 'h' => '4', 'x' => '120', 'y' => '68', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->execute();
+        } elseif($millesime == 17) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 9))
+                ->add('html', array('html' => isset($GS) ? $GS : '', 'w' => '90', 'h' => '4', 'x' => '197', 'y' => '21', 'align' => 'L'))
+                ->add('textOptions', array('size' => 12))
+                ->add('textOptions', array('spacing' => 2))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '30', 'y' => '32', 'align' => 'L'))
+                ->add('html', array('html' => $siren, 'w' => '90', 'h' => '4', 'x' => '164', 'y' => '32', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '39', 'align' => 'L'))
+                ->add('textOptions', array('size' => 9))
+                ->add('html', array('html' => $numero . $type . ' ' . $voie . ' ' . $complement, 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '46', 'align' => 'L'))
+                ->add('html', array('html' => $codePostal, 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '54', 'align' => 'L'))
+                ->add('html', array('html' => $ville, 'w' => '90', 'h' => '4', 'x' => '100', 'y' => '54', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->execute();
+        } else {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 9))
+                ->add('html', array('html' => isset($GS) ? $GS : '', 'w' => '90', 'h' => '4', 'x' => '198', 'y' => '23', 'align' => 'L'))
+                ->add('textOptions', array('size' => 12))
+                ->add('textOptions', array('spacing' => 2))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '35', 'align' => 'L'))
+                ->add('html', array('html' => $siren, 'w' => '90', 'h' => '4', 'x' => '166', 'y' => '35', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '42', 'align' => 'L'))
+                ->add('textOptions', array('size' => 9))
+                ->add('html', array('html' => $numero . $type . ' ' . $voie . ' ' . $complement, 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '48', 'align' => 'L'))
+                ->add('html', array('html' => $codePostal, 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '55', 'align' => 'L'))
+                ->add('html', array('html' => $ville, 'w' => '90', 'h' => '4', 'x' => '80', 'y' => '55', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->execute();
+        }
         $page++;
         //2033G
         $nom = '2033G';
@@ -749,21 +1060,40 @@ class AsponePdf
                     $this->crawler->filter("{$crawlerForm}Zone#$zone")->first()->text()) : '';
         }
         $this->pdf->setPage($page);
-        $this->pdf->transaction()
-            ->add('textOptions', array('size' => 9))
-            ->add('html', array('html' => isset($GS) ? $GS : '', 'w' => '90', 'h' => '4', 'x' => '195', 'y' => '19', 'align' => 'L'))
-            ->add('textOptions', array('size' => 12))
-            ->add('textOptions', array('spacing' => 2))
-            ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '28', 'align' => 'L'))
-            ->add('html', array('html' => $siren, 'w' => '90', 'h' => '4', 'x' => '163', 'y' => '28', 'align' => 'L'))
-            ->add('textOptions', array('spacing' => 0))
-            ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '35', 'align' => 'L'))
-            ->add('textOptions', array('size' => 9))
-            ->add('html', array('html' => $numero . $type . ' ' . $voie . ' ' . $complement, 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '41', 'align' => 'L'))
-            ->add('html', array('html' => $codePostal, 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '48', 'align' => 'L'))
-            ->add('html', array('html' => $ville, 'w' => '90', 'h' => '4', 'x' => '80', 'y' => '48', 'align' => 'L'))
-            ->add('textOptions', array('size' => 10))
-            ->execute();
+
+        if($millesime == 15) {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 9))
+                ->add('html', array('html' => isset($GS) ? $GS : '', 'w' => '90', 'h' => '4', 'x' => '197', 'y' => '27', 'align' => 'L'))
+                ->add('textOptions', array('size' => 12))
+                ->add('textOptions', array('spacing' => 2))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '36', 'y' => '36', 'align' => 'L'))
+                ->add('html', array('html' => $siren, 'w' => '90', 'h' => '4', 'x' => '165', 'y' => '36', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '44', 'align' => 'L'))
+                ->add('textOptions', array('size' => 9))
+                ->add('html', array('html' => $numero . $type . ' ' . $voie . ' ' . $complement, 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '51', 'align' => 'L'))
+                ->add('html', array('html' => $codePostal, 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '57', 'align' => 'L'))
+                ->add('html', array('html' => $ville, 'w' => '90', 'h' => '4', 'x' => '120', 'y' => '57', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->execute();
+        } else {
+            $this->pdf->transaction()
+                ->add('textOptions', array('size' => 9))
+                ->add('html', array('html' => isset($GS) ? $GS : '', 'w' => '90', 'h' => '4', 'x' => '195', 'y' => '19', 'align' => 'L'))
+                ->add('textOptions', array('size' => 12))
+                ->add('textOptions', array('spacing' => 2))
+                ->add('html', array('html' => $dateFin->format('dmY'), 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '28', 'align' => 'L'))
+                ->add('html', array('html' => $siren, 'w' => '90', 'h' => '4', 'x' => '163', 'y' => '28', 'align' => 'L'))
+                ->add('textOptions', array('spacing' => 0))
+                ->add('html', array('html' => $identif, 'w' => '90', 'h' => '4', 'x' => '60', 'y' => '35', 'align' => 'L'))
+                ->add('textOptions', array('size' => 9))
+                ->add('html', array('html' => $numero . $type . ' ' . $voie . ' ' . $complement, 'w' => '90', 'h' => '4', 'x' => '38', 'y' => '41', 'align' => 'L'))
+                ->add('html', array('html' => $codePostal, 'w' => '90', 'h' => '4', 'x' => '35', 'y' => '48', 'align' => 'L'))
+                ->add('html', array('html' => $ville, 'w' => '90', 'h' => '4', 'x' => '80', 'y' => '48', 'align' => 'L'))
+                ->add('textOptions', array('size' => 10))
+                ->execute();
+        }
 
         return $this->pdf;
     }
