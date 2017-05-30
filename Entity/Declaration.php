@@ -2,9 +2,8 @@
 
 namespace InterInvest\AsponeBundle\Entity;
 
-use Symfony\Component\DependencyInjection\Container;
-
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * AsponeDeclaration
@@ -36,11 +35,15 @@ abstract class Declaration
      */
     protected $historiques;
 
-    abstract function getId();
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->historiques = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     abstract function setType($type);
-
-    abstract function getType();
 
     abstract function getIdentifiant();
 
@@ -49,8 +52,6 @@ abstract class Declaration
     abstract function getEtat();
 
     abstract function setEtat($etat);
-
-    abstract function getDeposit();
 
     abstract function setDeposit($deposit);
 
@@ -76,28 +77,11 @@ abstract class Declaration
 
     abstract function getFormulaires();
 
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->historiques = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
     /**
      * Doit renvoyer un tableau avec le nom du service pour la création de l'objet déclarable et l'entité utilisée
      * @return mixed
      */
     abstract function getServiceDeclarable();
-
-    /**
-     * @return string
-     */
-    public function getXmlPath()
-    {
-        return $this->getType() . '/' . $this->getId() . '.xml';
-    }
 
     /**
      * @param Container $container
@@ -117,6 +101,18 @@ abstract class Declaration
 
         return $serviceXml->setXmlFromDeclarable($this, 1);
     }
+
+    /**
+     * @return string
+     */
+    public function getXmlPath()
+    {
+        return $this->getType() . '/' . $this->getId() . '.xml';
+    }
+
+    abstract function getType();
+
+    abstract function getId();
 
     /**
      * Add detail
@@ -151,4 +147,16 @@ abstract class Declaration
     {
         return $this->historiques;
     }
+
+    public function getMillesime()
+    {
+        /** @var Deposit $deposit */
+        $deposit = $this->getDeposit();
+        if ($deposit) {
+            return $deposit->getDateEnvoi()->format("y");
+        }
+        return $this->getPeriodeStart()->format("y");
+    }
+
+    abstract function getDeposit();
 }
