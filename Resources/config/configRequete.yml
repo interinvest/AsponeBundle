@@ -1,0 +1,8 @@
+xsd2php:
+  namespaces:
+    'http://www.w3.org': 'InterInvest\AsponeBundle\Entity\Requete'
+  destinations_php:
+    'InterInvest\AsponeBundle\Entity\Requete': InterInvest/AsponeBundle/Entity/Requete
+  destinations_jms:
+    'InterInvest\AsponeBundle\Entity\Requete': InterInvest/AsponeBundle/Entity/Requete
+  naming_strategy: long # optional and default

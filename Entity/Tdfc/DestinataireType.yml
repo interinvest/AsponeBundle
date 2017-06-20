@@ -1,0 +1,50 @@
+InterInvest\AsponeBundle\Entity\Tdfc\DestinataireType:
+    properties:
+        designation:
+            expose: true
+            access_type: public_method
+            serialized_name: Designation
+            accessor:
+                getter: getDesignation
+                setter: setDesignation
+            type: string
+        identifiant:
+            expose: true
+            access_type: public_method
+            serialized_name: Identifiant
+            accessor:
+                getter: getIdentifiant
+                setter: setIdentifiant
+            type: InterInvest\AsponeBundle\Entity\Tdfc\Identifiant
+        designationSuite1:
+            expose: true
+            access_type: public_method
+            serialized_name: DesignationSuite1
+            accessor:
+                getter: getDesignationSuite1
+                setter: setDesignationSuite1
+            type: InterInvest\AsponeBundle\Entity\Tdfc\DesignationSuite1
+        designationSuite2:
+            expose: true
+            access_type: public_method
+            serialized_name: DesignationSuite2
+            accessor:
+                getter: getDesignationSuite2
+                setter: setDesignationSuite2
+            type: InterInvest\AsponeBundle\Entity\Tdfc\DesignationSuite2
+        adresse:
+            expose: true
+            access_type: public_method
+            serialized_name: Adresse
+            accessor:
+                getter: getAdresse
+                setter: setAdresse
+            type: InterInvest\AsponeBundle\Entity\Tdfc\Adresse
+        referenceDossier:
+            expose: true
+            access_type: public_method
+            serialized_name: ReferenceDossier
+            accessor:
+                getter: getReferenceDossier
+                setter: setReferenceDossier
+            type: InterInvest\AsponeBundle\Entity\Tdfc\ReferenceDossier

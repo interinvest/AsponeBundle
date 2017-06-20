@@ -1,0 +1,68 @@
+InterInvest\AsponeBundle\Entity\Requete\DeclarationType:
+    properties:
+        type:
+            expose: true
+            access_type: public_method
+            serialized_name: Type
+            accessor:
+                getter: getType
+                setter: setType
+            xml_attribute: true
+            type: string
+        reference:
+            expose: true
+            access_type: public_method
+            serialized_name: Reference
+            accessor:
+                getter: getReference
+                setter: setReference
+            xml_attribute: true
+            type: string
+        emetteur:
+            expose: true
+            access_type: public_method
+            serialized_name: Emetteur
+            accessor:
+                getter: getEmetteur
+                setter: setEmetteur
+            type: InterInvest\AsponeBundle\Entity\Requete\EmetteurType
+        redacteur:
+            expose: true
+            access_type: public_method
+            serialized_name: Redacteur
+            accessor:
+                getter: getRedacteur
+                setter: setRedacteur
+            type: InterInvest\AsponeBundle\Entity\Requete\RedacteurType
+        redevable:
+            expose: true
+            access_type: public_method
+            serialized_name: Redevable
+            accessor:
+                getter: getRedevable
+                setter: setRedevable
+            type: InterInvest\AsponeBundle\Entity\Requete\RedevableType
+        partenaireEdi:
+            expose: true
+            access_type: public_method
+            serialized_name: PartenaireEdi
+            accessor:
+                getter: getPartenaireEdi
+                setter: setPartenaireEdi
+            type: InterInvest\AsponeBundle\Entity\Requete\PartenaireEdiType
+        listeDestinataires:
+            expose: true
+            access_type: public_method
+            serialized_name: ListeDestinataires
+            accessor:
+                getter: getListeDestinataires
+                setter: setListeDestinataires
+            type: InterInvest\AsponeBundle\Entity\Requete\ListeDestinatairesType
+        listeFormulaires:
+            expose: true
+            access_type: public_method
+            serialized_name: ListeFormulaires
+            accessor:
+                getter: getListeFormulaires
+                setter: setListeFormulaires
+            type: InterInvest\AsponeBundle\Entity\Requete\ListeFormulairesType

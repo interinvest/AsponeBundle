@@ -1,0 +1,8 @@
+xsd2php:
+  namespaces:
+    'http://www.w3.org': 'InterInvest\AsponeBundle\Entity\Ir'
+  destinations_php:
+    'InterInvest\AsponeBundle\Entity\Ir': InterInvest/AsponeBundle/Entity/Ir
+  destinations_jms:
+    'InterInvest\AsponeBundle\Entity\Ir': InterInvest/AsponeBundle/Entity/Ir
+  naming_strategy: long # optional and default

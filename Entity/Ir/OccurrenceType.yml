@@ -1,0 +1,243 @@
+InterInvest\AsponeBundle\Entity\Ir\OccurrenceType:
+    properties:
+        numero:
+            expose: true
+            access_type: public_method
+            serialized_name: Numero
+            accessor:
+                getter: getNumero
+                setter: setNumero
+            xml_attribute: true
+            type: string
+        valeur:
+            expose: true
+            access_type: public_method
+            serialized_name: Valeur
+            accessor:
+                getter: getValeur
+                setter: setValeur
+            type: string
+        identifiant:
+            expose: true
+            access_type: public_method
+            serialized_name: Identifiant
+            accessor:
+                getter: getIdentifiant
+                setter: setIdentifiant
+            type: InterInvest\AsponeBundle\Entity\Ir\Identifiant
+        designation:
+            expose: true
+            access_type: public_method
+            serialized_name: Designation
+            accessor:
+                getter: getDesignation
+                setter: setDesignation
+            type: InterInvest\AsponeBundle\Entity\Ir\Designation
+        designationSuite1:
+            expose: true
+            access_type: public_method
+            serialized_name: DesignationSuite1
+            accessor:
+                getter: getDesignationSuite1
+                setter: setDesignationSuite1
+            type: InterInvest\AsponeBundle\Entity\Ir\DesignationSuite1
+        designationSuite2:
+            expose: true
+            access_type: public_method
+            serialized_name: DesignationSuite2
+            accessor:
+                getter: getDesignationSuite2
+                setter: setDesignationSuite2
+            type: InterInvest\AsponeBundle\Entity\Ir\DesignationSuite2
+        adresseNumero:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseNumero
+            accessor:
+                getter: getAdresseNumero
+                setter: setAdresseNumero
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseNumero
+        adresseRepetabilite:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseRepetabilite
+            accessor:
+                getter: getAdresseRepetabilite
+                setter: setAdresseRepetabilite
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseRepetabilite
+        adresseVoie:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseVoie
+            accessor:
+                getter: getAdresseVoie
+                setter: setAdresseVoie
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseVoie
+        adresseComplement:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseComplement
+            accessor:
+                getter: getAdresseComplement
+                setter: setAdresseComplement
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseComplement
+        adresseHameau:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseHameau
+            accessor:
+                getter: getAdresseHameau
+                setter: setAdresseHameau
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseHameau
+        adresseCodePostal:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseCodePostal
+            accessor:
+                getter: getAdresseCodePostal
+                setter: setAdresseCodePostal
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseCodePostal
+        adresseVille:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseVille
+            accessor:
+                getter: getAdresseVille
+                setter: setAdresseVille
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseVille
+        adresseCodeDivisionTerritoriale:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseCodeDivisionTerritoriale
+            accessor:
+                getter: getAdresseCodeDivisionTerritoriale
+                setter: setAdresseCodeDivisionTerritoriale
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseCodeDivisionTerritoriale
+        adresseDivisionTerritoriale:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseDivisionTerritoriale
+            accessor:
+                getter: getAdresseDivisionTerritoriale
+                setter: setAdresseDivisionTerritoriale
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseDivisionTerritoriale
+        adresseEtrangere1:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseEtrangere1
+            accessor:
+                getter: getAdresseEtrangere1
+                setter: setAdresseEtrangere1
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseEtrangere1
+        adresseEtrangere2:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseEtrangere2
+            accessor:
+                getter: getAdresseEtrangere2
+                setter: setAdresseEtrangere2
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseEtrangere2
+        adresseEtrangere3:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseEtrangere3
+            accessor:
+                getter: getAdresseEtrangere3
+                setter: setAdresseEtrangere3
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseEtrangere3
+        adresseEtrangere4:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseEtrangere4
+            accessor:
+                getter: getAdresseEtrangere4
+                setter: setAdresseEtrangere4
+            type: InterInvest\AsponeBundle\Entity\Ir\AdresseEtrangere4
+        telephone:
+            expose: true
+            access_type: public_method
+            serialized_name: Telephone
+            accessor:
+                getter: getTelephone
+                setter: setTelephone
+            type: InterInvest\AsponeBundle\Entity\Ir\Telephone
+        email:
+            expose: true
+            access_type: public_method
+            serialized_name: Email
+            accessor:
+                getter: getEmail
+                setter: setEmail
+            type: InterInvest\AsponeBundle\Entity\Ir\Email
+        texteLibre1:
+            expose: true
+            access_type: public_method
+            serialized_name: TexteLibre1
+            accessor:
+                getter: getTexteLibre1
+                setter: setTexteLibre1
+            type: InterInvest\AsponeBundle\Entity\Ir\TexteLibre1
+        texteLibre2:
+            expose: true
+            access_type: public_method
+            serialized_name: TexteLibre2
+            accessor:
+                getter: getTexteLibre2
+                setter: setTexteLibre2
+            type: InterInvest\AsponeBundle\Entity\Ir\TexteLibre2
+        texteLibre3:
+            expose: true
+            access_type: public_method
+            serialized_name: TexteLibre3
+            accessor:
+                getter: getTexteLibre3
+                setter: setTexteLibre3
+            type: InterInvest\AsponeBundle\Entity\Ir\TexteLibre3
+        texteLibre4:
+            expose: true
+            access_type: public_method
+            serialized_name: TexteLibre4
+            accessor:
+                getter: getTexteLibre4
+                setter: setTexteLibre4
+            type: InterInvest\AsponeBundle\Entity\Ir\TexteLibre4
+        texteLibre5:
+            expose: true
+            access_type: public_method
+            serialized_name: TexteLibre5
+            accessor:
+                getter: getTexteLibre5
+                setter: setTexteLibre5
+            type: InterInvest\AsponeBundle\Entity\Ir\TexteLibre5
+        iban:
+            expose: true
+            access_type: public_method
+            serialized_name: Iban
+            accessor:
+                getter: getIban
+                setter: setIban
+            type: string
+        bic:
+            expose: true
+            access_type: public_method
+            serialized_name: Bic
+            accessor:
+                getter: getBic
+                setter: setBic
+            type: InterInvest\AsponeBundle\Entity\Ir\Bic
+        titulaireDesignation:
+            expose: true
+            access_type: public_method
+            serialized_name: TitulaireDesignation
+            accessor:
+                getter: getTitulaireDesignation
+                setter: setTitulaireDesignation
+            type: InterInvest\AsponeBundle\Entity\Ir\TitulaireDesignation
+        titulaireDesignationSuite:
+            expose: true
+            access_type: public_method
+            serialized_name: TitulaireDesignationSuite
+            accessor:
+                getter: getTitulaireDesignationSuite
+                setter: setTitulaireDesignationSuite
+            type: InterInvest\AsponeBundle\Entity\Ir\TitulaireDesignationSuite

@@ -1,0 +1,66 @@
+InterInvest\AsponeBundle\Entity\Requete\AdresseType:
+    properties:
+        adresseNumero:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseNumero
+            accessor:
+                getter: getAdresseNumero
+                setter: setAdresseNumero
+            type: InterInvest\AsponeBundle\Entity\Requete\AdresseNumero
+        adresseType:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseType
+            accessor:
+                getter: getAdresseType
+                setter: setAdresseType
+            type: InterInvest\AsponeBundle\Entity\Requete\AdresseType
+        adresseVoie:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseVoie
+            accessor:
+                getter: getAdresseVoie
+                setter: setAdresseVoie
+            type: InterInvest\AsponeBundle\Entity\Requete\AdresseVoie
+        adresseComplement:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseComplement
+            accessor:
+                getter: getAdresseComplement
+                setter: setAdresseComplement
+            type: InterInvest\AsponeBundle\Entity\Requete\AdresseComplement
+        adresseHameau:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseHameau
+            accessor:
+                getter: getAdresseHameau
+                setter: setAdresseHameau
+            type: InterInvest\AsponeBundle\Entity\Requete\AdresseHameau
+        adresseCodePostal:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseCodePostal
+            accessor:
+                getter: getAdresseCodePostal
+                setter: setAdresseCodePostal
+            type: InterInvest\AsponeBundle\Entity\Requete\AdresseCodePostal
+        adresseVille:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseVille
+            accessor:
+                getter: getAdresseVille
+                setter: setAdresseVille
+            type: InterInvest\AsponeBundle\Entity\Requete\AdresseVille
+        adresseCodePays:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseCodePays
+            accessor:
+                getter: getAdresseCodePays
+                setter: setAdresseCodePays
+            type: InterInvest\AsponeBundle\Entity\Requete\AdresseCodePays

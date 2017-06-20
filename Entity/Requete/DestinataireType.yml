@@ -1,0 +1,10 @@
+InterInvest\AsponeBundle\Entity\Requete\DestinataireType:
+    properties:
+        designation:
+            expose: true
+            access_type: public_method
+            serialized_name: Designation
+            accessor:
+                getter: getDesignation
+                setter: setDesignation
+            type: string

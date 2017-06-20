@@ -1,0 +1,10 @@
+InterInvest\AsponeBundle\Entity\Requete\ListeFormulairesType:
+    properties:
+        identif:
+            expose: true
+            access_type: public_method
+            serialized_name: Identif
+            accessor:
+                getter: getIdentif
+                setter: setIdentif
+            type: InterInvest\AsponeBundle\Entity\Requete\FormulaireType

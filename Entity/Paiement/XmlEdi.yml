@@ -1,0 +1,3 @@
+InterInvest\AsponeBundle\Entity\Paiement\XmlEdi:
+    xml_root_name: 'ns-8e38da8c:XmlEdi'
+    xml_root_namespace: 'http://www.w3.org'

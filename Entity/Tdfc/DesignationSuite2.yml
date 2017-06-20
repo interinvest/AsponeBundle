@@ -1,0 +1,12 @@
+InterInvest\AsponeBundle\Entity\Tdfc\DesignationSuite2:
+    xml_root_name: 'ns-8e38da8c:DesignationSuite2'
+    xml_root_namespace: 'http://www.w3.org'
+    properties:
+        __value:
+            expose: true
+            xml_value: true
+            access_type: public_method
+            accessor:
+                getter: value
+                setter: value
+            type: string

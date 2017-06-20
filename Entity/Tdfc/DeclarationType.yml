@@ -1,0 +1,72 @@
+InterInvest\AsponeBundle\Entity\Tdfc\DeclarationType:
+    properties:
+        type:
+            expose: true
+            access_type: public_method
+            serialized_name: Type
+            accessor:
+                getter: getType
+                setter: setType
+            xml_attribute: true
+            type: string
+        reference:
+            expose: true
+            access_type: public_method
+            serialized_name: Reference
+            accessor:
+                getter: getReference
+                setter: setReference
+            xml_attribute: true
+            type: string
+        emetteur:
+            expose: true
+            access_type: public_method
+            serialized_name: Emetteur
+            accessor:
+                getter: getEmetteur
+                setter: setEmetteur
+            type: InterInvest\AsponeBundle\Entity\Tdfc\EmetteurType
+        redacteur:
+            expose: true
+            access_type: public_method
+            serialized_name: Redacteur
+            accessor:
+                getter: getRedacteur
+                setter: setRedacteur
+            type: InterInvest\AsponeBundle\Entity\Tdfc\RedacteurType
+        redevable:
+            expose: true
+            access_type: public_method
+            serialized_name: Redevable
+            accessor:
+                getter: getRedevable
+                setter: setRedevable
+            type: InterInvest\AsponeBundle\Entity\Tdfc\RedevableType
+        partenaireEdi:
+            expose: true
+            access_type: public_method
+            serialized_name: PartenaireEdi
+            accessor:
+                getter: getPartenaireEdi
+                setter: setPartenaireEdi
+            type: InterInvest\AsponeBundle\Entity\Tdfc\PartenaireEdiType
+        listeDestinataires:
+            expose: true
+            access_type: public_method
+            serialized_name: ListeDestinataires
+            accessor:
+                getter: getListeDestinataires
+                setter: setListeDestinataires
+            type: array<InterInvest\AsponeBundle\Entity\Tdfc\DestinataireType>
+            xml_list:
+                inline: false
+                entry_name: Destinataire
+                skip_when_empty: false
+        listeFormulaires:
+            expose: true
+            access_type: public_method
+            serialized_name: ListeFormulaires
+            accessor:
+                getter: getListeFormulaires
+                setter: setListeFormulaires
+            type: InterInvest\AsponeBundle\Entity\Tdfc\ListeFormulairesType

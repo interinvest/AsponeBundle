@@ -1,0 +1,42 @@
+InterInvest\AsponeBundle\Entity\Paiement\PartenaireEdiType:
+    properties:
+        identifiant:
+            expose: true
+            access_type: public_method
+            serialized_name: Identifiant
+            accessor:
+                getter: getIdentifiant
+                setter: setIdentifiant
+            type: string
+        designation:
+            expose: true
+            access_type: public_method
+            serialized_name: Designation
+            accessor:
+                getter: getDesignation
+                setter: setDesignation
+            type: InterInvest\AsponeBundle\Entity\Paiement\Designation
+        designationSuite1:
+            expose: true
+            access_type: public_method
+            serialized_name: DesignationSuite1
+            accessor:
+                getter: getDesignationSuite1
+                setter: setDesignationSuite1
+            type: InterInvest\AsponeBundle\Entity\Paiement\DesignationSuite1
+        adresse:
+            expose: true
+            access_type: public_method
+            serialized_name: Adresse
+            accessor:
+                getter: getAdresse
+                setter: setAdresse
+            type: InterInvest\AsponeBundle\Entity\Paiement\Adresse
+        referenceDossier:
+            expose: true
+            access_type: public_method
+            serialized_name: ReferenceDossier
+            accessor:
+                getter: getReferenceDossier
+                setter: setReferenceDossier
+            type: InterInvest\AsponeBundle\Entity\Paiement\ReferenceDossier

@@ -1,0 +1,19 @@
+InterInvest\AsponeBundle\Entity\Ir\XmlEdiType:
+    properties:
+        test:
+            expose: true
+            access_type: public_method
+            serialized_name: Test
+            accessor:
+                getter: getTest
+                setter: setTest
+            xml_attribute: true
+            type: string
+        groupeFonctionnel:
+            expose: true
+            access_type: public_method
+            serialized_name: GroupeFonctionnel
+            accessor:
+                getter: getGroupeFonctionnel
+                setter: setGroupeFonctionnel
+            type: InterInvest\AsponeBundle\Entity\Ir\GroupeFonctionnelType

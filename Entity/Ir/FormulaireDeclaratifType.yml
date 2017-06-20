@@ -1,0 +1,11 @@
+InterInvest\AsponeBundle\Entity\Ir\FormulaireDeclaratifType:
+    properties:
+        nom:
+            expose: true
+            access_type: public_method
+            serialized_name: Nom
+            accessor:
+                getter: getNom
+                setter: setNom
+            xml_attribute: true
+            type: string

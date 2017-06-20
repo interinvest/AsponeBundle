@@ -1,0 +1,8 @@
+xsd2php:
+  namespaces:
+    'http://www.w3.org': 'InterInvest\AsponeBundle\Entity\Paiement'
+  destinations_php:
+    'InterInvest\AsponeBundle\Entity\Paiement': InterInvest/AsponeBundle/Entity/Paiement
+  destinations_jms:
+    'InterInvest\AsponeBundle\Entity\Paiement': InterInvest/AsponeBundle/Entity/Paiement
+  naming_strategy: long # optional and default

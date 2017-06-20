@@ -1,0 +1,31 @@
+InterInvest\AsponeBundle\Entity\Ir\FormulaireType:
+    properties:
+        millesime:
+            expose: true
+            access_type: public_method
+            serialized_name: Millesime
+            accessor:
+                getter: getMillesime
+                setter: setMillesime
+            xml_attribute: true
+            type: string
+        repetition:
+            expose: true
+            access_type: public_method
+            serialized_name: Repetition
+            accessor:
+                getter: getRepetition
+                setter: setRepetition
+            xml_attribute: true
+            type: string
+        zone:
+            expose: true
+            access_type: public_method
+            serialized_name: Zone
+            accessor:
+                getter: getZone
+                setter: setZone
+            xml_list:
+                inline: true
+                entry_name: Zone
+            type: array<InterInvest\AsponeBundle\Entity\Ir\ZoneType>

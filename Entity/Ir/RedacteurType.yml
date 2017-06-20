@@ -1,0 +1,50 @@
+InterInvest\AsponeBundle\Entity\Ir\RedacteurType:
+    properties:
+        siret:
+            expose: true
+            access_type: public_method
+            serialized_name: Siret
+            accessor:
+                getter: getSiret
+                setter: setSiret
+            type: InterInvest\AsponeBundle\Entity\Ir\Siret
+        designation:
+            expose: true
+            access_type: public_method
+            serialized_name: Designation
+            accessor:
+                getter: getDesignation
+                setter: setDesignation
+            type: string
+        designationSuite1:
+            expose: true
+            access_type: public_method
+            serialized_name: DesignationSuite1
+            accessor:
+                getter: getDesignationSuite1
+                setter: setDesignationSuite1
+            type: InterInvest\AsponeBundle\Entity\Ir\DesignationSuite1
+        designationSuite2:
+            expose: true
+            access_type: public_method
+            serialized_name: DesignationSuite2
+            accessor:
+                getter: getDesignationSuite2
+                setter: setDesignationSuite2
+            type: InterInvest\AsponeBundle\Entity\Ir\DesignationSuite2
+        adresse:
+            expose: true
+            access_type: public_method
+            serialized_name: Adresse
+            accessor:
+                getter: getAdresse
+                setter: setAdresse
+            type: InterInvest\AsponeBundle\Entity\Ir\Adresse
+        referenceDossier:
+            expose: true
+            access_type: public_method
+            serialized_name: ReferenceDossier
+            accessor:
+                getter: getReferenceDossier
+                setter: setReferenceDossier
+            type: InterInvest\AsponeBundle\Entity\Ir\ReferenceDossier

@@ -1,0 +1,42 @@
+InterInvest\AsponeBundle\Entity\Ir\RedevableType:
+    properties:
+        identifiant:
+            expose: true
+            access_type: public_method
+            serialized_name: Identifiant
+            accessor:
+                getter: getIdentifiant
+                setter: setIdentifiant
+            type: string
+        designation:
+            expose: true
+            access_type: public_method
+            serialized_name: Designation
+            accessor:
+                getter: getDesignation
+                setter: setDesignation
+            type: InterInvest\AsponeBundle\Entity\Ir\Designation
+        referenceDossier:
+            expose: true
+            access_type: public_method
+            serialized_name: ReferenceDossier
+            accessor:
+                getter: getReferenceDossier
+                setter: setReferenceDossier
+            type: InterInvest\AsponeBundle\Entity\Ir\ReferenceDossier
+        identifiantRedevable2:
+            expose: true
+            access_type: public_method
+            serialized_name: IdentifiantRedevable2
+            accessor:
+                getter: getIdentifiantRedevable2
+                setter: setIdentifiantRedevable2
+            type: string
+        sirenActivitePrincipale:
+            expose: true
+            access_type: public_method
+            serialized_name: SirenActivitePrincipale
+            accessor:
+                getter: getSirenActivitePrincipale
+                setter: setSirenActivitePrincipale
+            type: string

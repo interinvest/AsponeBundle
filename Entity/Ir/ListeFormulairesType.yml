@@ -1,0 +1,48 @@
+InterInvest\AsponeBundle\Entity\Ir\ListeFormulairesType:
+    properties:
+        identif0:
+            expose: true
+            access_type: public_method
+            serialized_name: Identif0
+            accessor:
+                getter: getIdentif0
+                setter: setIdentif0
+            type: InterInvest\AsponeBundle\Entity\Ir\FormulaireType
+        identif1:
+            expose: true
+            access_type: public_method
+            serialized_name: Identif1
+            accessor:
+                getter: getIdentif1
+                setter: setIdentif1
+            xml_list:
+                inline: true
+                entry_name: Identif1
+            type: array<InterInvest\AsponeBundle\Entity\Ir\FormulaireType>
+        identif2:
+            expose: true
+            access_type: public_method
+            serialized_name: Identif2
+            accessor:
+                getter: getIdentif2
+                setter: setIdentif2
+            type: InterInvest\AsponeBundle\Entity\Ir\FormulaireType
+        identif3:
+            expose: true
+            access_type: public_method
+            serialized_name: Identif3
+            accessor:
+                getter: getIdentif3
+                setter: setIdentif3
+            type: InterInvest\AsponeBundle\Entity\Ir\FormulaireType
+        formulaire:
+            expose: true
+            access_type: public_method
+            serialized_name: Formulaire
+            accessor:
+                getter: getFormulaire
+                setter: setFormulaire
+            xml_list:
+                inline: true
+                entry_name: Formulaire
+            type: array<InterInvest\AsponeBundle\Entity\Ir\FormulaireDeclaratifType>

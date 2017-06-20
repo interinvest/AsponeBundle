@@ -1,0 +1,21 @@
+InterInvest\AsponeBundle\Entity\Paiement\ListeFormulairesType:
+    properties:
+        identif:
+            expose: true
+            access_type: public_method
+            serialized_name: Identif
+            accessor:
+                getter: getIdentif
+                setter: setIdentif
+            type: InterInvest\AsponeBundle\Entity\Paiement\FormulaireType
+        formulaire:
+            expose: true
+            access_type: public_method
+            serialized_name: Formulaire
+            accessor:
+                getter: getFormulaire
+                setter: setFormulaire
+            xml_list:
+                inline: true
+                entry_name: Formulaire
+            type: array<InterInvest\AsponeBundle\Entity\Paiement\FormulaireDeclaratifType>

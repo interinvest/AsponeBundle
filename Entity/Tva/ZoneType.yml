@@ -1,0 +1,203 @@
+InterInvest\AsponeBundle\Entity\Tva\ZoneType:
+    properties:
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        valeur:
+            expose: true
+            access_type: public_method
+            serialized_name: Valeur
+            accessor:
+                getter: getValeur
+                setter: setValeur
+            type: string
+        identifiant:
+            expose: true
+            access_type: public_method
+            serialized_name: Identifiant
+            accessor:
+                getter: getIdentifiant
+                setter: setIdentifiant
+            type: InterInvest\AsponeBundle\Entity\Tva\Identifiant
+        designation:
+            expose: true
+            access_type: public_method
+            serialized_name: Designation
+            accessor:
+                getter: getDesignation
+                setter: setDesignation
+            type: InterInvest\AsponeBundle\Entity\Tva\Designation
+        designationSuite1:
+            expose: true
+            access_type: public_method
+            serialized_name: DesignationSuite1
+            accessor:
+                getter: getDesignationSuite1
+                setter: setDesignationSuite1
+            type: InterInvest\AsponeBundle\Entity\Tva\DesignationSuite1
+        designationSuite2:
+            expose: true
+            access_type: public_method
+            serialized_name: DesignationSuite2
+            accessor:
+                getter: getDesignationSuite2
+                setter: setDesignationSuite2
+            type: InterInvest\AsponeBundle\Entity\Tva\DesignationSuite2
+        adresseNumero:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseNumero
+            accessor:
+                getter: getAdresseNumero
+                setter: setAdresseNumero
+            type: InterInvest\AsponeBundle\Entity\Tva\AdresseNumero
+        adresseType:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseType
+            accessor:
+                getter: getAdresseType
+                setter: setAdresseType
+            type: InterInvest\AsponeBundle\Entity\Tva\AdresseType
+        adresseVoie:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseVoie
+            accessor:
+                getter: getAdresseVoie
+                setter: setAdresseVoie
+            type: InterInvest\AsponeBundle\Entity\Tva\AdresseVoie
+        adresseComplement:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseComplement
+            accessor:
+                getter: getAdresseComplement
+                setter: setAdresseComplement
+            type: InterInvest\AsponeBundle\Entity\Tva\AdresseComplement
+        adresseHameau:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseHameau
+            accessor:
+                getter: getAdresseHameau
+                setter: setAdresseHameau
+            type: InterInvest\AsponeBundle\Entity\Tva\AdresseHameau
+        adresseCodePostal:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseCodePostal
+            accessor:
+                getter: getAdresseCodePostal
+                setter: setAdresseCodePostal
+            type: InterInvest\AsponeBundle\Entity\Tva\AdresseCodePostal
+        adresseVille:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseVille
+            accessor:
+                getter: getAdresseVille
+                setter: setAdresseVille
+            type: InterInvest\AsponeBundle\Entity\Tva\AdresseVille
+        adresseCodePays:
+            expose: true
+            access_type: public_method
+            serialized_name: AdresseCodePays
+            accessor:
+                getter: getAdresseCodePays
+                setter: setAdresseCodePays
+            type: InterInvest\AsponeBundle\Entity\Tva\AdresseCodePays
+        telephone:
+            expose: true
+            access_type: public_method
+            serialized_name: Telephone
+            accessor:
+                getter: getTelephone
+                setter: setTelephone
+            type: InterInvest\AsponeBundle\Entity\Tva\Telephone
+        email:
+            expose: true
+            access_type: public_method
+            serialized_name: Email
+            accessor:
+                getter: getEmail
+                setter: setEmail
+            type: InterInvest\AsponeBundle\Entity\Tva\Email
+        texteLibre1:
+            expose: true
+            access_type: public_method
+            serialized_name: TexteLibre1
+            accessor:
+                getter: getTexteLibre1
+                setter: setTexteLibre1
+            type: InterInvest\AsponeBundle\Entity\Tva\TexteLibre1
+        texteLibre2:
+            expose: true
+            access_type: public_method
+            serialized_name: TexteLibre2
+            accessor:
+                getter: getTexteLibre2
+                setter: setTexteLibre2
+            type: InterInvest\AsponeBundle\Entity\Tva\TexteLibre2
+        texteLibre3:
+            expose: true
+            access_type: public_method
+            serialized_name: TexteLibre3
+            accessor:
+                getter: getTexteLibre3
+                setter: setTexteLibre3
+            type: InterInvest\AsponeBundle\Entity\Tva\TexteLibre3
+        texteLibre4:
+            expose: true
+            access_type: public_method
+            serialized_name: TexteLibre4
+            accessor:
+                getter: getTexteLibre4
+                setter: setTexteLibre4
+            type: InterInvest\AsponeBundle\Entity\Tva\TexteLibre4
+        texteLibre5:
+            expose: true
+            access_type: public_method
+            serialized_name: TexteLibre5
+            accessor:
+                getter: getTexteLibre5
+                setter: setTexteLibre5
+            type: InterInvest\AsponeBundle\Entity\Tva\TexteLibre5
+        iban:
+            expose: true
+            access_type: public_method
+            serialized_name: Iban
+            accessor:
+                getter: getIban
+                setter: setIban
+            type: InterInvest\AsponeBundle\Entity\Tva\Iban
+        bic:
+            expose: true
+            access_type: public_method
+            serialized_name: Bic
+            accessor:
+                getter: getBic
+                setter: setBic
+            type: InterInvest\AsponeBundle\Entity\Tva\Bic
+        titulaireDesignation:
+            expose: true
+            access_type: public_method
+            serialized_name: TitulaireDesignation
+            accessor:
+                getter: getTitulaireDesignation
+                setter: setTitulaireDesignation
+            type: InterInvest\AsponeBundle\Entity\Tva\TitulaireDesignation
+        titulaireDesignationSuite:
+            expose: true
+            access_type: public_method
+            serialized_name: TitulaireDesignationSuite
+            accessor:
+                getter: getTitulaireDesignationSuite
+                setter: setTitulaireDesignationSuite
+            type: InterInvest\AsponeBundle\Entity\Tva\TitulaireDesignationSuite

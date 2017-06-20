@@ -1,0 +1,20 @@
+InterInvest\AsponeBundle\Entity\Tdfc\FormulaireDeclaratifType:
+    properties:
+        nom:
+            expose: true
+            access_type: public_method
+            serialized_name: Nom
+            accessor:
+                getter: getNom
+                setter: setNom
+            xml_attribute: true
+            type: string
+        repetition:
+            expose: true
+            access_type: public_method
+            serialized_name: Repetition
+            accessor:
+                getter: getRepetition
+                setter: setRepetition
+            xml_attribute: true
+            type: string

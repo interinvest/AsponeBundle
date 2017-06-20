@@ -1,0 +1,10 @@
+InterInvest\AsponeBundle\Entity\Requete\ListeDestinatairesType:
+    properties:
+        destinataire:
+            expose: true
+            access_type: public_method
+            serialized_name: Destinataire
+            accessor:
+                getter: getDestinataire
+                setter: setDestinataire
+            type: InterInvest\AsponeBundle\Entity\Requete\DestinataireType

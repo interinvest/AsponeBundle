@@ -1,0 +1,8 @@
+xsd2php:
+  namespaces:
+    'http://www.w3.org': 'InterInvest\AsponeBundle\Entity\Tdfc'
+  destinations_php:
+    'InterInvest\AsponeBundle\Entity\Tdfc': InterInvest/AsponeBundle/Entity/Tdfc
+  destinations_jms:
+    'InterInvest\AsponeBundle\Entity\Tdfc': InterInvest/AsponeBundle/Entity/Tdfc
+  naming_strategy: long # optional and default
